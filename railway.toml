@@ -1,0 +1,10 @@
+[build]
+builder = "railpack"
+buildCommand = "echo building!!!"
+
+[deploy]
+preDeployCommand = []
+startCommand = "bash setup.sh && npm start"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "never"
