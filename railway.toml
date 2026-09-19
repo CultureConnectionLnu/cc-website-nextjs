@@ -1,6 +1,6 @@
 [build]
 builder = "railpack"
-buildCommand = "echo building!!!"
+buildCommand = "npm run build"
 
 [deploy]
 preDeployCommand = []
