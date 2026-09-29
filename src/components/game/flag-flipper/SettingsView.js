@@ -26,8 +26,7 @@ export function SettingsView({
   const queryClient = useQueryClient();
 
   const [showNamePubliclyLocal, setShowNamePubliclyLocal] = useState(true);
-  const [displayNameTypeLocal, setDisplayNameTypeLocal] =
-    useState("fullName");
+  const [displayNameTypeLocal, setDisplayNameTypeLocal] = useState("fullName");
 
   useEffect(() => {
     if (isLoadedFromPage && userFromPage) {

@@ -38,7 +38,10 @@ const updateGuidelines = async (updatedData) => {
   return response.json();
 };
 
-const normalizeGuidelineSection = (section, fallbackId = "guideline-section") => {
+const normalizeGuidelineSection = (
+  section,
+  fallbackId = "guideline-section",
+) => {
   const safeSection =
     section && typeof section === "object" && !Array.isArray(section)
       ? section
@@ -59,7 +62,10 @@ const normalizeGuidelineSection = (section, fallbackId = "guideline-section") =>
   };
 };
 
-const normalizeGuidelinesData = (data, fallbackPrefix = "guideline-section") => {
+const normalizeGuidelinesData = (
+  data,
+  fallbackPrefix = "guideline-section",
+) => {
   if (!Array.isArray(data)) {
     return [];
   }
@@ -81,7 +87,8 @@ const flattenGuidelines = (sections) =>
 const collectSectionIds = (sections) =>
   flattenGuidelines(sections).map((section) => section.id);
 
-const findFirstSectionId = (sections) => flattenGuidelines(sections)[0]?.id || null;
+const findFirstSectionId = (sections) =>
+  flattenGuidelines(sections)[0]?.id || null;
 
 const doesSectionExist = (sections, sectionId) =>
   flattenGuidelines(sections).some((section) => section.id === sectionId);
@@ -89,7 +96,8 @@ const doesSectionExist = (sections, sectionId) =>
 const sectionsHaveMissingTitles = (sections) =>
   sections.some(
     (section) =>
-      !section.title.trim() || sectionsHaveMissingTitles(section.children || []),
+      !section.title.trim() ||
+      sectionsHaveMissingTitles(section.children || []),
   );
 
 const getSectionAtPath = (sections, path) => {
@@ -156,8 +164,7 @@ const createNewSection = (localIdPrefix, title = "New Section") => ({
   children: [],
 });
 
-const escapeRegExp = (value) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const stripHtml = (content) =>
   typeof content === "string" ? content.replace(/<[^>]*>/g, " ") : "";
@@ -167,7 +174,8 @@ const matchesSearch = (section, normalizedTerm) => {
     return true;
   }
 
-  const searchableText = `${section.title} ${stripHtml(section.content)}`.toLowerCase();
+  const searchableText =
+    `${section.title} ${stripHtml(section.content)}`.toLowerCase();
   return searchableText.includes(normalizedTerm);
 };
 
@@ -244,7 +252,8 @@ const mergeExpandedIds = (expandedIds, idsToAdd) =>
   Array.from(new Set([...expandedIds, ...idsToAdd]));
 
 const arraysEqual = (left, right) =>
-  left.length === right.length && left.every((value, index) => value === right[index]);
+  left.length === right.length &&
+  left.every((value, index) => value === right[index]);
 
 const AccordionPanel = ({ isOpen, children }) => (
   <AnimatePresence initial={false}>
@@ -377,7 +386,9 @@ export default function GuidelinesManagement() {
     editData,
     normalizedSearchTerm,
   );
-  const visibleEditSectionIds = new Set(collectSectionIds(filteredEditSections));
+  const visibleEditSectionIds = new Set(
+    collectSectionIds(filteredEditSections),
+  );
   const resolvedExpandedEditSectionIds = isSearchActive
     ? collectSectionIds(filteredEditSections)
     : expandedEditSectionIds;
@@ -390,7 +401,8 @@ export default function GuidelinesManagement() {
     const safeGuidelines = normalizeGuidelinesData(guidelines);
     setEditData(cloneGuidelinesData(safeGuidelines));
     setActiveSectionId((currentActiveSectionId) =>
-      currentActiveSectionId && doesSectionExist(safeGuidelines, currentActiveSectionId)
+      currentActiveSectionId &&
+      doesSectionExist(safeGuidelines, currentActiveSectionId)
         ? currentActiveSectionId
         : findFirstSectionId(safeGuidelines),
     );
@@ -543,10 +555,15 @@ export default function GuidelinesManagement() {
   };
 
   const handleNavLinkClick = (sectionId) => {
-    const trail = findSectionTrailById(displayableGuidelines, sectionId) || [sectionId];
+    const trail = findSectionTrailById(displayableGuidelines, sectionId) || [
+      sectionId,
+    ];
     const clickedSection = findSectionById(displayableGuidelines, sectionId);
-    const descendantIds = clickedSection ? collectSectionIds(clickedSection.children || []) : [];
-    const clickedSectionIsExpanded = resolvedExpandedViewSectionIds.includes(sectionId);
+    const descendantIds = clickedSection
+      ? collectSectionIds(clickedSection.children || [])
+      : [];
+    const clickedSectionIsExpanded =
+      resolvedExpandedViewSectionIds.includes(sectionId);
     const hasChildren = descendantIds.length > 0;
 
     if (!isSearchActive && hasChildren && clickedSectionIsExpanded) {
@@ -780,9 +797,7 @@ export default function GuidelinesManagement() {
             sectionRefs.current[section.id] = el;
           }}
           className={`scroll-mt-20 rounded-xl border bg-white shadow-sm ${
-            depth === 0
-              ? "mb-4"
-              : "mt-4 ml-4 border-l-4 border-l-purple-100"
+            depth === 0 ? "mb-4" : "mt-4 ml-4 border-l-4 border-l-purple-100"
           }`}
         >
           <button
@@ -795,7 +810,11 @@ export default function GuidelinesManagement() {
             <div>
               <div
                 className={`${
-                  depth === 0 ? "text-xl" : depth === 1 ? "text-lg" : "text-base"
+                  depth === 0
+                    ? "text-xl"
+                    : depth === 1
+                      ? "text-lg"
+                      : "text-base"
                 } font-semibold text-gray-900`}
               >
                 {section.title}
@@ -830,7 +849,9 @@ export default function GuidelinesManagement() {
     });
 
   if (isLoading && !isEditing) {
-    return <p className="text-center text-gray-500 py-4">Loading guidelines...</p>;
+    return (
+      <p className="text-center text-gray-500 py-4">Loading guidelines...</p>
+    );
   }
 
   if (isError && !isEditing) {

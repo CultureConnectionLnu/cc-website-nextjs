@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import fs from "fs/promises";
 import path from "path";
 
-const dataFilePath = path.join(process.cwd(), "public", "data", "membership.json");
+const dataFilePath = path.join(
+  process.cwd(),
+  "public",
+  "data",
+  "membership.json",
+);
 
 async function readMemberships() {
   try {
@@ -28,7 +33,7 @@ async function writeMemberships(data) {
   }
 }
 
-export async function GET(request) { 
+export async function GET(request) {
   try {
     let memberships = await readMemberships();
     memberships.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -41,10 +46,18 @@ export async function GET(request) {
   }
 }
 
-export async function POST(request) { 
+export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, description, address, discount, imgurl, websiteUrl, googleMapUrl } = body;
+    const {
+      name,
+      description,
+      address,
+      discount,
+      imgurl,
+      websiteUrl,
+      googleMapUrl,
+    } = body;
 
     if (!name || !description || !address || !discount || !imgurl) {
       return NextResponse.json(
@@ -75,9 +88,12 @@ export async function POST(request) {
     return NextResponse.json(newMembership, { status: 201 });
   } catch (error) {
     if (error instanceof SyntaxError) {
-      return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid JSON body" },
+        { status: 400 },
+      );
     }
-    console.error("Error creating membership:", error); 
+    console.error("Error creating membership:", error);
     return NextResponse.json(
       { message: error.message || "Internal Server Error creating membership" },
       { status: 500 },
@@ -85,11 +101,19 @@ export async function POST(request) {
   }
 }
 
-export async function PUT(request) { 
+export async function PUT(request) {
   try {
     const body = await request.json();
-    const { id, name, description, address, discount, imgurl, websiteUrl, googleMapUrl } =
-      body;
+    const {
+      id,
+      name,
+      description,
+      address,
+      discount,
+      imgurl,
+      websiteUrl,
+      googleMapUrl,
+    } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -115,8 +139,14 @@ export async function PUT(request) {
       address: address ?? memberships[membershipIndex].address,
       discount: discount ?? memberships[membershipIndex].discount,
       imgurl: imgurl ?? memberships[membershipIndex].imgurl,
-      websiteUrl: websiteUrl !== undefined ? websiteUrl : memberships[membershipIndex].websiteUrl,
-      googleMapUrl: googleMapUrl !== undefined ? googleMapUrl : memberships[membershipIndex].googleMapUrl,
+      websiteUrl:
+        websiteUrl !== undefined
+          ? websiteUrl
+          : memberships[membershipIndex].websiteUrl,
+      googleMapUrl:
+        googleMapUrl !== undefined
+          ? googleMapUrl
+          : memberships[membershipIndex].googleMapUrl,
       updatedAt: new Date().toISOString(),
     };
 
@@ -126,9 +156,12 @@ export async function PUT(request) {
     return NextResponse.json(updatedMembership, { status: 200 });
   } catch (error) {
     if (error instanceof SyntaxError) {
-      return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid JSON body" },
+        { status: 400 },
+      );
     }
-    console.error("Error updating membership:", error); 
+    console.error("Error updating membership:", error);
     return NextResponse.json(
       { message: error.message || "Internal Server Error updating membership" },
       { status: 500 },
@@ -136,9 +169,9 @@ export async function PUT(request) {
   }
 }
 
-export async function DELETE(request) { 
+export async function DELETE(request) {
   try {
-    const { searchParams } = new URL(request.url); 
+    const { searchParams } = new URL(request.url);
     const membershipId = searchParams.get("id");
 
     if (!membershipId) {
@@ -166,7 +199,7 @@ export async function DELETE(request) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error deleting membership:", error); 
+    console.error("Error deleting membership:", error);
     return NextResponse.json(
       { message: error.message || "Internal Server Error deleting membership" },
       { status: 500 },

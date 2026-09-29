@@ -76,7 +76,10 @@ export async function PUT(request) {
     const updatedSponsorData = await request.json();
 
     if (!updatedSponsorData.id) {
-      return NextResponse.json({ error: "Sponsor ID is required." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Sponsor ID is required." },
+        { status: 400 },
+      );
     }
     if (!updatedSponsorData.name) {
       return NextResponse.json(
@@ -86,7 +89,9 @@ export async function PUT(request) {
     }
 
     const sponsors = await readSponsors();
-    const sponsorIndex = sponsors.findIndex((s) => s.id === updatedSponsorData.id);
+    const sponsorIndex = sponsors.findIndex(
+      (s) => s.id === updatedSponsorData.id,
+    );
 
     if (sponsorIndex === -1) {
       return NextResponse.json(
@@ -117,7 +122,10 @@ export async function DELETE(request) {
     const sponsorId = searchParams.get("id");
 
     if (!sponsorId) {
-      return NextResponse.json({ error: "Sponsor ID is required." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Sponsor ID is required." },
+        { status: 400 },
+      );
     }
 
     const sponsors = await readSponsors();
@@ -133,7 +141,9 @@ export async function DELETE(request) {
 
     await writeSponsors(filteredSponsors);
 
-    return NextResponse.json({ message: `Sponsor ${sponsorId} deleted successfully.` });
+    return NextResponse.json({
+      message: `Sponsor ${sponsorId} deleted successfully.`,
+    });
   } catch (error) {
     return NextResponse.json(
       { error: error.message || "Failed to delete sponsor" },

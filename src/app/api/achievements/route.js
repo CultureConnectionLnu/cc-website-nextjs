@@ -11,20 +11,28 @@ const boolToInt = (val) => (val === true ? 1 : 0);
 
 // Helper to construct a specific level's badge object
 const createExplodedBadge = (baseAch, level, isAchieved, userProgress) => {
-  const title = level ? (level.levelTitle || baseAch.title) : baseAch.title;
-  const imgurl = level ? (level.levelImgUrl || baseAch.imgurl) : baseAch.imgurl;
-  const description = level ? (level.levelDescription || baseAch.description) : baseAch.description;
-  const achiveDescription = level 
-    ? (level.levelAchiveDescription || level.levelDescription || baseAch.achiveDescription) 
+  const title = level ? level.levelTitle || baseAch.title : baseAch.title;
+  const imgurl = level ? level.levelImgUrl || baseAch.imgurl : baseAch.imgurl;
+  const description = level
+    ? level.levelDescription || baseAch.description
+    : baseAch.description;
+  const achiveDescription = level
+    ? level.levelAchiveDescription ||
+      level.levelDescription ||
+      baseAch.achiveDescription
     : baseAch.achiveDescription;
-  const cardSkin = level ? (level.levelSkinUrl || baseAch.card_skin_image_url) : baseAch.card_skin_image_url;
-  
+  const cardSkin = level
+    ? level.levelSkinUrl || baseAch.card_skin_image_url
+    : baseAch.card_skin_image_url;
+
   // Create a unique virtual ID for the level (e.g., ach_123_lvl_2)
   const uniqueId = level ? `${baseAch.id}_lvl_${level.levelOrder}` : baseAch.id;
   const progressTarget = level ? level.progressNeeded : baseAch.attendanceNeed;
 
   // Use the specific level count if available, otherwise fallback to base total
-  const specificGlobalCount = level ? (level.globalCount || 0) : baseAch.totalAchievedCount;
+  const specificGlobalCount = level
+    ? level.globalCount || 0
+    : baseAch.totalAchievedCount;
 
   return {
     ...baseAch,
@@ -38,9 +46,9 @@ const createExplodedBadge = (baseAch, level, isAchieved, userProgress) => {
     currentUserAchieved: isAchieved,
     currentUserProgress: userProgress,
     attendanceNeed: progressTarget,
-    totalAchievedCount: specificGlobalCount, 
+    totalAchievedCount: specificGlobalCount,
     isMaxLevel: false,
-    level_config: baseAch.level_config 
+    level_config: baseAch.level_config,
   };
 };
 
@@ -77,13 +85,15 @@ export async function GET(request) {
     const achievementsData = stmt.all(userId);
 
     // 2. Fetch ALL user progress stats to calculate global counts per level
-    const allStatsStmt = db.prepare("SELECT achievement_id, attendanceCount FROM UserAchievementStatus WHERE achieved = 1");
+    const allStatsStmt = db.prepare(
+      "SELECT achievement_id, attendanceCount FROM UserAchievementStatus WHERE achieved = 1",
+    );
     const allStats = allStatsStmt.all();
-    
+
     const statsMap = {};
-    allStats.forEach(row => {
-        if (!statsMap[row.achievement_id]) statsMap[row.achievement_id] = [];
-        statsMap[row.achievement_id].push(row.attendanceCount || 0);
+    allStats.forEach((row) => {
+      if (!statsMap[row.achievement_id]) statsMap[row.achievement_id] = [];
+      statsMap[row.achievement_id].push(row.attendanceCount || 0);
     });
 
     const finalDisplayList = [];
@@ -100,11 +110,13 @@ export async function GET(request) {
 
       // Enrich Level Config with Global Counts
       if (parsedLevelConfig.length > 0) {
-          const achStats = statsMap[ach.id] || [];
-          parsedLevelConfig = parsedLevelConfig.map(level => {
-              const levelCount = achStats.filter(p => p >= level.progressNeeded).length;
-              return { ...level, globalCount: levelCount };
-          });
+        const achStats = statsMap[ach.id] || [];
+        parsedLevelConfig = parsedLevelConfig.map((level) => {
+          const levelCount = achStats.filter(
+            (p) => p >= level.progressNeeded,
+          ).length;
+          return { ...level, globalCount: levelCount };
+        });
       }
 
       const baseObj = {
@@ -115,26 +127,37 @@ export async function GET(request) {
         onScore: intToBool(ach.onScore),
         hasQrCodeExpiry: intToBool(ach.hasQrCodeExpiry), // Correctly cast to boolean
         currentUserAchieved: intToBool(ach.currentUserAchieved_raw),
-        userHas: ach.userHasJson ? JSON.parse(ach.userHasJson).map(u => ({...u, achived: u.achived === true})) : [],
+        userHas: ach.userHasJson
+          ? JSON.parse(ach.userHasJson).map((u) => ({
+              ...u,
+              achived: u.achived === true,
+            }))
+          : [],
       };
 
       const userProgress = baseObj.currentUserProgress ?? 0;
 
       // 3. Explode into levels OR Push single badge
       if (baseObj.attendanceCounter && parsedLevelConfig.length > 0) {
-        const sortedLevels = [...parsedLevelConfig].sort((a, b) => a.progressNeeded - b.progressNeeded);
-        
+        const sortedLevels = [...parsedLevelConfig].sort(
+          (a, b) => a.progressNeeded - b.progressNeeded,
+        );
+
         let nextGoalAdded = false;
         let hasAtLeastOneBadge = false;
 
         sortedLevels.forEach((level) => {
           if (userProgress >= level.progressNeeded) {
             // User has achieved this level -> Show it as "Achieved"
-            finalDisplayList.push(createExplodedBadge(baseObj, level, true, userProgress));
+            finalDisplayList.push(
+              createExplodedBadge(baseObj, level, true, userProgress),
+            );
             hasAtLeastOneBadge = true;
           } else if (!nextGoalAdded) {
             // This is the next unachieved level -> Show it as "Locked/Next Goal"
-            finalDisplayList.push(createExplodedBadge(baseObj, level, false, userProgress));
+            finalDisplayList.push(
+              createExplodedBadge(baseObj, level, false, userProgress),
+            );
             nextGoalAdded = true;
             hasAtLeastOneBadge = true;
           }
@@ -142,18 +165,19 @@ export async function GET(request) {
 
         // If user hasn't even reached level 1, make sure we show the first level as the goal
         if (!hasAtLeastOneBadge && sortedLevels.length > 0) {
-           finalDisplayList.push(createExplodedBadge(baseObj, sortedLevels[0], false, userProgress));
+          finalDisplayList.push(
+            createExplodedBadge(baseObj, sortedLevels[0], false, userProgress),
+          );
         }
-
       } else {
         // Standard Badge (No levels)
         finalDisplayList.push({
-            ...baseObj,
-            id: baseObj.id,
-            currentUserAchievedDescription: baseObj.currentUserAchieved 
-                ? (baseObj.achiveDescription || baseObj.description)
-                : baseObj.description,
-            attendanceNeed: baseObj.attendanceNeed 
+          ...baseObj,
+          id: baseObj.id,
+          currentUserAchievedDescription: baseObj.currentUserAchieved
+            ? baseObj.achiveDescription || baseObj.description
+            : baseObj.description,
+          attendanceNeed: baseObj.attendanceNeed,
         });
       }
     });
@@ -202,7 +226,7 @@ export async function POST(request) {
         body.level_config &&
         body.level_config.length > 0
       ) {
-         // Valid configuration
+        // Valid configuration
       } else if (!body.description) {
         throw new Error("Missing required field: description");
       }
@@ -330,7 +354,7 @@ export async function PUT(request) {
     // If ID looks like "ach_123_lvl_1", strip the "_lvl_1" part
     let realAchievementId = body.id;
     if (realAchievementId && realAchievementId.includes("_lvl_")) {
-        realAchievementId = realAchievementId.split("_lvl_")[0];
+      realAchievementId = realAchievementId.split("_lvl_")[0];
     }
     // ----------------------------
 
@@ -523,7 +547,7 @@ export async function PATCH(request) {
       // Exploded ID stripping just in case
       let realAchievementId = achievementId;
       if (realAchievementId && realAchievementId.includes("_lvl_")) {
-          realAchievementId = realAchievementId.split("_lvl_")[0];
+        realAchievementId = realAchievementId.split("_lvl_")[0];
       }
       // ---------------------
 
@@ -547,7 +571,7 @@ export async function PATCH(request) {
           );
         }
       }
-      
+
       const currentDate = new Date().toISOString();
 
       if (action === "setAchieved") {
@@ -615,7 +639,10 @@ export async function PATCH(request) {
           FROM UserAchievementStatus uas
           WHERE uas.achievement_id = ? AND uas.user_id = ?
       `);
-        const statusCheck = statusCheckStmt.get(realAchievementId, targetUserId);
+        const statusCheck = statusCheckStmt.get(
+          realAchievementId,
+          targetUserId,
+        );
 
         if (statusCheck && intToBool(achievement.attendanceCounter)) {
           let newAchievedStatusBasedOnLevels = false;
@@ -654,7 +681,7 @@ export async function PATCH(request) {
             `);
             revokeStmt.run(realAchievementId, targetUserId);
             */
-          } 
+          }
         }
       } else if (action === "updateScore") {
         if (!intToBool(achievement.onScore)) {
@@ -731,7 +758,7 @@ export async function DELETE(request) {
 
     // --- FIX FOR EXPLODED IDs ---
     if (achievementId.includes("_lvl_")) {
-        achievementId = achievementId.split("_lvl_")[0];
+      achievementId = achievementId.split("_lvl_")[0];
     }
     // ----------------------------
 

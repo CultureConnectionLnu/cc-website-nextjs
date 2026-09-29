@@ -7,11 +7,11 @@ if (!i18n.isInitialized) {
   i18n
     .use(HttpBackend)
     .use(LanguageDetector)
-    .use(initReactI18next) 
+    .use(initReactI18next)
     .init({
       fallbackLng: "en",
       debug: true,
-      supportedLngs: ["en"], 
+      supportedLngs: ["en"],
       nonExplicitSupportedLngs: true,
       interpolation: {
         escapeValue: false,

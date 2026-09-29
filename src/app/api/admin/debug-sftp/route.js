@@ -22,29 +22,34 @@ export async function GET() {
   }
 
   // 2. Try to Connect
-const client = new SftpClient();
-try {
-  await client.connect({
-    host: process.env.ONE_COM_SFTP_HOST,
-    port: 22,
-    username: process.env.ONE_COM_SFTP_USERNAME,
-    password: process.env.ONE_COM_SFTP_PASSWORD,
-    readyTimeout: 10000,
-  });
-    const list = await client.list("/customers/b/8/9/cultureconnection.se/httpd.www/public_images");
+  const client = new SftpClient();
+  try {
+    await client.connect({
+      host: process.env.ONE_COM_SFTP_HOST,
+      port: 22,
+      username: process.env.ONE_COM_SFTP_USERNAME,
+      password: process.env.ONE_COM_SFTP_PASSWORD,
+      readyTimeout: 10000,
+    });
+    const list = await client.list(
+      "/customers/b/8/9/cultureconnection.se/httpd.www/public_images",
+    );
     await client.end();
-    
-    return NextResponse.json({ 
-      status: "Success", 
+
+    return NextResponse.json({
+      status: "Success",
       message: `Connected! Found ${list.length} files.`,
-      pathUsed: path 
+      pathUsed: path,
     });
   } catch (err) {
-    return NextResponse.json({
-      status: "Connection Failed",
-      error: err.message,
-      code: err.code || "UNKNOWN",
-      // This will help us identify if it's a password or network issue
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        status: "Connection Failed",
+        error: err.message,
+        code: err.code || "UNKNOWN",
+        // This will help us identify if it's a password or network issue
+      },
+      { status: 500 },
+    );
   }
 }

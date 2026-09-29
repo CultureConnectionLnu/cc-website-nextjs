@@ -52,8 +52,7 @@ export default function AddMembershipModal({
         googleMapUrl: googleMapUrl || null,
       });
       resetForm();
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   if (!isOpen) return null;

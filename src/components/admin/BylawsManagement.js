@@ -76,7 +76,8 @@ const TipTapEditor = ({ content, onChange }) => {
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
     editorProps: {
       attributes: {
-        class: "prose prose-sm max-w-none focus:outline-none p-3 border border-t-0 border-gray-300 rounded-b-md min-h-[150px] bg-white",
+        class:
+          "prose prose-sm max-w-none focus:outline-none p-3 border border-t-0 border-gray-300 rounded-b-md min-h-[150px] bg-white",
       },
     },
   });
@@ -100,7 +101,7 @@ export default function BylawsManagement() {
   const isAdmin = user?.publicMetadata?.admin === true;
 
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState("bylaws"); 
+  const [activeTab, setActiveTab] = useState("bylaws");
   const [activeSectionId, setActiveSectionId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -116,7 +117,8 @@ export default function BylawsManagement() {
     queryFn: fetchBylaws,
     onSuccess: (data) => {
       const safeData = Array.isArray(data) ? data : [];
-      if (safeData.length > 0 && !activeSectionId) setActiveSectionId(safeData[0].id);
+      if (safeData.length > 0 && !activeSectionId)
+        setActiveSectionId(safeData[0].id);
       setEditData(JSON.parse(JSON.stringify(safeData)));
     },
     enabled: !isEditing && activeTab === "bylaws",
@@ -162,26 +164,39 @@ export default function BylawsManagement() {
   };
 
   const handleSaveChanges = () => {
-    if (editData.some((s) => !s.title.trim())) return setGeneralError("All sections need a title.");
+    if (editData.some((s) => !s.title.trim()))
+      return setGeneralError("All sections need a title.");
     mutation.mutate(editData);
   };
 
   const sortedPropositions = [...propositions].sort((a, b) => {
-    return new Date(b.submittedAt || b.createdAt || 0) - new Date(a.submittedAt || a.createdAt || 0);
+    return (
+      new Date(b.submittedAt || b.createdAt || 0) -
+      new Date(a.submittedAt || a.createdAt || 0)
+    );
   });
 
   if (activeTab === "propositions") {
     return (
       <div className="bg-gray-50 p-4 rounded border mt-6">
         <div className="flex justify-between items-center mb-6 pb-4 border-b">
-          <h2 className="text-2xl font-semibold text-gray-800">Member Propositions</h2>
-          <button onClick={() => setActiveTab("bylaws")} className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm font-medium">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Member Propositions
+          </h2>
+          <button
+            onClick={() => setActiveTab("bylaws")}
+            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm font-medium"
+          >
             Back to Bylaws
           </button>
         </div>
-        
-        {loadingProps ? <p>Loading propositions...</p> : propositions.length === 0 ? (
-          <p className="text-gray-500">No propositions have been submitted yet.</p>
+
+        {loadingProps ? (
+          <p>Loading propositions...</p>
+        ) : propositions.length === 0 ? (
+          <p className="text-gray-500">
+            No propositions have been submitted yet.
+          </p>
         ) : (
           <div className="space-y-4">
             {propositionActionError && (
@@ -190,7 +205,10 @@ export default function BylawsManagement() {
               </p>
             )}
             {sortedPropositions.map((prop) => (
-              <div key={prop.id} className="p-4 bg-white border rounded shadow-sm">
+              <div
+                key={prop.id}
+                className="p-4 bg-white border rounded shadow-sm"
+              >
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <span className="text-xs font-bold uppercase px-2 py-1 rounded bg-blue-100 text-blue-800 mr-2">
@@ -205,14 +223,21 @@ export default function BylawsManagement() {
                     >
                       {prop.status === "viewed" ? "Viewed" : "Pending"}
                     </span>
-                    <span className="font-semibold text-gray-800">{prop.sectionTitle}</span>
+                    <span className="font-semibold text-gray-800">
+                      {prop.sectionTitle}
+                    </span>
                   </div>
                   <span className="text-sm text-gray-500">
-                    {new Date(prop.submittedAt || prop.createdAt).toLocaleString()}
+                    {new Date(
+                      prop.submittedAt || prop.createdAt,
+                    ).toLocaleString()}
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mb-2">
-                  Submitted by: <strong>{prop.userFullName || prop.userName || "Unknown Member"}</strong>
+                  Submitted by:{" "}
+                  <strong>
+                    {prop.userFullName || prop.userName || "Unknown Member"}
+                  </strong>
                 </p>
                 <div className="p-3 bg-gray-50 border rounded text-sm text-gray-800 whitespace-pre-wrap">
                   {prop.content}
@@ -221,24 +246,34 @@ export default function BylawsManagement() {
                   {prop.status !== "viewed" && (
                     <button
                       onClick={() => markViewedMutation.mutate(prop.id)}
-                      disabled={markViewedMutation.isPending || deletePropositionMutation.isPending}
+                      disabled={
+                        markViewedMutation.isPending ||
+                        deletePropositionMutation.isPending
+                      }
                       className="px-3 py-1 text-xs font-medium rounded bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
                     >
-                      {markViewedMutation.isPending && markViewedMutation.variables === prop.id
+                      {markViewedMutation.isPending &&
+                      markViewedMutation.variables === prop.id
                         ? "Saving..."
                         : "Mark Viewed"}
                     </button>
                   )}
                   <button
                     onClick={() => {
-                      if (window.confirm("Delete this proposition permanently?")) {
+                      if (
+                        window.confirm("Delete this proposition permanently?")
+                      ) {
                         deletePropositionMutation.mutate(prop.id);
                       }
                     }}
-                    disabled={markViewedMutation.isPending || deletePropositionMutation.isPending}
+                    disabled={
+                      markViewedMutation.isPending ||
+                      deletePropositionMutation.isPending
+                    }
                     className="px-3 py-1 text-xs font-medium rounded bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
                   >
-                    {deletePropositionMutation.isPending && deletePropositionMutation.variables === prop.id
+                    {deletePropositionMutation.isPending &&
+                    deletePropositionMutation.variables === prop.id
                       ? "Deleting..."
                       : "Delete"}
                   </button>
@@ -257,17 +292,30 @@ export default function BylawsManagement() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800">Edit Bylaws</h2>
           <div className="space-x-2">
-            <button onClick={handleSaveChanges} className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium">
+            <button
+              onClick={handleSaveChanges}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
+            >
               Save Changes
             </button>
-            <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm font-medium">
+            <button
+              onClick={() => setIsEditing(false)}
+              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm font-medium"
+            >
               Cancel
             </button>
           </div>
         </div>
-        {generalError && <p className="text-red-600 bg-red-100 border-red-400 rounded p-2 my-2 text-sm">{generalError}</p>}
+        {generalError && (
+          <p className="text-red-600 bg-red-100 border-red-400 rounded p-2 my-2 text-sm">
+            {generalError}
+          </p>
+        )}
         {editData.map((section, index) => (
-          <div key={section.id || index} className="mb-8 p-4 border rounded-md bg-white shadow-sm">
+          <div
+            key={section.id || index}
+            className="mb-8 p-4 border rounded-md bg-white shadow-sm"
+          >
             <input
               type="text"
               value={section.title}
@@ -287,7 +335,9 @@ export default function BylawsManagement() {
               }}
             />
             <button
-              onClick={() => setEditData(editData.filter((_, i) => i !== index))}
+              onClick={() =>
+                setEditData(editData.filter((_, i) => i !== index))
+              }
               className="mt-3 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs font-medium"
             >
               Delete Section
@@ -295,7 +345,12 @@ export default function BylawsManagement() {
           </div>
         ))}
         <button
-          onClick={() => setEditData([...editData, { id: `new-${Date.now()}`, title: "New Section", content: "" }])}
+          onClick={() =>
+            setEditData([
+              ...editData,
+              { id: `new-${Date.now()}`, title: "New Section", content: "" },
+            ])
+          }
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm font-medium"
         >
           + Add New Section
@@ -307,13 +362,21 @@ export default function BylawsManagement() {
   return (
     <div className="bg-gray-50 p-4 rounded border mt-6">
       <div className="flex justify-between items-center mb-6 pb-4 border-b">
-        <h2 className="text-2xl font-semibold text-gray-800">Association Bylaws</h2>
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Association Bylaws
+        </h2>
         {isAdmin && (
           <div className="space-x-2">
-            <button onClick={() => setActiveTab("propositions")} className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm font-medium">
+            <button
+              onClick={() => setActiveTab("propositions")}
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm font-medium"
+            >
               View Propositions
             </button>
-            <button onClick={handleEditToggle} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium">
+            <button
+              onClick={handleEditToggle}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
+            >
               Edit Bylaws
             </button>
           </div>
@@ -328,7 +391,9 @@ export default function BylawsManagement() {
                 <button
                   onClick={() => setActiveSectionId(section.id)}
                   className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
-                    activeSectionId === section.id ? "bg-purple-100 text-purple-700 font-semibold" : "text-gray-600 hover:bg-gray-100"
+                    activeSectionId === section.id
+                      ? "bg-purple-100 text-purple-700 font-semibold"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   {section.title}
@@ -340,9 +405,19 @@ export default function BylawsManagement() {
 
         <main className="md:w-3/4 lg:w-4/5 p-4 border rounded-md bg-white shadow min-h-[60vh] max-h-[80vh] overflow-y-auto">
           {bylaws.map((section) => (
-            <section key={section.id} id={section.id} ref={(el) => (sectionRefs.current[section.id] = el)} className="mb-8 scroll-mt-20">
-              <h3 className="text-xl font-bold text-purple-700 mb-3 pb-2 border-b border-purple-200">{section.title}</h3>
-              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+            <section
+              key={section.id}
+              id={section.id}
+              ref={(el) => (sectionRefs.current[section.id] = el)}
+              className="mb-8 scroll-mt-20"
+            >
+              <h3 className="text-xl font-bold text-purple-700 mb-3 pb-2 border-b border-purple-200">
+                {section.title}
+              </h3>
+              <div
+                className="prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: section.content }}
+              />
             </section>
           ))}
         </main>

@@ -115,7 +115,11 @@ export default function LinktreeManagement() {
   };
 
   const handleDeleteLink = (indexToDelete) => {
-    if (window.confirm(`Are you sure you want to delete "${links[indexToDelete].text}"?`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${links[indexToDelete].text}"?`,
+      )
+    ) {
       const updatedList = links.filter((_, index) => index !== indexToDelete);
       setGeneralError(null);
       mutation.mutate(updatedList);
@@ -131,11 +135,10 @@ export default function LinktreeManagement() {
     });
     setGeneralError(null);
     if (editIndex === indexToToggle && editedLink) {
-        setEditedLink(prev => ({...prev, isEnabled: !prev.isEnabled}));
+      setEditedLink((prev) => ({ ...prev, isEnabled: !prev.isEnabled }));
     }
     mutation.mutate(updatedList);
   };
-
 
   const handleMove = (index, direction) => {
     const newIndex = direction === "up" ? index - 1 : index + 1;

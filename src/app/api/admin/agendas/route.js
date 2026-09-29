@@ -88,7 +88,8 @@ const formatAgendaDate = (dateValue) => {
   return agendaDocumentFormatter.format(parsedDate);
 };
 
-const formatAgendaTitle = (dateValue) => `Agenda ${formatAgendaDate(dateValue)}`;
+const formatAgendaTitle = (dateValue) =>
+  `Agenda ${formatAgendaDate(dateValue)}`;
 
 const DEFAULT_AGENDA_LABELS = {
   meetingInitiation: "Meeting initiation",
@@ -100,7 +101,9 @@ const DEFAULT_AGENDA_LABELS = {
 
 const normalizeAgendaLabels = (labels) => {
   const safeLabels =
-    labels && typeof labels === "object" && !Array.isArray(labels) ? labels : {};
+    labels && typeof labels === "object" && !Array.isArray(labels)
+      ? labels
+      : {};
 
   return Object.fromEntries(
     Object.entries(DEFAULT_AGENDA_LABELS).map(([key, fallbackValue]) => [
@@ -114,71 +117,69 @@ const normalizeAgendaLabels = (labels) => {
 
 const ensureTopicList = (topics) => {
   const normalizedTopics = Array.isArray(topics)
-    ? topics
-        .slice(0, 20)
-        .map((topic, index) => {
-          if (typeof topic === "string") {
-            return {
-              id: `agenda-topic-${index}`,
-              label: `Topic ${index + 1}`,
-              content: topic,
-            };
-          }
-
-          const safeTopic =
-            topic && typeof topic === "object" && !Array.isArray(topic)
-              ? topic
-              : {};
-
+    ? topics.slice(0, 20).map((topic, index) => {
+        if (typeof topic === "string") {
           return {
-            id:
-              typeof safeTopic.id === "string" && safeTopic.id.trim()
-                ? safeTopic.id
-                : `agenda-topic-${index}`,
-            label:
-              typeof safeTopic.label === "string" && safeTopic.label.trim()
-                ? safeTopic.label
-                : `Topic ${index + 1}`,
-            content:
-              typeof safeTopic.content === "string" ? safeTopic.content : "",
-            voting: {
-              enabled:
-                safeTopic.voting && typeof safeTopic.voting === "object"
-                  ? safeTopic.voting.enabled === true
-                  : false,
-              reason:
-                safeTopic.voting &&
-                typeof safeTopic.voting === "object" &&
-                typeof safeTopic.voting.reason === "string"
-                  ? safeTopic.voting.reason
-                  : "",
-              approve:
-                safeTopic.voting &&
-                typeof safeTopic.voting === "object" &&
-                Array.isArray(safeTopic.voting.approve)
-                  ? safeTopic.voting.approve.filter(
-                      (member) => typeof member === "string",
-                    )
-                  : [],
-              disapprove:
-                safeTopic.voting &&
-                typeof safeTopic.voting === "object" &&
-                Array.isArray(safeTopic.voting.disapprove)
-                  ? safeTopic.voting.disapprove.filter(
-                      (member) => typeof member === "string",
-                    )
-                  : [],
-              abstain:
-                safeTopic.voting &&
-                typeof safeTopic.voting === "object" &&
-                Array.isArray(safeTopic.voting.abstain)
-                  ? safeTopic.voting.abstain.filter(
-                      (member) => typeof member === "string",
-                    )
-                  : [],
-            },
+            id: `agenda-topic-${index}`,
+            label: `Topic ${index + 1}`,
+            content: topic,
           };
-        })
+        }
+
+        const safeTopic =
+          topic && typeof topic === "object" && !Array.isArray(topic)
+            ? topic
+            : {};
+
+        return {
+          id:
+            typeof safeTopic.id === "string" && safeTopic.id.trim()
+              ? safeTopic.id
+              : `agenda-topic-${index}`,
+          label:
+            typeof safeTopic.label === "string" && safeTopic.label.trim()
+              ? safeTopic.label
+              : `Topic ${index + 1}`,
+          content:
+            typeof safeTopic.content === "string" ? safeTopic.content : "",
+          voting: {
+            enabled:
+              safeTopic.voting && typeof safeTopic.voting === "object"
+                ? safeTopic.voting.enabled === true
+                : false,
+            reason:
+              safeTopic.voting &&
+              typeof safeTopic.voting === "object" &&
+              typeof safeTopic.voting.reason === "string"
+                ? safeTopic.voting.reason
+                : "",
+            approve:
+              safeTopic.voting &&
+              typeof safeTopic.voting === "object" &&
+              Array.isArray(safeTopic.voting.approve)
+                ? safeTopic.voting.approve.filter(
+                    (member) => typeof member === "string",
+                  )
+                : [],
+            disapprove:
+              safeTopic.voting &&
+              typeof safeTopic.voting === "object" &&
+              Array.isArray(safeTopic.voting.disapprove)
+                ? safeTopic.voting.disapprove.filter(
+                    (member) => typeof member === "string",
+                  )
+                : [],
+            abstain:
+              safeTopic.voting &&
+              typeof safeTopic.voting === "object" &&
+              Array.isArray(safeTopic.voting.abstain)
+                ? safeTopic.voting.abstain.filter(
+                    (member) => typeof member === "string",
+                  )
+                : [],
+          },
+        };
+      })
     : [];
 
   return normalizedTopics;
@@ -201,7 +202,8 @@ const ensureAppliedTopicSubmissions = (topics) => {
       userid:
         typeof safeTopic.userid === "string" && safeTopic.userid.trim()
           ? safeTopic.userid
-          : typeof safeTopic.submittedBy === "string" && safeTopic.submittedBy.trim()
+          : typeof safeTopic.submittedBy === "string" &&
+              safeTopic.submittedBy.trim()
             ? safeTopic.submittedBy
             : "Unknown",
       topic:
@@ -245,7 +247,9 @@ const normalizeAgendaSignatures = (signatures) => {
 
 const normalizeAgenda = (agenda, index = 0) => {
   const safeAgenda =
-    agenda && typeof agenda === "object" && !Array.isArray(agenda) ? agenda : {};
+    agenda && typeof agenda === "object" && !Array.isArray(agenda)
+      ? agenda
+      : {};
   const date = typeof safeAgenda.date === "string" ? safeAgenda.date : "";
   const legacyPresent =
     typeof safeAgenda.present === "string" ? safeAgenda.present : "";
@@ -316,7 +320,9 @@ const normalizeAgenda = (agenda, index = 0) => {
       typeof safeAgenda.completedAt === "string" ? safeAgenda.completedAt : "",
     signatures: normalizeAgendaSignatures(safeAgenda.signatures),
     Topics: ensureAppliedTopicSubmissions(
-      Array.isArray(safeAgenda.Topics) ? safeAgenda.Topics : safeAgenda.appliedTopics,
+      Array.isArray(safeAgenda.Topics)
+        ? safeAgenda.Topics
+        : safeAgenda.appliedTopics,
     ),
   };
 };

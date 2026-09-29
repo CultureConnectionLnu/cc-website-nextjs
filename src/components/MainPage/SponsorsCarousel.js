@@ -32,7 +32,7 @@ const ArrowButton = ({
   disabled,
   icon,
   "aria-label": ariaLabel,
-  className, 
+  className,
 }) => (
   <button
     onClick={onClick}
@@ -125,9 +125,7 @@ function SponsorsCarousel() {
                       rel="noopener noreferrer"
                       className="block outline-none focus:ring-2 focus:ring-indigo-300 rounded-full"
                       aria-label={`Visit ${sponsor.name}`}
-                      onClick={(e) =>
-                        !sponsor.websiteUrl && e.preventDefault()
-                      }
+                      onClick={(e) => !sponsor.websiteUrl && e.preventDefault()}
                       style={{
                         cursor: sponsor.websiteUrl ? "pointer" : "default",
                       }}
@@ -150,14 +148,14 @@ function SponsorsCarousel() {
                 disabled={prevBtnDisabled}
                 icon={faChevronLeft}
                 aria-label="Previous sponsor"
-                className="left-0 -translate-x-1/2" 
+                className="left-0 -translate-x-1/2"
               />
               <ArrowButton
                 onClick={scrollNext}
                 disabled={nextBtnDisabled}
                 icon={faChevronRight}
                 aria-label="Next sponsor"
-                className="right-0 translate-x-1/2" 
+                className="right-0 translate-x-1/2"
               />
             </div>
           </div>

@@ -524,7 +524,10 @@ export async function PATCH(request) {
 
       if (action === "attend") {
         if (isUserCurrentlyConfirmed)
-          throw { status: 400, message: "You are already attending this event." };
+          throw {
+            status: 400,
+            message: "You are already attending this event.",
+          };
         if (isUserCurrentlyWaiting)
           throw {
             status: 400,
@@ -624,7 +627,11 @@ export async function PATCH(request) {
         const verifyStmt = db.prepare(
           "UPDATE EventAttendees SET verified = ? WHERE event_id = ? AND user_id = ?",
         );
-        verifyStmt.run(boolToInt(body.verified), eventId, targetUserIdForAction);
+        verifyStmt.run(
+          boolToInt(body.verified),
+          eventId,
+          targetUserIdForAction,
+        );
       } else if (action === "remove") {
         const userToRemoveStatus = userStatusStmt.get(
           eventId,

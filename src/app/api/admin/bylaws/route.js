@@ -88,7 +88,7 @@ async function readBylawsFile() {
   } catch (error) {
     if (error.code === "ENOENT") {
       console.log("Bylaws file not found, returning empty array.");
-      return []; 
+      return [];
     }
     console.error("Error reading bylaws file:", error);
     throw new Error("Failed to read bylaws data.");
@@ -111,11 +111,7 @@ async function writeBylawsFile(data) {
         );
       }
     }
-    await fs.writeFile(
-      bylawsFilePath,
-      JSON.stringify(data, null, 2),
-      "utf8",
-    );
+    await fs.writeFile(bylawsFilePath, JSON.stringify(data, null, 2), "utf8");
   } catch (error) {
     console.error("Error writing bylaws file:", error);
     throw new Error(`Failed to save bylaws data: ${error.message}`);

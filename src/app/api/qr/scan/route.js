@@ -28,31 +28,31 @@ export async function POST(request) {
     }
 
     // --- SUPPORT FOR NEW URL FORMAT ---
-    // If the scanner picks up a full URL (e.g. "https://site.com/claim?token=XYZ"), 
+    // If the scanner picks up a full URL (e.g. "https://site.com/claim?token=XYZ"),
     // extract just the token part.
     if (scannedToken.includes("token=")) {
-        scannedToken = scannedToken.split("token=")[1];
-        // Remove any subsequent params if they exist (unlikely in this scheme but safe)
-        if (scannedToken.includes("&")) {
-            scannedToken = scannedToken.split("&")[0];
-        }
+      scannedToken = scannedToken.split("token=")[1];
+      // Remove any subsequent params if they exist (unlikely in this scheme but safe)
+      if (scannedToken.includes("&")) {
+        scannedToken = scannedToken.split("&")[0];
+      }
     }
 
     // --- VERIFY TOKEN ---
     let achievementId;
     try {
-        const decoded = jwt.verify(scannedToken, QR_JWT_SECRET);
-        
-        // Ensure it's an achievement grant token ('ag')
-        if (decoded.t !== "ag" || !decoded.a) {
-            throw new Error("Invalid token type.");
-        }
-        achievementId = decoded.a;
+      const decoded = jwt.verify(scannedToken, QR_JWT_SECRET);
+
+      // Ensure it's an achievement grant token ('ag')
+      if (decoded.t !== "ag" || !decoded.a) {
+        throw new Error("Invalid token type.");
+      }
+      achievementId = decoded.a;
     } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            throw new Error("This QR code has expired.");
-        }
-        throw new Error("Invalid or tampered QR code.");
+      if (err.name === "TokenExpiredError") {
+        throw new Error("This QR code has expired.");
+      }
+      throw new Error("Invalid or tampered QR code.");
     }
 
     // --- PROCESS BADGE (Shared Logic) ---
@@ -60,7 +60,8 @@ export async function POST(request) {
     const result = processBadgeScan(userId, achievementId);
 
     // Return format matching what the frontend expects
-    return NextResponse.json({
+    return NextResponse.json(
+      {
         success: true,
         message: result.message,
         achievementId: result.achievement.id,
@@ -68,17 +69,19 @@ export async function POST(request) {
         achievedNow: result.achievedNow,
         isAchieved: true, // If processed successfully, they have progress or badge
         // Map any extra fields your legacy frontend might look for
-        achieveDescription: result.achievedNow 
-            ? (result.achievement.achiveDescription || result.achievement.description) 
-            : null
-    }, { status: 200 });
-
+        achieveDescription: result.achievedNow
+          ? result.achievement.achiveDescription ||
+            result.achievement.description
+          : null,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("QR Scan API Error:", error.message);
     const status = error.status || 400; // Default to Bad Request for logic errors
     return NextResponse.json(
-        { success: false, message: error.message || "Failed to process scan." }, 
-        { status }
+      { success: false, message: error.message || "Failed to process scan." },
+      { status },
     );
   }
 }

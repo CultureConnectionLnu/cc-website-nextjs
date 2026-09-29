@@ -73,7 +73,6 @@ export async function GET() {
   }
 }
 
-
 export async function POST(request) {
   try {
     const newMemberData = await request.json();
@@ -81,7 +80,7 @@ export async function POST(request) {
     if (
       !newMemberData.name ||
       !newMemberData.position ||
-      !newMemberData.codention 
+      !newMemberData.codention
     ) {
       return NextResponse.json(
         { error: "Name, Position, and Codention are required." },
@@ -148,7 +147,7 @@ export async function PUT(request) {
 
     members[memberIndex] = {
       ...members[memberIndex],
-      ...updatedMemberData, 
+      ...updatedMemberData,
     };
 
     await writeMembers(members);

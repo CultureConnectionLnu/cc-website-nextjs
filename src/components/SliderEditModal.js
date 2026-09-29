@@ -30,13 +30,19 @@ const SliderEditModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      const safeData = initialData ? JSON.parse(JSON.stringify(initialData)) : {};
-      const safeSettings = initialSettings ? JSON.parse(JSON.stringify(initialSettings)) : { defaultPreset: "", presetMappings: {} };
+      const safeData = initialData
+        ? JSON.parse(JSON.stringify(initialData))
+        : {};
+      const safeSettings = initialSettings
+        ? JSON.parse(JSON.stringify(initialSettings))
+        : { defaultPreset: "", presetMappings: {} };
       safeSettings.presetMappings = safeSettings.presetMappings || {};
 
       setEditableData(safeData);
       setEditedSettings(safeSettings);
-      setSelectedPreset(safeSettings.defaultPreset || Object.keys(safeData)[0] || "");
+      setSelectedPreset(
+        safeSettings.defaultPreset || Object.keys(safeData)[0] || "",
+      );
 
       console.log("[Modal] Initialized state:", { safeData, safeSettings }); // Debug log
     }
@@ -200,7 +206,10 @@ const SliderEditModal = ({
       return;
     }
 
-    console.log("[Modal] Attempting save with:", { newData: editableData, newSettings: editedSettings }); // Debug log
+    console.log("[Modal] Attempting save with:", {
+      newData: editableData,
+      newSettings: editedSettings,
+    }); // Debug log
 
     onSave({ newData: editableData, newSettings: editedSettings });
   };

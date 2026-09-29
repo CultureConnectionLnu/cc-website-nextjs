@@ -59,9 +59,8 @@ export default function EditableTextArea({
 
     setTimeout(() => {
       if (textareaRef.current) {
-        textareaRef.current.selectionStart =
-          textareaRef.current.selectionEnd =
-            selectionStart + insertText.length;
+        textareaRef.current.selectionStart = textareaRef.current.selectionEnd =
+          selectionStart + insertText.length;
         textareaRef.current.focus();
       }
     }, 0);

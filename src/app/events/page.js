@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useUser, SignInButton } from "@clerk/nextjs"; 
+import { useUser, SignInButton } from "@clerk/nextjs";
 import Header from "@/components/Header";
 import { BackgroundEvent } from "@/components/Background";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,7 +13,12 @@ import BecomeMemberModal from "@/components/BecomeMemberModal";
 import { AnimatePresence } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQrcode, faSignInAlt, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faQrcode,
+  faSignInAlt,
+  faChevronDown,
+  faChevronUp,
+} from "@fortawesome/free-solid-svg-icons";
 import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
 import "react-datepicker/dist/react-datepicker.css";
 import { motion } from "framer-motion";
@@ -37,7 +42,9 @@ const createEvent = async (newEventData) => {
     body: JSON.stringify(newEventData),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -61,7 +68,9 @@ const editEvent = async (updatedEventData) => {
     body: JSON.stringify(updatedEventData),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -80,7 +89,9 @@ const deleteEvent = async (eventId) => {
     method: "DELETE",
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -96,7 +107,9 @@ const attendUnattendEvent = async ({ eventId, action }) => {
     body: JSON.stringify({ eventId, action }),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -109,10 +122,17 @@ const verifyAttendee = async ({ eventId, attendeeUserId, verified }) => {
   const response = await fetch("/api/events", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ eventId, attendeeUserId, verified, action: "verify" }),
+    body: JSON.stringify({
+      eventId,
+      attendeeUserId,
+      verified,
+      action: "verify",
+    }),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -121,7 +141,9 @@ const verifyAttendee = async ({ eventId, attendeeUserId, verified }) => {
         errorData.message || "You do not have permission to verify attendees.",
       );
     }
-    throw new Error(errorData.message || "Failed to update verification status");
+    throw new Error(
+      errorData.message || "Failed to update verification status",
+    );
   }
   return response.json();
 };
@@ -133,7 +155,9 @@ const removeAttendee = async ({ eventId, attendeeUserId }) => {
     body: JSON.stringify({ eventId, attendeeUserId, action: "remove" }),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -154,7 +178,9 @@ const freezeUnverified = async ({ eventId }) => {
     body: JSON.stringify({ eventId }),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -175,7 +201,9 @@ const scanEventQrCodeApi = async (scannedData) => {
     body: JSON.stringify({ scannedData }),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -189,7 +217,9 @@ const fetchAllUsers = async () => {
   if (!response.ok) {
     const errorData = await response
       .json()
-      .catch(() => ({ message: `Request failed with status ${response.status}` }));
+      .catch(() => ({
+        message: `Request failed with status ${response.status}`,
+      }));
     throw new Error(errorData.message || "Failed to fetch users");
   }
   return response.json();
@@ -244,7 +274,8 @@ const EventCard = ({
       ? attendeesList.find((att) => att.userID === user.id)
       : null;
 
-  const isCurrentUserConfirmed = !!currentUserEntry && !currentUserEntry.waiting;
+  const isCurrentUserConfirmed =
+    !!currentUserEntry && !currentUserEntry.waiting;
   const isCurrentUserWaiting = !!currentUserEntry && currentUserEntry.waiting;
 
   const handleAttendUnattendClick = () => {
@@ -330,7 +361,8 @@ const EventCard = ({
 
   const showSignInPrompt = !user && isUserLoaded && event.attendees;
   const showActionButtons = user && isUserLoaded && event.attendees;
-  const showBecomeMemberPromptButton = showActionButtons && !isUserMember && !canManageEvents;
+  const showBecomeMemberPromptButton =
+    showActionButtons && !isUserMember && !canManageEvents;
 
   const manageButtonCountString = useMemo(() => {
     if (!canManageEvents || !event.attendees) return "";
@@ -375,7 +407,8 @@ const EventCard = ({
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = "https://api2.cultureconnection.se/assets/random/website/f6c5bd30-6ec2-4aba-8539-88a682b881dc.jpg";
+              e.target.src =
+                "https://api2.cultureconnection.se/assets/random/website/f6c5bd30-6ec2-4aba-8539-88a682b881dc.jpg";
             }}
           />
         </div>
@@ -399,9 +432,9 @@ const EventCard = ({
         </p>
 
         {isUserFreezed && event.freezenotallow && showActionButtons && (
-             <p className="text-center p-3 rounded border-2 mb-5 border-black bg-red-800/40 text-red-800 font-semibold">
-              Your account is frozen and this event does not allow frozen users.
-            </p>
+          <p className="text-center p-3 rounded border-2 mb-5 border-black bg-red-800/40 text-red-800 font-semibold">
+            Your account is frozen and this event does not allow frozen users.
+          </p>
         )}
 
         <div className="mt-auto pt-2">
@@ -425,8 +458,8 @@ const EventCard = ({
                 onClick={handleAttendUnattendClick}
                 disabled={isAttendButtonDisabled}
                 className={`w-full text-center p-3 mb-5 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 font-semibold ${buttonBgClass} ${buttonTextClass} ${buttonHoverBgClass} ${
-                  (attendUnattendMutation.isPending &&
-                  attendUnattendMutation.variables?.eventId === event.id)
+                  attendUnattendMutation.isPending &&
+                  attendUnattendMutation.variables?.eventId === event.id
                     ? "opacity-50 cursor-wait"
                     : ""
                 } ${
@@ -492,11 +525,7 @@ const AddEventCard = ({ onClick }) => {
         stroke="currentColor"
         strokeWidth={1.5}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 4v16m8-8H4"
-        />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
       </svg>
       <span className="text-lg font-medium">Add New Event</span>
     </button>
@@ -529,7 +558,7 @@ export default function EventsPage() {
   } = useQuery({
     queryKey: ["events"],
     queryFn: fetchEvents,
-    refetchInterval: 5000
+    refetchInterval: 5000,
   });
 
   const canManageEvents =
@@ -571,78 +600,126 @@ export default function EventsPage() {
             return originalEventInCache;
           }
 
-          const eventToUpdate = JSON.parse(JSON.stringify(originalEventInCache));
+          const eventToUpdate = JSON.parse(
+            JSON.stringify(originalEventInCache),
+          );
           eventToUpdate.attendeeDetails = eventToUpdate.attendeeDetails || [];
           eventToUpdate.attendeesCounter = eventToUpdate.attendeesCounter || [];
-          
-          const userIndexInDetails = eventToUpdate.attendeeDetails.findIndex(att => att.userID === user.id);
+
+          const userIndexInDetails = eventToUpdate.attendeeDetails.findIndex(
+            (att) => att.userID === user.id,
+          );
 
           if (action === "attend") {
-            const confirmedCountForThisEvent = eventToUpdate.attendeeDetails.filter(a => !a.waiting).length;
+            const confirmedCountForThisEvent =
+              eventToUpdate.attendeeDetails.filter((a) => !a.waiting).length;
             let shouldBeOnWaitlist =
               eventToUpdate.isLimitEnabled &&
               eventToUpdate.attendanceLimit > 0 &&
               confirmedCountForThisEvent >= eventToUpdate.attendanceLimit;
-            
-            if (isUserFreezed && shouldBeOnWaitlist && !eventToUpdate.freezenotallow) {
-            } else if (isUserFreezed && eventToUpdate.freezenotallow) {
-              return originalEventInCache; 
-            }
 
+            if (
+              isUserFreezed &&
+              shouldBeOnWaitlist &&
+              !eventToUpdate.freezenotallow
+            ) {
+            } else if (isUserFreezed && eventToUpdate.freezenotallow) {
+              return originalEventInCache;
+            }
 
             const userEntry = {
               userID: user.id,
               waiting: shouldBeOnWaitlist,
               verified: false,
               fullName: user.fullName || `User (${user.id.substring(0, 5)})`,
-              primaryEmailAddress: user.primaryEmailAddress?.emailAddress || null,
+              primaryEmailAddress:
+                user.primaryEmailAddress?.emailAddress || null,
             };
-            const counterEntry = { userID: user.id, waiting: shouldBeOnWaitlist, verified: false };
+            const counterEntry = {
+              userID: user.id,
+              waiting: shouldBeOnWaitlist,
+              verified: false,
+            };
 
             if (userIndexInDetails === -1) {
               eventToUpdate.attendeeDetails.push(userEntry);
             } else {
               eventToUpdate.attendeeDetails[userIndexInDetails] = userEntry;
             }
-            
-            const userIndexInCounterForAdd = eventToUpdate.attendeesCounter.findIndex(att => att.userID === user.id);
-            if (userIndexInCounterForAdd === -1) {
-                eventToUpdate.attendeesCounter.push(counterEntry);
-            } else {
-                eventToUpdate.attendeesCounter[userIndexInCounterForAdd] = counterEntry;
-            }
 
+            const userIndexInCounterForAdd =
+              eventToUpdate.attendeesCounter.findIndex(
+                (att) => att.userID === user.id,
+              );
+            if (userIndexInCounterForAdd === -1) {
+              eventToUpdate.attendeesCounter.push(counterEntry);
+            } else {
+              eventToUpdate.attendeesCounter[userIndexInCounterForAdd] =
+                counterEntry;
+            }
           } else if (action === "unattend") {
             if (userIndexInDetails !== -1) {
-              const wasUserWaiting = eventToUpdate.attendeeDetails[userIndexInDetails].waiting;
+              const wasUserWaiting =
+                eventToUpdate.attendeeDetails[userIndexInDetails].waiting;
               eventToUpdate.attendeeDetails.splice(userIndexInDetails, 1);
-              
-              eventToUpdate.attendeesCounter = eventToUpdate.attendeesCounter.filter(att => att.userID !== user.id);
 
-              if (!wasUserWaiting && eventToUpdate.isLimitEnabled && eventToUpdate.attendanceLimit > 0) {
-                let promotedUser = null;
-                let firstWaitingNonFrozenUserIndex = eventToUpdate.attendeeDetails.findIndex(
-                    att => att.waiting && !(user?.publicMetadata?.freezed === true && att.userID === user.id) 
+              eventToUpdate.attendeesCounter =
+                eventToUpdate.attendeesCounter.filter(
+                  (att) => att.userID !== user.id,
                 );
+
+              if (
+                !wasUserWaiting &&
+                eventToUpdate.isLimitEnabled &&
+                eventToUpdate.attendanceLimit > 0
+              ) {
+                let promotedUser = null;
+                let firstWaitingNonFrozenUserIndex =
+                  eventToUpdate.attendeeDetails.findIndex(
+                    (att) =>
+                      att.waiting &&
+                      !(
+                        user?.publicMetadata?.freezed === true &&
+                        att.userID === user.id
+                      ),
+                  );
                 if (firstWaitingNonFrozenUserIndex !== -1) {
-                    promotedUser = eventToUpdate.attendeeDetails[firstWaitingNonFrozenUserIndex];
+                  promotedUser =
+                    eventToUpdate.attendeeDetails[
+                      firstWaitingNonFrozenUserIndex
+                    ];
                 } else {
-                    let firstWaitingFrozenUserIndex = eventToUpdate.attendeeDetails.findIndex(att => att.waiting);
-                    if (firstWaitingFrozenUserIndex !== -1) {
-                        promotedUser = eventToUpdate.attendeeDetails[firstWaitingFrozenUserIndex];
-                    }
+                  let firstWaitingFrozenUserIndex =
+                    eventToUpdate.attendeeDetails.findIndex(
+                      (att) => att.waiting,
+                    );
+                  if (firstWaitingFrozenUserIndex !== -1) {
+                    promotedUser =
+                      eventToUpdate.attendeeDetails[
+                        firstWaitingFrozenUserIndex
+                      ];
+                  }
                 }
 
                 if (promotedUser) {
-                    const promotedUserIndex = eventToUpdate.attendeeDetails.findIndex(att => att.userID === promotedUser.userID);
-                    if (promotedUserIndex !== -1) { 
-                        eventToUpdate.attendeeDetails[promotedUserIndex].waiting = false;
-                        
-                        const counterIdxToUpdate = eventToUpdate.attendeesCounter.findIndex(att => att.userID === promotedUser.userID);
-                        if (counterIdxToUpdate !== -1) {
-                            eventToUpdate.attendeesCounter[counterIdxToUpdate].waiting = false;
-                        }
+                  const promotedUserIndex =
+                    eventToUpdate.attendeeDetails.findIndex(
+                      (att) => att.userID === promotedUser.userID,
+                    );
+                  if (promotedUserIndex !== -1) {
+                    eventToUpdate.attendeeDetails[promotedUserIndex].waiting =
+                      false;
+
+                    const counterIdxToUpdate =
+                      eventToUpdate.attendeesCounter.findIndex(
+                        (att) => att.userID === promotedUser.userID,
+                      );
+                    if (counterIdxToUpdate !== -1) {
+                      eventToUpdate.attendeesCounter[
+                        counterIdxToUpdate
+                      ].waiting = false;
                     }
+                  }
                 }
               }
             }
@@ -713,7 +790,7 @@ export default function EventsPage() {
       throw err;
     },
     onSuccess: (data, variables) => {
-        toast.success("Event updated!");
+      toast.success("Event updated!");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
@@ -796,7 +873,7 @@ export default function EventsPage() {
       throw err;
     },
     onSuccess: () => {
-        toast.success("Verification status updated.");
+      toast.success("Verification status updated.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
@@ -856,7 +933,7 @@ export default function EventsPage() {
       throw err;
     },
     onSuccess: () => {
-        toast.success("Attendee removed.");
+      toast.success("Attendee removed.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
@@ -888,7 +965,7 @@ export default function EventsPage() {
     },
   });
 
-const allEvents = eventsData || [];
+  const allEvents = eventsData || [];
   const visibleEvents = canManageEvents
     ? allEvents
     : allEvents.filter((event) => event.cardEnabled !== false);
@@ -915,13 +992,13 @@ const allEvents = eventsData || [];
     };
 
     const { date, time } = formatDateTime(event.date);
-    
-    setSelectedEvent({ 
-      ...event, 
-      date: date, 
-      time: time 
+
+    setSelectedEvent({
+      ...event,
+      date: date,
+      time: time,
     });
-    
+
     document.body.style.overflow = "hidden";
   };
   const closeModal = () => {
@@ -1009,7 +1086,10 @@ const allEvents = eventsData || [];
 
               <p className="mt-4 text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto text-center">
                 Almost all the Activities provided by Culture Connection
-                <span className="text-mainColor font-semibold"> is FREE of charge!</span>{' '}
+                <span className="text-mainColor font-semibold">
+                  {" "}
+                  is FREE of charge!
+                </span>{" "}
               </p>
 
               <section className="mt-6 max-w-3xl mx-auto">
@@ -1018,7 +1098,10 @@ const allEvents = eventsData || [];
                   className="w-full flex items-center justify-center gap-2 text-2xl md:text-3xl font-Header text-mainColor font-bold mb-4"
                 >
                   How to Help us Grow!
-                  <FontAwesomeIcon icon={isHelpOpen ? faChevronUp : faChevronDown} className="h-6 w-6" />
+                  <FontAwesomeIcon
+                    icon={isHelpOpen ? faChevronUp : faChevronDown}
+                    className="h-6 w-6"
+                  />
                 </button>
                 <AnimatePresence>
                   {isHelpOpen && (
@@ -1033,7 +1116,7 @@ const allEvents = eventsData || [];
                         <li>
                           <span className="font-semibold">
                             Become a member!
-                          </span>{' '}
+                          </span>{" "}
                         </li>
                         <li>
                           <span className="font-semibold">
@@ -1042,7 +1125,8 @@ const allEvents = eventsData || [];
                         </li>
                         <li>
                           <span className="font-semibold">
-                            Help us to run events by becoming a volunteer or committee member!
+                            Help us to run events by becoming a volunteer or
+                            committee member!
                           </span>
                         </li>
                       </ul>
@@ -1051,14 +1135,14 @@ const allEvents = eventsData || [];
                           Become a volunteer or committee member!
                         </h2>
                         <div className="text-gray-700 mb-4">
-                          Apply through our{' '}
+                          Apply through our{" "}
                           <a
                             href="https://forms.gle/iPYcieTrBnSGxL3j8"
                             className="text-mainColor font-semibold hover:underline"
                           >
                             Google Form Application
-                          </a>
-                          {' '}or contact our Head of Committee{' '}
+                          </a>{" "}
+                          or contact our Head of Committee{" "}
                           <a
                             href="mailto:community@cultureconnection.se"
                             className="text-mainColor font-semibold hover:underline"
@@ -1066,7 +1150,11 @@ const allEvents = eventsData || [];
                             community@cultureconnection.se
                           </a>
                           <p className="mt-2">
-                            <span className="text-mainColor font-semibold">{' '}Thank you!</span> and enjoy our Events & Activities!
+                            <span className="text-mainColor font-semibold">
+                              {" "}
+                              Thank you!
+                            </span>{" "}
+                            and enjoy our Events & Activities!
                           </p>
                         </div>
                       </div>
@@ -1074,7 +1162,7 @@ const allEvents = eventsData || [];
                   )}
                 </AnimatePresence>
               </section>
-           </div>
+            </div>
             <div className="flex flex-col justify-center items-center gap-4">
               {isUserLoaded && user ? (
                 <button
@@ -1106,7 +1194,9 @@ const allEvents = eventsData || [];
                 title="Toggle Activities"
                 aria-label="Toggle Activities"
               >
-                {isActivitiesOpen ? "Hide Weekly Activities" : "Show Weekly Activities"}
+                {isActivitiesOpen
+                  ? "Hide Weekly Activities"
+                  : "Show Weekly Activities"}
               </button>
             </div>
             <AnimatePresence>
@@ -1172,7 +1262,7 @@ const allEvents = eventsData || [];
             )}
           </main>
         </div>
-      <Footer />
+        <Footer />
       </div>
 
       <AnimatePresence>

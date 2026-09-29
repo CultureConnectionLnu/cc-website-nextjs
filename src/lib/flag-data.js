@@ -226,17 +226,20 @@ export const flags = [
   { name: "American Samoa", code: "as" },
   { name: "Wallis and Futuna", code: "wf" },
   { name: "Cocos Island", code: "cc" },
-  { name: "Pitcairn Islands", code: "pn" }
-].map((flag) => ({
-  ...flag,
-  imageUrl: `https://flagcdn.com/w320/${flag.code.toLowerCase()}.png`,
-})).concat([
-  {
-    name: "Culture Connection",
-    code: "culture_connection",
-    imageUrl: "https://api2.cultureconnection.se/assets/achievements-frame/website/115f93a1-a1f7-4369-91a6-9107eac5feb1.png"
-  }
-]);
+  { name: "Pitcairn Islands", code: "pn" },
+]
+  .map((flag) => ({
+    ...flag,
+    imageUrl: `https://flagcdn.com/w320/${flag.code.toLowerCase()}.png`,
+  }))
+  .concat([
+    {
+      name: "Culture Connection",
+      code: "culture_connection",
+      imageUrl:
+        "https://api2.cultureconnection.se/assets/achievements-frame/website/115f93a1-a1f7-4369-91a6-9107eac5feb1.png",
+    },
+  ]);
 
 export const getRandomOptions = (correctFlag, allFlags, count = 2) => {
   const options = [correctFlag];
@@ -244,12 +247,12 @@ export const getRandomOptions = (correctFlag, allFlags, count = 2) => {
   while (options.length < count) {
     const randomFlag = allFlags[Math.floor(Math.random() * allFlags.length)];
     const alreadyExists = options.some((f) => f.name === randomFlag.name);
-    
+
     if (!alreadyExists) {
       options.push(randomFlag);
     }
   }
-  
+
   return options.sort(() => Math.random() - 0.5);
 };
 
