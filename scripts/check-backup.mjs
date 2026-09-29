@@ -6,7 +6,7 @@ const data_dir =
     process.env.DATA_DIR !== undefined
         ? process.env.DATA_DIR
         : RAILWAY_DATA_DIR;
-const TZ_PATH = `${data_dir}/.timezone`;
+const TZ_PATH = `${data_dir}/.backup_time`;
 
 function read_latest_backup_time() {
     try {
@@ -43,7 +43,7 @@ export function check_backup() {
     );
     if (timeSinceBackup > BACKUP_INTERVAL) {
         console.log(
-            `Last backup was ${timeSinceBackupHours} hours ago. Running backup script...`,
+            `Last backup was ${Math.floor(timeSinceBackup / HOURS)} hours ago. Running backup script...`,
         );
         run_backup();
     }
