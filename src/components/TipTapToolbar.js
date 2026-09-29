@@ -2,8 +2,16 @@
 "use client";
 import React from "react";
 import {
-  FaBold, FaItalic, FaUnderline, FaStrikethrough,
-  FaListOl, FaListUl, FaLink, FaUnlink, FaPaintBrush, FaEraser
+  FaBold,
+  FaItalic,
+  FaUnderline,
+  FaStrikethrough,
+  FaListOl,
+  FaListUl,
+  FaLink,
+  FaUnlink,
+  FaPaintBrush,
+  FaEraser,
 } from "react-icons/fa";
 
 const TipTapToolbar = ({ editor }) => {
@@ -15,7 +23,7 @@ const TipTapToolbar = ({ editor }) => {
     const previousUrl = editor.getAttributes("link").href;
     const url = window.prompt("URL", previousUrl);
 
-    if (url === null) return; 
+    if (url === null) return;
     if (url === "") {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
@@ -24,12 +32,14 @@ const TipTapToolbar = ({ editor }) => {
   };
 
   const addColor = () => {
-    const color = window.prompt("Enter color (e.g., #FF0000 or red)", editor.getAttributes('textStyle').color);
+    const color = window.prompt(
+      "Enter color (e.g., #FF0000 or red)",
+      editor.getAttributes("textStyle").color,
+    );
     if (color) {
       editor.chain().focus().setColor(color).run();
     }
   };
-
 
   return (
     <div className="tiptap-toolbar border border-gray-300 rounded-t-md p-2 flex flex-wrap gap-1 bg-gray-50">
@@ -116,7 +126,7 @@ const TipTapToolbar = ({ editor }) => {
           <FaUnlink />
         </button>
       )}
-       <button
+      <button
         onClick={addColor}
         className="p-2 rounded hover:bg-gray-200"
         title="Text Color"
@@ -131,7 +141,9 @@ const TipTapToolbar = ({ editor }) => {
         <FaEraser />
       </button>
       <button
-        onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
+        onClick={() =>
+          editor.chain().focus().clearNodes().unsetAllMarks().run()
+        }
         className="p-2 rounded hover:bg-gray-200"
         title="Clear Formatting"
       >

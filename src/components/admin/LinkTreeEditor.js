@@ -1,6 +1,6 @@
 import { HexColorPicker } from "react-colorful";
 import ColorPicker from "../ColorPicker";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 function LinkTreeEditor({
   links,
@@ -27,25 +27,28 @@ function LinkTreeEditor({
       <h3 className="text-4xl text-center font-bold my-6">Link Tree Editing</h3>
 
       {links.map((item, index) => (
-        <div key={index} className={!item.isEnabled ? 'opacity-50' : ''}>
-          <a href={item.isEnabled ? item.link : '#'}
-             target="_blank"
-             rel="noopener noreferrer"
-             onClick={(e) => !item.isEnabled && e.preventDefault()}
-             aria-disabled={!item.isEnabled}
-             >
+        <div key={index} className={!item.isEnabled ? "opacity-50" : ""}>
+          <a
+            href={item.isEnabled ? item.link : "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => !item.isEnabled && e.preventDefault()}
+            aria-disabled={!item.isEnabled}
+          >
             <div
               className={`sm:w-96 w-[90%] mx-auto mt-6 text-center p-4 rounded py-3 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${
                 item.color?.startsWith("#") ? "" : item.color || "bg-gray-200"
-              } ${!item.isEnabled ? 'cursor-not-allowed' : ''}`}
+              } ${!item.isEnabled ? "cursor-not-allowed" : ""}`}
               style={
                 item.color?.startsWith("#")
                   ? { backgroundColor: item.color }
                   : {}
               }
             >
-              <p className={`text-xl font-bold ${item.textColor || "text-black"}`}>
-                {item.text} {!item.isEnabled && '(Disabled)'}
+              <p
+                className={`text-xl font-bold ${item.textColor || "text-black"}`}
+              >
+                {item.text} {!item.isEnabled && "(Disabled)"}
               </p>
             </div>
           </a>
@@ -70,11 +73,11 @@ function LinkTreeEditor({
               disabled={isSaving}
               className={`p-2 rounded text-white transition-all duration-200 disabled:opacity-50 ${
                 item.isEnabled
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-green-500 hover:bg-green-600'
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-green-500 hover:bg-green-600"
               }`}
             >
-              {item.isEnabled ? 'Disable' : 'Enable'}
+              {item.isEnabled ? "Disable" : "Enable"}
             </button>
             <button
               onClick={() => handleMoveUp(index)}
@@ -96,7 +99,9 @@ function LinkTreeEditor({
             <div className="sm:w-[70%] p-2 mx-auto bg-white py-10 mt-6 rounded-lg border-2 border-black focus:outline-none placeholder">
               <h4 className="text-4xl text-center font-bold mb-2">Edit Link</h4>
               <div className="mb-4">
-                <label className="block mb-2 text-center font-semibold text-lg">Text</label>
+                <label className="block mb-2 text-center font-semibold text-lg">
+                  Text
+                </label>
                 <input
                   type="text"
                   value={editedLink.text}
@@ -108,7 +113,9 @@ function LinkTreeEditor({
               </div>
 
               <div className="mb-4">
-                <label className="block mb-2 text-center font-semibold text-lg">Link</label>
+                <label className="block mb-2 text-center font-semibold text-lg">
+                  Link
+                </label>
                 <input
                   type="url"
                   value={editedLink.link}
@@ -120,16 +127,21 @@ function LinkTreeEditor({
               </div>
 
               <div className="mb-4">
-                 <label className="block mb-2 text-center font-semibold text-lg">Color (Tailwind/Hex)</label>
-                 <input
-                   type="text"
-                   placeholder="e.g., bg-blue-500 or #ff00ff"
-                   value={editedLink.color || ''}
-                   onChange={(e) =>
-                     setEditedLink({ ...editedLink, color: e.target.value.trim() })
-                   }
-                   className="sm:w-96 flex mx-auto mt-2 text-center font-bold p-4 rounded py-3 border-2 border-black focus:outline-none"
-                 />
+                <label className="block mb-2 text-center font-semibold text-lg">
+                  Color (Tailwind/Hex)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g., bg-blue-500 or #ff00ff"
+                  value={editedLink.color || ""}
+                  onChange={(e) =>
+                    setEditedLink({
+                      ...editedLink,
+                      color: e.target.value.trim(),
+                    })
+                  }
+                  className="sm:w-96 flex mx-auto mt-2 text-center font-bold p-4 rounded py-3 border-2 border-black focus:outline-none"
+                />
               </div>
 
               <div className="mb-4">
@@ -142,7 +154,7 @@ function LinkTreeEditor({
                     onClick={() =>
                       setEditedLink({ ...editedLink, textColor: "text-black" })
                     }
-                    className={`w-48 text-center p-2 rounded py-3 bg-gray-200 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${editedLink.textColor === 'text-black' ? 'ring-2 ring-offset-1 ring-blue-500' : ''}`}
+                    className={`w-48 text-center p-2 rounded py-3 bg-gray-200 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${editedLink.textColor === "text-black" ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
                   >
                     <p className="text-xl font-bold text-black">Black Text</p>
                   </button>
@@ -151,7 +163,7 @@ function LinkTreeEditor({
                     onClick={() =>
                       setEditedLink({ ...editedLink, textColor: "text-white" })
                     }
-                    className={`w-48 text-center p-2 rounded py-3 bg-gray-700 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${editedLink.textColor === 'text-white' ? 'ring-2 ring-offset-1 ring-blue-500' : ''}`}
+                    className={`w-48 text-center p-2 rounded py-3 bg-gray-700 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${editedLink.textColor === "text-white" ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
                   >
                     <p className="text-xl font-bold text-white">White Text</p>
                   </button>
@@ -159,16 +171,24 @@ function LinkTreeEditor({
               </div>
 
               <div className="mb-6 flex justify-center items-center space-x-2">
-                 <input
-                    type="checkbox"
-                    id={`edit-enabled-${index}`}
-                    checked={editedLink.isEnabled}
-                    onChange={(e) => setEditedLink({...editedLink, isEnabled: e.target.checked })}
-                    className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                 />
-                 <label htmlFor={`edit-enabled-${index}`} className="font-semibold text-lg">
-                    Enabled
-                 </label>
+                <input
+                  type="checkbox"
+                  id={`edit-enabled-${index}`}
+                  checked={editedLink.isEnabled}
+                  onChange={(e) =>
+                    setEditedLink({
+                      ...editedLink,
+                      isEnabled: e.target.checked,
+                    })
+                  }
+                  className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label
+                  htmlFor={`edit-enabled-${index}`}
+                  className="font-semibold text-lg"
+                >
+                  Enabled
+                </label>
               </div>
 
               <button
@@ -185,7 +205,9 @@ function LinkTreeEditor({
 
       <div className="sm:w-[70%] w-[97%] mx-auto py-10 mt-6 focus:outline-none placeholder">
         <div className="mt-6">
-          <h3 className="text-5xl text-center font-semibold mb-4">Add New Link</h3>
+          <h3 className="text-5xl text-center font-semibold mb-4">
+            Add New Link
+          </h3>
 
           <div className="mb-6">
             <a
@@ -196,7 +218,9 @@ function LinkTreeEditor({
             >
               <div
                 className={`sm:w-96 w-[95%] mx-auto mt-6 text-center p-4 rounded py-3 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${
-                  newLink.color?.startsWith("#") ? "" : newLink.color || "bg-gray-200"
+                  newLink.color?.startsWith("#")
+                    ? ""
+                    : newLink.color || "bg-gray-200"
                 }`}
                 style={
                   newLink.color?.startsWith("#")
@@ -204,7 +228,9 @@ function LinkTreeEditor({
                     : {}
                 }
               >
-                <p className={`text-xl font-bold ${newLink.textColor || "text-black"}`}>
+                <p
+                  className={`text-xl font-bold ${newLink.textColor || "text-black"}`}
+                >
                   {newLink.text || "Preview"}
                 </p>
               </div>
@@ -212,7 +238,9 @@ function LinkTreeEditor({
           </div>
 
           <div className="mb-4 items-center justify-center">
-             <label className="block mb-2 text-center font-semibold text-lg">Color (Tailwind/Hex)</label>
+            <label className="block mb-2 text-center font-semibold text-lg">
+              Color (Tailwind/Hex)
+            </label>
             <input
               type="text"
               placeholder="e.g., bg-red-300 or #aabbcc"
@@ -285,7 +313,9 @@ function LinkTreeEditor({
           </div>
 
           <div className="mb-4">
-             <label className="block mb-2 text-center font-semibold text-lg">Button Text</label>
+            <label className="block mb-2 text-center font-semibold text-lg">
+              Button Text
+            </label>
             <input
               type="text"
               placeholder="Text"
@@ -296,31 +326,35 @@ function LinkTreeEditor({
           </div>
 
           <div className="mb-4">
-             <label className="block mb-2 text-center font-semibold text-lg">Text Color</label>
-             <div className="flex justify-center space-x-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setNewLink({ ...newLink, textColor: "text-black" })
-                  }
-                  className={`w-48 text-center p-2 rounded py-3 bg-gray-200 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${newLink.textColor === 'text-black' ? 'ring-2 ring-offset-1 ring-blue-500' : ''}`}
-                >
-                  <p className="text-xl font-bold text-black">Black Text</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setNewLink({ ...newLink, textColor: "text-white" })
-                  }
-                  className={`w-48 text-center p-2 rounded py-3 bg-gray-700 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${newLink.textColor === 'text-white' ? 'ring-2 ring-offset-1 ring-blue-500' : ''}`}
-                >
-                  <p className="text-xl font-bold text-white">White Text</p>
-                </button>
-             </div>
+            <label className="block mb-2 text-center font-semibold text-lg">
+              Text Color
+            </label>
+            <div className="flex justify-center space-x-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setNewLink({ ...newLink, textColor: "text-black" })
+                }
+                className={`w-48 text-center p-2 rounded py-3 bg-gray-200 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${newLink.textColor === "text-black" ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
+              >
+                <p className="text-xl font-bold text-black">Black Text</p>
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setNewLink({ ...newLink, textColor: "text-white" })
+                }
+                className={`w-48 text-center p-2 rounded py-3 bg-gray-700 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 ${newLink.textColor === "text-white" ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
+              >
+                <p className="text-xl font-bold text-white">White Text</p>
+              </button>
+            </div>
           </div>
 
           <div className="mb-4">
-             <label className="block mb-2 text-center font-semibold text-lg">Link URL</label>
+            <label className="block mb-2 text-center font-semibold text-lg">
+              Link URL
+            </label>
             <input
               type="url"
               placeholder="https://example.com"
@@ -331,16 +365,18 @@ function LinkTreeEditor({
           </div>
 
           <div className="mb-6 flex justify-center items-center space-x-2">
-             <input
-                type="checkbox"
-                id="add-enabled"
-                checked={newLink.isEnabled}
-                onChange={(e) => setNewLink({...newLink, isEnabled: e.target.checked })}
-                className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-             />
-             <label htmlFor="add-enabled" className="font-semibold text-lg">
-                Enabled
-             </label>
+            <input
+              type="checkbox"
+              id="add-enabled"
+              checked={newLink.isEnabled}
+              onChange={(e) =>
+                setNewLink({ ...newLink, isEnabled: e.target.checked })
+              }
+              className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="add-enabled" className="font-semibold text-lg">
+              Enabled
+            </label>
           </div>
 
           <button
@@ -357,28 +393,30 @@ function LinkTreeEditor({
 }
 
 LinkTreeEditor.propTypes = {
-  links: PropTypes.arrayOf(PropTypes.shape({
+  links: PropTypes.arrayOf(
+    PropTypes.shape({
       color: PropTypes.string,
       text: PropTypes.string,
       link: PropTypes.string,
       textColor: PropTypes.string,
       isEnabled: PropTypes.bool,
-  })).isRequired,
+    }),
+  ).isRequired,
   newLink: PropTypes.shape({
-      color: PropTypes.string,
-      text: PropTypes.string,
-      link: PropTypes.string,
-      textColor: PropTypes.string,
-      isEnabled: PropTypes.bool,
+    color: PropTypes.string,
+    text: PropTypes.string,
+    link: PropTypes.string,
+    textColor: PropTypes.string,
+    isEnabled: PropTypes.bool,
   }).isRequired,
   setNewLink: PropTypes.func.isRequired,
   editIndex: PropTypes.number,
   editedLink: PropTypes.shape({
-      color: PropTypes.string,
-      text: PropTypes.string,
-      link: PropTypes.string,
-      textColor: PropTypes.string,
-      isEnabled: PropTypes.bool,
+    color: PropTypes.string,
+    text: PropTypes.string,
+    link: PropTypes.string,
+    textColor: PropTypes.string,
+    isEnabled: PropTypes.bool,
   }),
   setEditedLink: PropTypes.func.isRequired,
   showHexColorPicker: PropTypes.bool.isRequired,

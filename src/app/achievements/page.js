@@ -48,11 +48,9 @@ const createAchievement = async (newAchievementData) => {
     body: JSON.stringify(newAchievementData),
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to create achievement");
   }
   return response.json();
@@ -65,11 +63,9 @@ const editAchievement = async (updatedAchievementData) => {
     body: JSON.stringify(updatedAchievementData),
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to update achievement");
   }
   return response.json();
@@ -80,11 +76,9 @@ const deleteAchievement = async (achievementId) => {
     method: "DELETE",
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to delete achievement");
   }
   return response.json();
@@ -102,11 +96,9 @@ const patchUserAchievement = async (payload) => {
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || `Failed to ${body.action}`);
   }
   return response.json();
@@ -115,11 +107,9 @@ const patchUserAchievement = async (payload) => {
 const fetchAllUsers = async () => {
   const response = await fetch("/api/user");
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to fetch users");
   }
   return response.json();
@@ -163,11 +153,9 @@ const updateUserFavorite = async ({ achievementId, slotPosition }) => {
     body: JSON.stringify({ achievementId, slotPosition }),
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to update favorite badge.");
   }
   return response.json();
@@ -180,11 +168,9 @@ const removeUserFavorite = async ({ slotPosition }) => {
     body: JSON.stringify({ slotPosition }),
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to remove favorite badge.");
   }
   return response.json();
@@ -197,11 +183,9 @@ const updateUserCardSkin = async ({ achievementIdForSkin }) => {
     body: JSON.stringify({ achievementIdForSkin }),
   });
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to update card skin.");
   }
   return response.json();
@@ -219,10 +203,8 @@ export default function AchievementsPage() {
   const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
   const [isQrCodeModalOpen, setIsQrCodeModalOpen] = useState(false);
   const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
-  const [
-    isFavoriteSelectionModalOpen,
-    setIsFavoriteSelectionModalOpen,
-  ] = useState(false);
+  const [isFavoriteSelectionModalOpen, setIsFavoriteSelectionModalOpen] =
+    useState(false);
   const [isCardSkinModalOpen, setIsCardSkinModalOpen] = useState(false);
   const [isUserIdentityModalOpen, setIsUserIdentityModalOpen] = useState(false);
   const [isUserProfileModalOpen, setIsUserProfileModalOpen] = useState(false);
@@ -250,8 +232,7 @@ export default function AchievementsPage() {
     (user.publicMetadata?.admin === true ||
       user.publicMetadata?.committee === true);
   const isAdmin = isUserLoaded && user && user.publicMetadata?.admin === true;
-  const isMember =
-    isUserLoaded && user && user.publicMetadata?.member === true;
+  const isMember = isUserLoaded && user && user.publicMetadata?.member === true;
   const isSimpleUser =
     isUserLoaded && isSignedIn && user && !isMember && !canManage;
 
@@ -389,38 +370,36 @@ export default function AchievementsPage() {
     },
   });
 
-  const {
-    groupedAchievements,
-    sortedCategoryNames: allSortedCategoryNames,
-  } = useMemo(() => {
-    if (!achievementsData)
-      return { groupedAchievements: {}, sortedCategoryNames: [] };
-    const visibleAchievements = achievementsData.filter(
-      (ach) => ach.isEnabled || canManage,
-    );
-    const groups = {};
-    const categorySet = new Set();
-    let hasUncategorized = false;
-    visibleAchievements.forEach((ach) => {
-      const category = ach.category || "Uncategorized";
-      if (category !== "Uncategorized") {
-        categorySet.add(category);
-      } else {
-        hasUncategorized = true;
+  const { groupedAchievements, sortedCategoryNames: allSortedCategoryNames } =
+    useMemo(() => {
+      if (!achievementsData)
+        return { groupedAchievements: {}, sortedCategoryNames: [] };
+      const visibleAchievements = achievementsData.filter(
+        (ach) => ach.isEnabled || canManage,
+      );
+      const groups = {};
+      const categorySet = new Set();
+      let hasUncategorized = false;
+      visibleAchievements.forEach((ach) => {
+        const category = ach.category || "Uncategorized";
+        if (category !== "Uncategorized") {
+          categorySet.add(category);
+        } else {
+          hasUncategorized = true;
+        }
+        if (!groups[category]) {
+          groups[category] = [];
+        }
+        groups[category].push(ach);
+      });
+      const sortedNames = Array.from(categorySet).sort((a, b) =>
+        a.localeCompare(b),
+      );
+      if (hasUncategorized && groups["Uncategorized"]?.length > 0) {
+        sortedNames.push("Uncategorized");
       }
-      if (!groups[category]) {
-        groups[category] = [];
-      }
-      groups[category].push(ach);
-    });
-    const sortedNames = Array.from(categorySet).sort((a, b) =>
-      a.localeCompare(b),
-    );
-    if (hasUncategorized && groups["Uncategorized"]?.length > 0) {
-      sortedNames.push("Uncategorized");
-    }
-    return { groupedAchievements: groups, sortedCategoryNames: sortedNames };
-  }, [achievementsData, canManage]);
+      return { groupedAchievements: groups, sortedCategoryNames: sortedNames };
+    }, [achievementsData, canManage]);
 
   const { displayedAchievements, displayMode, categoriesToDisplay } =
     useMemo(() => {
@@ -619,7 +598,7 @@ export default function AchievementsPage() {
       const userId = decodedText;
       setIsUserProfileLoading(true);
       setIsUserProfileModalOpen(true);
-      setViewedUserProfile(null); 
+      setViewedUserProfile(null);
 
       try {
         const response = await fetch(`/api/user/${userId}/profile`);
@@ -924,16 +903,14 @@ export default function AchievementsPage() {
                     </h2>
                     <div className="bg-gray-400/80 p-4 md:p-6 rounded-lg shadow-xl border-4 border-gray-900/50">
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 justify-items-center">
-                        {displayedAchievements[category]?.map(
-                          (achievement) => (
-                            <AchievementBadge
-                              key={achievement.id}
-                              achievement={achievement}
-                              isAdminView={canManage}
-                              onOpenModal={openDetailModal}
-                            />
-                          ),
-                        )}
+                        {displayedAchievements[category]?.map((achievement) => (
+                          <AchievementBadge
+                            key={achievement.id}
+                            achievement={achievement}
+                            isAdminView={canManage}
+                            onOpenModal={openDetailModal}
+                          />
+                        ))}
                         {(!displayedAchievements[category] ||
                           displayedAchievements[category].length === 0) && (
                           <p className="col-span-full text-center text-gray-700 italic">

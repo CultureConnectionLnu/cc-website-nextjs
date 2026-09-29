@@ -85,20 +85,21 @@ export default function MembershipDetailModal({
               {membershipData.name}
             </h2>
 
-            {membershipData.websiteUrl && isValidUrl(membershipData.websiteUrl) && (
-              <p className="text-sm text-gray-600">
-                <span className="font-semibold text-gray-700">Website:</span>{" "}
-                <a
-                  href={membershipData.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-indigo-600 hover:text-indigo-800 hover:underline"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {membershipData.websiteUrl}
-                </a>
-              </p>
-            )}
+            {membershipData.websiteUrl &&
+              isValidUrl(membershipData.websiteUrl) && (
+                <p className="text-sm text-gray-600">
+                  <span className="font-semibold text-gray-700">Website:</span>{" "}
+                  <a
+                    href={membershipData.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-600 hover:text-indigo-800 hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {membershipData.websiteUrl}
+                  </a>
+                </p>
+              )}
 
             <div className="border-t border-gray-200 pt-4">
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">

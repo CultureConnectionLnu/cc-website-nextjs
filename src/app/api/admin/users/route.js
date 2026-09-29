@@ -76,11 +76,15 @@ async function readVerificationData() {
     const data = JSON.parse(fileContent);
     if (
       Array.isArray(data) &&
-      data.every((item) => typeof item === "object" && item !== null && "userID" in item)
+      data.every(
+        (item) => typeof item === "object" && item !== null && "userID" in item,
+      )
     ) {
       return data;
     }
-    console.warn("MemberVerefication.json format is invalid. Returning empty array.");
+    console.warn(
+      "MemberVerefication.json format is invalid. Returning empty array.",
+    );
     return [];
   } catch (error) {
     if (error.code === "ENOENT") {
@@ -210,10 +214,11 @@ export async function PUT(request) {
       !validKeys.includes(metadataKey) ||
       typeof metadataValue !== "boolean"
     ) {
-      console.error(
-        "API PUT /api/admin/users - Invalid request body:",
-        { userId, metadataKey, metadataValue },
-      );
+      console.error("API PUT /api/admin/users - Invalid request body:", {
+        userId,
+        metadataKey,
+        metadataValue,
+      });
       return NextResponse.json(
         {
           error:

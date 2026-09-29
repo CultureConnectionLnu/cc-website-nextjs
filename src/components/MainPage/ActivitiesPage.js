@@ -100,7 +100,8 @@ export default function ActivitiesPage() {
   };
 
   const jumpToCard = (newIndex) => {
-    if (isAnimating || newIndex === activeIndex || allCards.length === 0) return;
+    if (isAnimating || newIndex === activeIndex || allCards.length === 0)
+      return;
 
     const len = allCards.length;
     const deltaNext = (newIndex - activeIndex + len) % len;
@@ -195,7 +196,7 @@ export default function ActivitiesPage() {
       <div className="flex md:flex-row justify-center items-center gap-2 mb-4 px-4 w-full max-w-6xl flex-wrap">
         {allCards.map((card, index) => {
           const hasDay = daysOfWeek.some((day) => card.date?.includes(day));
-          const day = hasDay ? (card.date?.split(" ")[1] || "") : "";
+          const day = hasDay ? card.date?.split(" ")[1] || "" : "";
           return (
             <div key={card.id} className="relative">
               <button

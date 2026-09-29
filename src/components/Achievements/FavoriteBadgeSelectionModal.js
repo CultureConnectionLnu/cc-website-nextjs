@@ -24,7 +24,7 @@ export default function FavoriteBadgeSelectionModal({
 
   // Sorting: Put the "Base" badges first, then exploded levels if necessary?
   // Actually, standard list is fine.
-  
+
   const handleSelect = (achievement) => {
     // achievement.id might be "ach_123" or "ach_123_lvl_2"
     // We pass this directly to the parent handler.
@@ -58,12 +58,12 @@ export default function FavoriteBadgeSelectionModal({
             {/* Header */}
             <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-gray-50">
               <div>
-                 <h2 className="text-xl font-bold text-gray-800">
-                    Select Badge
-                 </h2>
-                 <p className="text-sm text-gray-500">
-                    Choose which achievement to display in Slot {currentSlot}
-                 </p>
+                <h2 className="text-xl font-bold text-gray-800">
+                  Select Badge
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Choose which achievement to display in Slot {currentSlot}
+                </p>
               </div>
               <button
                 onClick={onClose}
@@ -79,36 +79,42 @@ export default function FavoriteBadgeSelectionModal({
               {achievedBadges && achievedBadges.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 justify-items-center">
                   {achievedBadges.map((ach) => {
-                      // Check if this specific badge ID is currently selected in this slot
-                      const isSelected = currentFavoriteInSlot && (
-                          currentFavoriteInSlot.id === ach.id || 
-                          // Handle exploded ID match against base ID if checking crudely, 
-                          // but exact ID match is better for level specificity
-                          (ach.id.includes("_lvl_") && currentFavoriteInSlot.id === ach.id)
-                      );
+                    // Check if this specific badge ID is currently selected in this slot
+                    const isSelected =
+                      currentFavoriteInSlot &&
+                      (currentFavoriteInSlot.id === ach.id ||
+                        // Handle exploded ID match against base ID if checking crudely,
+                        // but exact ID match is better for level specificity
+                        (ach.id.includes("_lvl_") &&
+                          currentFavoriteInSlot.id === ach.id));
 
-                      return (
-                        <div key={ach.id} className="flex flex-col items-center group relative">
-                          <div className={`
+                    return (
+                      <div
+                        key={ach.id}
+                        className="flex flex-col items-center group relative"
+                      >
+                        <div
+                          className={`
                              rounded-xl transition-all duration-200
-                             ${isSelected ? 'ring-4 ring-indigo-400 ring-offset-2' : 'hover:scale-105'}
-                          `}>
-                              <AchievementBadge
-                                achievement={ach}
-                                onOpenModal={() => handleSelect(ach)} // Select on click
-                              />
-                          </div>
-                          <p className="text-xs text-center mt-2 font-medium text-gray-600 truncate w-32 px-1">
-                            {ach.title}
-                          </p>
+                             ${isSelected ? "ring-4 ring-indigo-400 ring-offset-2" : "hover:scale-105"}
+                          `}
+                        >
+                          <AchievementBadge
+                            achievement={ach}
+                            onOpenModal={() => handleSelect(ach)} // Select on click
+                          />
                         </div>
-                      );
+                        <p className="text-xs text-center mt-2 font-medium text-gray-600 truncate w-32 px-1">
+                          {ach.title}
+                        </p>
+                      </div>
+                    );
                   })}
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-40 text-gray-500">
-                   <p className="text-lg font-medium">No badges found.</p>
-                   <p className="text-sm">Go play some games to earn badges!</p>
+                  <p className="text-lg font-medium">No badges found.</p>
+                  <p className="text-sm">Go play some games to earn badges!</p>
                 </div>
               )}
             </div>

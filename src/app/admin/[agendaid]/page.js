@@ -119,7 +119,9 @@ export default function AgendaTopicApplicationPage() {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["agendas"] }),
-        queryClient.invalidateQueries({ queryKey: ["agendas", "topic-application-page"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["agendas", "topic-application-page"],
+        }),
       ]);
       setNewTopics([""]);
       setSuccessMessage("Topics successfully submitted!");
@@ -133,7 +135,9 @@ export default function AgendaTopicApplicationPage() {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["agendas"] }),
-        queryClient.invalidateQueries({ queryKey: ["agendas", "topic-application-page"] }),
+        queryClient.invalidateQueries({
+          queryKey: ["agendas", "topic-application-page"],
+        }),
       ]);
       setSuccessMessage("Topic removed.");
     },
@@ -170,7 +174,9 @@ export default function AgendaTopicApplicationPage() {
             <p className="mt-2 text-sm text-gray-600">
               Add topics for the{" "}
               <span className="font-semibold text-gray-900">
-                {selectedAgenda ? formatAgendaShortDate(selectedAgenda.date) : "selected"}
+                {selectedAgenda
+                  ? formatAgendaShortDate(selectedAgenda.date)
+                  : "selected"}
               </span>{" "}
               meeting.
             </p>
@@ -248,15 +254,16 @@ export default function AgendaTopicApplicationPage() {
                           {isAdmin ? (
                             <button
                               type="button"
-                              disabled={removeMutation.isPending || mutation.isPending}
+                              disabled={
+                                removeMutation.isPending || mutation.isPending
+                              }
                               onClick={() => {
                                 if (!selectedAgenda) {
                                   return;
                                 }
 
-                                const shouldRemove = window.confirm(
-                                  "Remove this topic?",
-                                );
+                                const shouldRemove =
+                                  window.confirm("Remove this topic?");
 
                                 if (!shouldRemove) {
                                   return;
@@ -269,7 +276,9 @@ export default function AgendaTopicApplicationPage() {
                                   ),
                                 };
                                 const updatedAgendas = agendas.map((agenda) =>
-                                  agenda.id === updatedAgenda.id ? updatedAgenda : agenda,
+                                  agenda.id === updatedAgenda.id
+                                    ? updatedAgenda
+                                    : agenda,
                                 );
                                 removeMutation.mutate(updatedAgendas);
                               }}
@@ -327,7 +336,9 @@ export default function AgendaTopicApplicationPage() {
                         type="button"
                         onClick={() =>
                           setNewTopics(
-                            newTopics.filter((_, itemIndex) => itemIndex !== index),
+                            newTopics.filter(
+                              (_, itemIndex) => itemIndex !== index,
+                            ),
                           )
                         }
                         className="px-2 text-red-500 hover:text-red-700"

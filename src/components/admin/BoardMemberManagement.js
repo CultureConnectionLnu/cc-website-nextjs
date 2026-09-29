@@ -482,8 +482,8 @@ function MemberForm({
           {isSubmitting
             ? "Saving..."
             : initialData
-            ? "Update Member"
-            : "Add Member"}
+              ? "Update Member"
+              : "Add Member"}
         </button>
       </div>
     </form>
@@ -811,9 +811,7 @@ export default function BoardMemberManagement() {
     if (activeCodentionTab === ALL_MEMBERS_TAB_KEY) {
       return members;
     }
-    return members.filter(
-      (member) => member.codention === activeCodentionTab,
-    );
+    return members.filter((member) => member.codention === activeCodentionTab);
   }, [members, activeCodentionTab]);
 
   const handleMutationSuccess = (action) => {
@@ -845,9 +843,8 @@ export default function BoardMemberManagement() {
     mutationFn: deleteMember,
     onSuccess: () => {
       handleMutationSuccess("deletion");
-      const currentTabStillExists = uniqueCodentionsForTabs.includes(
-        activeCodentionTab,
-      );
+      const currentTabStillExists =
+        uniqueCodentionsForTabs.includes(activeCodentionTab);
       if (
         activeCodentionTab !== ALL_MEMBERS_TAB_KEY &&
         !currentTabStillExists
@@ -897,11 +894,10 @@ export default function BoardMemberManagement() {
     onMutate: async (settingsUpdate) => {
       await queryClient.cancelQueries({ queryKey: ["boardSettings"] });
 
-      const previousSettings =
-        queryClient.getQueryData(["boardSettings"]) || {
-          defaultCodention: "All",
-          codentionOrder: [],
-        };
+      const previousSettings = queryClient.getQueryData(["boardSettings"]) || {
+        defaultCodention: "All",
+        codentionOrder: [],
+      };
 
       queryClient.setQueryData(["boardSettings"], {
         ...previousSettings,
@@ -966,15 +962,25 @@ export default function BoardMemberManagement() {
       return;
     }
 
-    const oldIndex = displayedMembers.findIndex((member) => member.id === active.id);
-    const newIndex = displayedMembers.findIndex((member) => member.id === over.id);
+    const oldIndex = displayedMembers.findIndex(
+      (member) => member.id === active.id,
+    );
+    const newIndex = displayedMembers.findIndex(
+      (member) => member.id === over.id,
+    );
 
     if (oldIndex === -1 || newIndex === -1) {
       return;
     }
 
-    const reorderedDisplayedMembers = arrayMove(displayedMembers, oldIndex, newIndex);
-    reorderMutation.mutate(reorderedDisplayedMembers.map((member) => member.id));
+    const reorderedDisplayedMembers = arrayMove(
+      displayedMembers,
+      oldIndex,
+      newIndex,
+    );
+    reorderMutation.mutate(
+      reorderedDisplayedMembers.map((member) => member.id),
+    );
   };
 
   const handleCodentionDragEnd = (event) => {
@@ -1269,9 +1275,7 @@ export default function BoardMemberManagement() {
                     </div>
                   )}
                   <div className="ml-3">
-                    <h3 className="font-medium text-gray-900">
-                      {member.name}
-                    </h3>
+                    <h3 className="font-medium text-gray-900">{member.name}</h3>
                     <p className="text-sm text-gray-500">{member.position}</p>
                   </div>
                 </div>

@@ -9,17 +9,28 @@ const initializeClerk = () => {
   return createClerkClient({ secretKey });
 };
 
-async function checkUserPermission(request, allowedRoleKeys = ["admin", "committee"]) {
+async function checkUserPermission(
+  request,
+  allowedRoleKeys = ["admin", "committee"],
+) {
   try {
     const { userId } = getAuth(request);
-    if (!userId) return { authorized: false, error: "Auth context missing", status: 401 };
+    if (!userId)
+      return { authorized: false, error: "Auth context missing", status: 401 };
     const clerk = initializeClerk();
     const user = await clerk.users.getUser(userId);
-    const hasPermission = allowedRoleKeys.some((role) => user?.publicMetadata?.[role] === true);
-    if (!hasPermission) return { authorized: false, error: "Unauthorized", status: 403 };
+    const hasPermission = allowedRoleKeys.some(
+      (role) => user?.publicMetadata?.[role] === true,
+    );
+    if (!hasPermission)
+      return { authorized: false, error: "Unauthorized", status: 403 };
     return { authorized: true, userId };
   } catch (error) {
-    return { authorized: false, error: "Auth verification failed", status: 500 };
+    return {
+      authorized: false,
+      error: "Auth verification failed",
+      status: 500,
+    };
   }
 }
 
@@ -37,21 +48,28 @@ const publicBaseUrl = process.env.NEXT_PUBLIC_ONE_COM_PUBLIC_FILES_BASE_URL;
 
 const joinPath = (...parts) => {
   return parts
-    .map(part => part || "") 
+    .map((part) => part || "")
     .join("/")
-    .replace(/\/+/g, "/") 
-    .replace(/\/$/, "");  
+    .replace(/\/+/g, "/")
+    .replace(/\/$/, "");
 };
 
 const getSafeRemotePath = (folderName) => {
-  const safeFolder = folderName ? folderName.replace(/[^a-zA-Z0-9_-]/g, "") : "";
+  const safeFolder = folderName
+    ? folderName.replace(/[^a-zA-Z0-9_-]/g, "")
+    : "";
   if (!safeFolder || safeFolder === "Root") return joinPath(baseRemotePath);
   return joinPath(baseRemotePath, safeFolder);
 };
 
 export async function GET(request) {
-  const perm = await checkUserPermission(request, ["admin", "committee", "member"]);
-  if (!perm.authorized) return NextResponse.json({ error: perm.error }, { status: perm.status });
+  const perm = await checkUserPermission(request, [
+    "admin",
+    "committee",
+    "member",
+  ]);
+  if (!perm.authorized)
+    return NextResponse.json({ error: perm.error }, { status: perm.status });
 
   const { searchParams } = new URL(request.url);
   const requestedFolder = searchParams.get("folder") || "";
@@ -63,13 +81,21 @@ export async function GET(request) {
 
     const exists = await sftp.exists(targetPath);
     if (!exists) {
-       return NextResponse.json({ imageBaseUrl: publicBaseUrl, files: [], folders: [] });
+      return NextResponse.json({
+        imageBaseUrl: publicBaseUrl,
+        files: [],
+        folders: [],
+      });
     }
 
     const list = await sftp.list(targetPath);
-    
+
     const files = list
-      .filter((item) => item.type === "-" && /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(item.name))
+      .filter(
+        (item) =>
+          item.type === "-" &&
+          /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(item.name),
+      )
       .map((item) => ({ name: item.name, size: item.size }));
 
     const folders = list
@@ -86,32 +112,36 @@ export async function GET(request) {
 
 export async function POST(request) {
   const perm = await checkUserPermission(request, ["admin"]);
-  if (!perm.authorized) return NextResponse.json({ error: perm.error }, { status: perm.status });
+  if (!perm.authorized)
+    return NextResponse.json({ error: perm.error }, { status: perm.status });
 
   const sftp = new SftpClient();
   try {
     await sftp.connect(sftpConfig);
     const formData = await request.formData();
     const action = formData.get("action");
-    
+
     if (action === "create_folder") {
       const newFolderName = formData.get("new_folder_name");
       if (!newFolderName) throw new Error("New folder name is required");
-      
+
       const safeNewName = newFolderName.replace(/[^a-zA-Z0-9_-]/g, "");
-      const parentPath = getSafeRemotePath(""); 
+      const parentPath = getSafeRemotePath("");
       const newPath = joinPath(parentPath, safeNewName);
-      
+
       const exists = await sftp.exists(newPath);
       if (exists) throw new Error("Folder already exists");
-      
+
       await sftp.mkdir(newPath, true);
-      return NextResponse.json({ success: true, message: `Created category: ${safeNewName}` });
+      return NextResponse.json({
+        success: true,
+        message: `Created category: ${safeNewName}`,
+      });
     }
 
     const folderName = formData.get("folder") || "";
     const targetDir = getSafeRemotePath(folderName);
-    
+
     const dirExists = await sftp.exists(targetDir);
     if (!dirExists) await sftp.mkdir(targetDir, true);
 
@@ -120,19 +150,25 @@ export async function POST(request) {
       if (file instanceof File) {
         const safeName = file.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
         const finalName = `${Date.now()}_${safeName}`;
-        
+
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
-        
+
         const fullUploadPath = joinPath(targetDir, finalName);
         await sftp.put(buffer, fullUploadPath);
         uploaded.push(finalName);
       }
     }
 
-    return NextResponse.json({ success: true, message: `Uploaded ${uploaded.length} files.` });
+    return NextResponse.json({
+      success: true,
+      message: `Uploaded ${uploaded.length} files.`,
+    });
   } catch (err) {
-    return NextResponse.json({ error: `Upload Failed: ${err.message}` }, { status: 500 });
+    return NextResponse.json(
+      { error: `Upload Failed: ${err.message}` },
+      { status: 500 },
+    );
   } finally {
     if (sftp.client) await sftp.end();
   }
@@ -140,7 +176,8 @@ export async function POST(request) {
 
 export async function PUT(request) {
   const perm = await checkUserPermission(request, ["admin"]);
-  if (!perm.authorized) return NextResponse.json({ error: perm.error }, { status: perm.status });
+  if (!perm.authorized)
+    return NextResponse.json({ error: perm.error }, { status: perm.status });
 
   const sftp = new SftpClient();
   try {
@@ -152,14 +189,17 @@ export async function PUT(request) {
 
     const oldPathDir = getSafeRemotePath(currentFolder);
     const newPathDir = getSafeRemotePath(targetFolder);
-    
+
     const oldFilePath = joinPath(oldPathDir, fileName);
     const newFilePath = joinPath(newPathDir, fileName);
 
     if (!(await sftp.exists(newPathDir))) await sftp.mkdir(newPathDir, true);
     await sftp.rename(oldFilePath, newFilePath);
 
-    return NextResponse.json({ success: true, message: `Moved to ${targetFolder || "Root"}` });
+    return NextResponse.json({
+      success: true,
+      message: `Moved to ${targetFolder || "Root"}`,
+    });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   } finally {
@@ -169,7 +209,8 @@ export async function PUT(request) {
 
 export async function DELETE(request) {
   const perm = await checkUserPermission(request, ["admin"]);
-  if (!perm.authorized) return NextResponse.json({ error: perm.error }, { status: perm.status });
+  if (!perm.authorized)
+    return NextResponse.json({ error: perm.error }, { status: perm.status });
 
   const sftp = new SftpClient();
   try {
@@ -181,7 +222,7 @@ export async function DELETE(request) {
 
     const folderPath = getSafeRemotePath(folder);
     const fullPath = joinPath(folderPath, fileName);
-    
+
     await sftp.delete(fullPath);
 
     return NextResponse.json({ success: true, message: `Deleted ${fileName}` });

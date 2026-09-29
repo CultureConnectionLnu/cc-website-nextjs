@@ -55,10 +55,7 @@ export async function GET(request, { params }) {
   } catch (error) {
     console.error(`GET /api/user/${targetUserId}/profile Error:`, error);
     if (error.clerkError) {
-      return NextResponse.json(
-        { message: "User not found." },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
     return NextResponse.json(
       { message: error.message || "Failed to load user profile." },

@@ -20,7 +20,10 @@ const initializeClerk = () => {
   return createClerkClient({ secretKey });
 };
 
-async function checkUserPermission(request, allowedRoleKeys = ["admin", "committee"]) {
+async function checkUserPermission(
+  request,
+  allowedRoleKeys = ["admin", "committee"],
+) {
   let authResult;
 
   try {
@@ -33,7 +36,10 @@ async function checkUserPermission(request, allowedRoleKeys = ["admin", "committ
       };
     }
   } catch (error) {
-    console.error("Agenda topic permission check failed while reading auth:", error);
+    console.error(
+      "Agenda topic permission check failed while reading auth:",
+      error,
+    );
     return {
       authorized: false,
       error: "Failed to get authentication context.",
@@ -60,7 +66,10 @@ async function checkUserPermission(request, allowedRoleKeys = ["admin", "committ
 
     return { authorized: true, userId: authResult.userId };
   } catch (error) {
-    console.error("Agenda topic permission check failed while reading user:", error);
+    console.error(
+      "Agenda topic permission check failed while reading user:",
+      error,
+    );
     return {
       authorized: false,
       error: "Could not verify user roles.",
@@ -80,7 +89,9 @@ const normalizeStoredTopics = (topics) => {
   return topics
     .map((topic) => {
       const safeTopic =
-        topic && typeof topic === "object" && !Array.isArray(topic) ? topic : {};
+        topic && typeof topic === "object" && !Array.isArray(topic)
+          ? topic
+          : {};
 
       return {
         id:
@@ -90,7 +101,8 @@ const normalizeStoredTopics = (topics) => {
         userid:
           typeof safeTopic.userid === "string" && safeTopic.userid.trim()
             ? safeTopic.userid
-            : typeof safeTopic.submittedBy === "string" && safeTopic.submittedBy.trim()
+            : typeof safeTopic.submittedBy === "string" &&
+                safeTopic.submittedBy.trim()
               ? safeTopic.submittedBy
               : "Unknown",
         topic:
@@ -173,14 +185,12 @@ export async function POST(request, { params }) {
     }
 
     const agendaIndex = agendas.findIndex(
-      (agenda) => agenda && typeof agenda === "object" && agenda.id === agendaId,
+      (agenda) =>
+        agenda && typeof agenda === "object" && agenda.id === agendaId,
     );
 
     if (agendaIndex === -1) {
-      return NextResponse.json(
-        { error: "Agenda not found." },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "Agenda not found." }, { status: 404 });
     }
 
     const currentAgenda = agendas[agendaIndex];

@@ -5,14 +5,14 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
 // Make sure these paths match where you actually put the files
-import BecomeMemberModal from "./BecomeMemberModal"; 
+import BecomeMemberModal from "./BecomeMemberModal";
 import LoginRequiredModal from "./LoginRequiredModal";
 
 function ModalControllerContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useUser(); 
+  const { user } = useUser();
 
   const modalType = searchParams.get("modal"); // "become_member" | "login_required"
 
@@ -21,7 +21,7 @@ function ModalControllerContent() {
     const params = new URLSearchParams(searchParams);
     params.delete("modal");
     params.delete("returnUrl"); // Clean up returnUrl if it exists
-    
+
     // Replace URL without refreshing the page
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
@@ -33,20 +33,22 @@ function ModalControllerContent() {
     } else {
       document.body.style.overflow = "unset";
     }
-    return () => { document.body.style.overflow = "unset"; };
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [modalType]);
 
   return (
     <>
-      <BecomeMemberModal 
-        isOpen={modalType === "become_member"} 
+      <BecomeMemberModal
+        isOpen={modalType === "become_member"}
         onClose={closeModal}
-        user={user} 
+        user={user}
       />
-      
-      <LoginRequiredModal 
-        isOpen={modalType === "login_required"} 
-        onClose={closeModal} 
+
+      <LoginRequiredModal
+        isOpen={modalType === "login_required"}
+        onClose={closeModal}
       />
     </>
   );

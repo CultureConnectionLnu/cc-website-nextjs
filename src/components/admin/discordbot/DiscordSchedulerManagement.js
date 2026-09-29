@@ -6,15 +6,13 @@ import DiscordSchedulerForm from "./DiscordSchedulerForm";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_DISCORD_URL;
 
-
 const fetchScheduledMessages = async () => {
   if (!API_BASE_URL) throw new Error("API URL not configured.");
   const response = await fetch(`${API_BASE_URL}/scheduledMessages`);
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(
-      errorData.error ||
-        `Failed to fetch schedules: ${response.statusText}`,
+      errorData.error || `Failed to fetch schedules: ${response.statusText}`,
     );
   }
   const result = await response.json();
@@ -31,8 +29,7 @@ const createScheduledMessage = async (newScheduleData) => {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(
-      errorData.error ||
-        `Failed to create schedule: ${response.statusText}`,
+      errorData.error || `Failed to create schedule: ${response.statusText}`,
     );
   }
   return response.json();
@@ -54,8 +51,7 @@ const updateScheduledMessage = async (updatedScheduleData) => {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(
-      errorData.error ||
-        `Failed to update schedule: ${response.statusText}`,
+      errorData.error || `Failed to update schedule: ${response.statusText}`,
     );
   }
   return response.json();
@@ -70,8 +66,7 @@ const deleteScheduledMessage = async (scheduleId) => {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(
-      errorData.error ||
-        `Failed to delete schedule: ${response.statusText}`,
+      errorData.error || `Failed to delete schedule: ${response.statusText}`,
     );
   }
   return response.json();
@@ -252,10 +247,7 @@ export default function DiscordSchedulerManagement() {
             <tbody className="bg-white divide-y divide-gray-200">
               {schedules.length === 0 && (
                 <tr>
-                  <td
-                    colSpan="6"
-                    className="text-center py-4 text-gray-500"
-                  >
+                  <td colSpan="6" className="text-center py-4 text-gray-500">
                     No scheduled messages found.
                   </td>
                 </tr>

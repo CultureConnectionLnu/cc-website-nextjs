@@ -2,11 +2,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const filterOptions = [
   { key: "all", label: "All" },
@@ -181,7 +177,10 @@ export default function UserManagement() {
       });
     }
 
-    const normalizedSearchTerm = searchTerm.toLowerCase().trim().replace(/\s+/g, " ");
+    const normalizedSearchTerm = searchTerm
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
     if (normalizedSearchTerm) {
       tempUsers = tempUsers.filter((user) => {
         const firstName = user.firstName?.toLowerCase() || "";
@@ -270,9 +269,7 @@ export default function UserManagement() {
   return (
     <div className="bg-gray-50 p-4 rounded border mt-6">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-3">
-        <h2 className="text-xl font-semibold text-gray-800">
-          User Management
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-800">User Management</h2>
         <button
           onClick={handleRemoveAllMembers}
           disabled={isBulkRemoving || isLoadingUsers}
@@ -476,8 +473,8 @@ export default function UserManagement() {
                         isLoadingThisUser
                           ? "bg-gray-400 cursor-not-allowed"
                           : user.isCommittee
-                          ? "bg-red-500 hover:bg-red-600"
-                          : "bg-orange-500 hover:bg-orange-600"
+                            ? "bg-red-500 hover:bg-red-600"
+                            : "bg-orange-500 hover:bg-orange-600"
                       }`}
                       aria-label={`${
                         user.isCommittee
@@ -488,8 +485,8 @@ export default function UserManagement() {
                       {isLoadingThisUser
                         ? "..."
                         : user.isCommittee
-                        ? "Remove Committee"
-                        : "Make Committee"}
+                          ? "Remove Committee"
+                          : "Make Committee"}
                     </button>
 
                     <button
@@ -501,33 +498,33 @@ export default function UserManagement() {
                         isLoadingThisUser || user.isAdmin
                           ? "bg-gray-400 cursor-not-allowed"
                           : user.isMember
-                          ? "bg-red-500 hover:bg-red-600"
-                          : user.isPending
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-blue-500 hover:bg-blue-600"
+                            ? "bg-red-500 hover:bg-red-600"
+                            : user.isPending
+                              ? "bg-green-500 hover:bg-green-600"
+                              : "bg-blue-500 hover:bg-blue-600"
                       }`}
                       aria-label={
                         user.isMember
                           ? `Remove member status from ${userName}`
                           : user.isPending
-                          ? `Approve ${userName} as member`
-                          : `Make ${userName} a member`
+                            ? `Approve ${userName} as member`
+                            : `Make ${userName} a member`
                       }
                       title={
                         user.isAdmin
                           ? "Admins automatically have Member status"
                           : user.isPending
-                          ? "Approve pending request"
-                          : ""
+                            ? "Approve pending request"
+                            : ""
                       }
                     >
                       {isLoadingThisUser
                         ? "..."
                         : user.isMember
-                        ? "Remove Member"
-                        : user.isPending
-                        ? "Approve Member"
-                        : "Make Member"}
+                          ? "Remove Member"
+                          : user.isPending
+                            ? "Approve Member"
+                            : "Make Member"}
                     </button>
 
                     <button
@@ -543,8 +540,8 @@ export default function UserManagement() {
                         isLoadingThisUser
                           ? "bg-gray-400 cursor-not-allowed"
                           : user.isFreezed
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-yellow-500 hover:bg-yellow-600"
+                            ? "bg-green-500 hover:bg-green-600"
+                            : "bg-yellow-500 hover:bg-yellow-600"
                       }`}
                       aria-label={`${
                         user.isFreezed ? "Unfreeze" : "Freeze"
@@ -553,8 +550,8 @@ export default function UserManagement() {
                       {isLoadingThisUser
                         ? "..."
                         : user.isFreezed
-                        ? "Unfreeze"
-                        : "Freeze"}
+                          ? "Unfreeze"
+                          : "Freeze"}
                     </button>
                   </td>
                 </tr>
@@ -683,8 +680,8 @@ export default function UserManagement() {
                     isLoadingThisUser
                       ? "bg-gray-400 cursor-not-allowed"
                       : user.isCommittee
-                      ? "bg-red-500 hover:bg-red-600"
-                      : "bg-orange-500 hover:bg-orange-600"
+                        ? "bg-red-500 hover:bg-red-600"
+                        : "bg-orange-500 hover:bg-orange-600"
                   }`}
                   aria-label={`${
                     user.isCommittee ? "Remove committee status from" : "Make"
@@ -693,8 +690,8 @@ export default function UserManagement() {
                   {isLoadingThisUser
                     ? "..."
                     : user.isCommittee
-                    ? "Remove Committee"
-                    : "Make Committee"}
+                      ? "Remove Committee"
+                      : "Make Committee"}
                 </button>
 
                 <button
@@ -706,33 +703,33 @@ export default function UserManagement() {
                     isLoadingThisUser || user.isAdmin
                       ? "bg-gray-400 cursor-not-allowed"
                       : user.isMember
-                      ? "bg-red-500 hover:bg-red-600"
-                      : user.isPending
-                      ? "bg-green-500 hover:bg-green-600"
-                      : "bg-blue-500 hover:bg-blue-600"
+                        ? "bg-red-500 hover:bg-red-600"
+                        : user.isPending
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-blue-500 hover:bg-blue-600"
                   }`}
                   aria-label={
                     user.isMember
                       ? `Remove member status from ${userName}`
                       : user.isPending
-                      ? `Approve ${userName} as member`
-                      : `Make ${userName} a member`
+                        ? `Approve ${userName} as member`
+                        : `Make ${userName} a member`
                   }
                   title={
                     user.isAdmin
                       ? "Admins automatically have Member status"
                       : user.isPending
-                      ? "Approve pending request"
-                      : ""
+                        ? "Approve pending request"
+                        : ""
                   }
                 >
                   {isLoadingThisUser
                     ? "..."
                     : user.isMember
-                    ? "Remove Member"
-                    : user.isPending
-                    ? "Approve Member"
-                    : "Make Member"}
+                      ? "Remove Member"
+                      : user.isPending
+                        ? "Approve Member"
+                        : "Make Member"}
                 </button>
 
                 <button
@@ -744,8 +741,8 @@ export default function UserManagement() {
                     isLoadingThisUser
                       ? "bg-gray-400 cursor-not-allowed"
                       : user.isFreezed
-                      ? "bg-green-500 hover:bg-green-600"
-                      : "bg-yellow-500 hover:bg-yellow-600"
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-yellow-500 hover:bg-yellow-600"
                   }`}
                   aria-label={`${
                     user.isFreezed ? "Unfreeze" : "Freeze"
@@ -754,8 +751,8 @@ export default function UserManagement() {
                   {isLoadingThisUser
                     ? "..."
                     : user.isFreezed
-                    ? "Unfreeze"
-                    : "Freeze"}
+                      ? "Unfreeze"
+                      : "Freeze"}
                 </button>
               </div>
             </div>
