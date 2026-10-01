@@ -176,11 +176,35 @@ export default function Header() {
               </div>
 
               <div className="flex-grow overflow-y-auto px-10 py-10 flex flex-col gap-8 text-3xl font-bold text-white uppercase">
-                <Link href="/" onClick={closeMenus} className="hover:translate-x-2 transition-transform">Home</Link>
-                <Link href="/about-us" onClick={closeMenus} className="hover:translate-x-2 transition-transform">About Us</Link>
-                <Link href="/events" onClick={closeMenus} className="hover:translate-x-2 transition-transform">Events</Link>
-                <Link href="/membership" onClick={closeMenus} className="hover:translate-x-2 transition-transform">Membership</Link>
-                
+                <Link
+                  href="/"
+                  onClick={closeMenus}
+                  className="hover:translate-x-2 transition-transform"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/about-us"
+                  onClick={closeMenus}
+                  className="hover:translate-x-2 transition-transform"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/events"
+                  onClick={closeMenus}
+                  className="hover:translate-x-2 transition-transform"
+                >
+                  Events
+                </Link>
+                <Link
+                  href="/membership"
+                  onClick={closeMenus}
+                  className="hover:translate-x-2 transition-transform"
+                >
+                  Membership
+                </Link>
+
                 <SignedIn>
                   {isRegularUser && (
                     <button

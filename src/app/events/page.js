@@ -215,11 +215,9 @@ const scanEventQrCodeApi = async (scannedData) => {
 const fetchAllUsers = async () => {
   const response = await fetch("/api/user");
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({
-        message: `Request failed with status ${response.status}`,
-      }));
+    const errorData = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status}`,
+    }));
     throw new Error(errorData.message || "Failed to fetch users");
   }
   return response.json();
