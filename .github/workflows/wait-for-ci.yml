@@ -6,8 +6,10 @@ on:
   pull_request:
 
 jobs:
-  test:
+  run-checks:
     runs-on: ubuntu-latest
+    env:
+        SKIP_ENV_VALIDATION: 1
     steps:
       - uses: actions/checkout@v4
 
