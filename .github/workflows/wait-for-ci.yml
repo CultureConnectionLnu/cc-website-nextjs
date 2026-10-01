@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  run-checks:
+  test:
     runs-on: ubuntu-latest
     env:
         SKIP_ENV_VALIDATION: 1
@@ -16,10 +16,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
       - run: npm run build
+      - run: npx prettier . --check
       - run: npm run lint
       - run: npm test
