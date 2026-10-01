@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
+import {
+  DndContext,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
@@ -133,7 +139,8 @@ const formatAgendaShortDate = (dateValue) => {
   return agendaShortDateFormatter.format(parsedDate);
 };
 
-const formatAgendaTitle = (dateValue) => `Agenda ${formatAgendaDate(dateValue)}`;
+const formatAgendaTitle = (dateValue) =>
+  `Agenda ${formatAgendaDate(dateValue)}`;
 
 const DEFAULT_AGENDA_LABELS = {
   meetingInitiation: "Meeting initiation",
@@ -145,7 +152,9 @@ const DEFAULT_AGENDA_LABELS = {
 
 const normalizeAgendaLabels = (labels) => {
   const safeLabels =
-    labels && typeof labels === "object" && !Array.isArray(labels) ? labels : {};
+    labels && typeof labels === "object" && !Array.isArray(labels)
+      ? labels
+      : {};
 
   return Object.fromEntries(
     Object.entries(DEFAULT_AGENDA_LABELS).map(([key, fallbackValue]) => [
@@ -157,7 +166,8 @@ const normalizeAgendaLabels = (labels) => {
   );
 };
 
-const getAgendaLabel = (agenda, key) => normalizeAgendaLabels(agenda?.customLabels)[key];
+const getAgendaLabel = (agenda, key) =>
+  normalizeAgendaLabels(agenda?.customLabels)[key];
 
 const PRINT_PAGE_ITEM_CAPACITY = 24;
 
@@ -439,8 +449,7 @@ const normalizeTopic = (topic, index = 0) => {
       typeof safeTopic.label === "string" && safeTopic.label.trim()
         ? safeTopic.label
         : `Topic ${index + 1}`,
-    content:
-      typeof safeTopic.content === "string" ? safeTopic.content : "",
+    content: typeof safeTopic.content === "string" ? safeTopic.content : "",
     voting: {
       enabled:
         safeTopic.voting && typeof safeTopic.voting === "object"
@@ -456,19 +465,25 @@ const normalizeTopic = (topic, index = 0) => {
         safeTopic.voting &&
         typeof safeTopic.voting === "object" &&
         Array.isArray(safeTopic.voting.approve)
-          ? safeTopic.voting.approve.filter((member) => typeof member === "string")
+          ? safeTopic.voting.approve.filter(
+              (member) => typeof member === "string",
+            )
           : [],
       disapprove:
         safeTopic.voting &&
         typeof safeTopic.voting === "object" &&
         Array.isArray(safeTopic.voting.disapprove)
-          ? safeTopic.voting.disapprove.filter((member) => typeof member === "string")
+          ? safeTopic.voting.disapprove.filter(
+              (member) => typeof member === "string",
+            )
           : [],
       abstain:
         safeTopic.voting &&
         typeof safeTopic.voting === "object" &&
         Array.isArray(safeTopic.voting.abstain)
-          ? safeTopic.voting.abstain.filter((member) => typeof member === "string")
+          ? safeTopic.voting.abstain.filter(
+              (member) => typeof member === "string",
+            )
           : [],
     },
   };
@@ -489,9 +504,7 @@ const createEmptyTopic = (index) => ({
 
 const ensureTopicList = (topics) => {
   return Array.isArray(topics)
-    ? topics
-        .slice(0, 20)
-        .map((topic, index) => normalizeTopic(topic, index))
+    ? topics.slice(0, 20).map((topic, index) => normalizeTopic(topic, index))
     : [];
 };
 
@@ -553,7 +566,9 @@ const normalizeAgendaSignatures = (signatures) => {
 
 const normalizeAgenda = (agenda, index = 0) => {
   const safeAgenda =
-    agenda && typeof agenda === "object" && !Array.isArray(agenda) ? agenda : {};
+    agenda && typeof agenda === "object" && !Array.isArray(agenda)
+      ? agenda
+      : {};
   const date = typeof safeAgenda.date === "string" ? safeAgenda.date : "";
   const legacyPresent =
     typeof safeAgenda.present === "string" ? safeAgenda.present : "";
@@ -659,9 +674,16 @@ const createPreviewPlaceholderAgenda = () =>
     date: "",
   });
 
-const cloneAgenda = (agenda) => normalizeAgenda(JSON.parse(JSON.stringify(agenda)));
+const cloneAgenda = (agenda) =>
+  normalizeAgenda(JSON.parse(JSON.stringify(agenda)));
 
-const AgendaPage = ({ dateValue, children, pageLabel, footer, pinFooter = false }) => (
+const AgendaPage = ({
+  dateValue,
+  children,
+  pageLabel,
+  footer,
+  pinFooter = false,
+}) => (
   <section
     className={`agenda-print-page rounded-[28px] border border-gray-200 bg-white px-6 py-8 shadow-sm sm:px-10 ${
       pinFooter ? "agenda-print-footer-page flex flex-col" : ""
@@ -674,17 +696,17 @@ const AgendaPage = ({ dateValue, children, pageLabel, footer, pinFooter = false 
         className="absolute left-0 top-0 h-32 w-32 object-contain"
       />
       <div className="grid grid-cols-[1fr_72px] items-start gap-4">
-      <div className="text-center">
-        <h3 className="font-Header text-4xl font-bold leading-none text-gray-900 sm:text-5xl">
-          Culture Connection Agenda
-        </h3>
-        <div className="mt-2 text-sm font-semibold tracking-[0.2em] text-gray-500">
-          {formatAgendaShortDate(dateValue)}
+        <div className="text-center">
+          <h3 className="font-Header text-4xl font-bold leading-none text-gray-900 sm:text-5xl">
+            Culture Connection Agenda
+          </h3>
+          <div className="mt-2 text-sm font-semibold tracking-[0.2em] text-gray-500">
+            {formatAgendaShortDate(dateValue)}
+          </div>
         </div>
-      </div>
-      <span className="justify-self-end rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-purple-700">
-        {pageLabel}
-      </span>
+        <span className="justify-self-end rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-purple-700">
+          {pageLabel}
+        </span>
       </div>
     </div>
     <div className={pinFooter ? "agenda-print-content" : ""}>{children}</div>
@@ -790,7 +812,9 @@ const PreviewListItem = ({ label, value, children }) => {
       <div className="flex items-start gap-3">
         <span className="mt-1 text-lg font-bold text-purple-600">•</span>
         <div className="min-w-0 flex-1">
-          <div className="text-base font-semibold text-gray-900 break-all">{label}</div>
+          <div className="text-base font-semibold text-gray-900 break-all">
+            {label}
+          </div>
           {children ? (
             <div className="mt-2">{children}</div>
           ) : (
@@ -826,7 +850,10 @@ const AgendaPrintFooter = ({ agenda }) => (
         isSigned: agenda.signatures?.minuteCheckerSigned === true,
       },
     ].map(({ label, value, isSigned }) => (
-      <div key={label} className="relative flex min-h-[72px] flex-col text-center">
+      <div
+        key={label}
+        className="relative flex min-h-[72px] flex-col text-center"
+      >
         <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
           {label}
         </div>
@@ -863,13 +890,17 @@ const AgendaTimeSummary = ({ agenda, meetingDuration }) => (
         </div>
       </div>
       <div>
-        <div className="text-sm font-semibold text-gray-900">End of meeting</div>
+        <div className="text-sm font-semibold text-gray-900">
+          End of meeting
+        </div>
         <div className="mt-2 text-sm leading-6 text-gray-700">
           {agenda.meetingEndTime}
         </div>
       </div>
       <div>
-        <div className="text-sm font-semibold text-gray-900">Meeting duration</div>
+        <div className="text-sm font-semibold text-gray-900">
+          Meeting duration
+        </div>
         <div className="mt-2 text-sm leading-6 text-gray-700">
           {meetingDuration}
         </div>
@@ -903,7 +934,9 @@ const AgendaPreview = ({ agenda, showPrintFooter = false }) => {
         dateValue={resolvedAgenda.date}
         pageLabel="Page 1"
         pinFooter={showPrintFooter}
-        footer={showPrintFooter ? <AgendaPrintFooter agenda={resolvedAgenda} /> : null}
+        footer={
+          showPrintFooter ? <AgendaPrintFooter agenda={resolvedAgenda} /> : null
+        }
       >
         <div className="grid gap-6 md:grid-cols-[1.3fr_1fr]">
           <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
@@ -942,19 +975,25 @@ const AgendaPreview = ({ agenda, showPrintFooter = false }) => {
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
                 Chairman
               </div>
-              <div className="mt-3 text-sm text-gray-800">{resolvedAgenda.chairman}</div>
+              <div className="mt-3 text-sm text-gray-800">
+                {resolvedAgenda.chairman}
+              </div>
             </div>
             <div className="rounded-2xl border border-gray-200 px-4 py-4">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
                 Secretary
               </div>
-              <div className="mt-3 text-sm text-gray-800">{resolvedAgenda.secretary}</div>
+              <div className="mt-3 text-sm text-gray-800">
+                {resolvedAgenda.secretary}
+              </div>
             </div>
             <div className="rounded-2xl border border-gray-200 px-4 py-4">
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
                 Minute checker
               </div>
-              <div className="mt-3 text-sm text-gray-800">{resolvedAgenda.minuteChecker}</div>
+              <div className="mt-3 text-sm text-gray-800">
+                {resolvedAgenda.minuteChecker}
+              </div>
             </div>
           </div>
         </div>
@@ -975,7 +1014,9 @@ const AgendaPreview = ({ agenda, showPrintFooter = false }) => {
           pageLabel={`Page ${pageIndex + 2}`}
           pinFooter={showPrintFooter}
           footer={
-            showPrintFooter ? <AgendaPrintFooter agenda={resolvedAgenda} /> : null
+            showPrintFooter ? (
+              <AgendaPrintFooter agenda={resolvedAgenda} />
+            ) : null
           }
         >
           <ul className="space-y-4">
@@ -1002,7 +1043,9 @@ const AgendaPreview = ({ agenda, showPrintFooter = false }) => {
               }
 
               const topic = item.topic;
-              const normalizedTopicContent = normalizePrintableText(topic.content);
+              const normalizedTopicContent = normalizePrintableText(
+                topic.content,
+              );
               const normalizedVoteReason = normalizePrintableText(
                 topic.voting?.reason,
               );
@@ -1236,7 +1279,9 @@ const SortableTopicItem = ({
                         <button
                           key={`${voteKey}-${member}`}
                           type="button"
-                          onClick={() => onRemoveVoteMember(index, voteKey, member)}
+                          onClick={() =>
+                            onRemoveVoteMember(index, voteKey, member)
+                          }
                           className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 ring-1 ring-gray-200"
                         >
                           {member} <span className="text-red-500">×</span>
@@ -1254,9 +1299,14 @@ const SortableTopicItem = ({
                         }}
                         className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm"
                       >
-                        <option value="">Add present person to {voteLabel}</option>
+                        <option value="">
+                          Add present person to {voteLabel}
+                        </option>
                         {availableMembers.map((member) => (
-                          <option key={`${voteKey}-option-${member}`} value={member}>
+                          <option
+                            key={`${voteKey}-option-${member}`}
+                            value={member}
+                          >
                             {member}
                           </option>
                         ))}
@@ -1310,7 +1360,7 @@ const AgendaEditor = ({
       <h3 className="text-lg font-semibold text-gray-900">Meeting details</h3>
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <div className="block md:col-span-2">
-            <span className="mb-1 block text-sm font-medium text-gray-700">
+          <span className="mb-1 block text-sm font-medium text-gray-700">
             Present
           </span>
           <div className="rounded-xl border border-gray-300 bg-gray-50 p-3">
@@ -1810,7 +1860,10 @@ export default function AgendaManagement() {
     const committeeNames = new Set();
 
     users.forEach((user) => {
-      const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim();
+      const fullName = [user?.firstName, user?.lastName]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
       if (!fullName) {
         return;
       }
@@ -1847,7 +1900,9 @@ export default function AgendaManagement() {
   const selectedAgenda =
     agendas.find((agenda) => agenda.id === resolvedSelectedAgendaId) || null;
   const openAgendas = agendas.filter((agenda) => agenda.isCompleted !== true);
-  const completedAgendas = agendas.filter((agenda) => agenda.isCompleted === true);
+  const completedAgendas = agendas.filter(
+    (agenda) => agenda.isCompleted === true,
+  );
   const availableSubmittedTopics = useMemo(
     () =>
       (draftAgenda?.Topics || []).filter(
@@ -1859,7 +1914,9 @@ export default function AgendaManagement() {
     [draftAgenda],
   );
   const currentUserComparableName = normalizeComparableName(userFullName);
-  const secretaryComparableName = normalizeComparableName(selectedAgenda?.secretary);
+  const secretaryComparableName = normalizeComparableName(
+    selectedAgenda?.secretary,
+  );
   const minuteCheckerComparableName = normalizeComparableName(
     selectedAgenda?.minuteChecker,
   );
@@ -2135,9 +2192,7 @@ export default function AgendaManagement() {
             : topic,
         ),
         Topics: (currentAgenda.Topics || []).map((topic) =>
-          topic.id === submittedTopicId
-            ? { ...topic, completed: true }
-            : topic,
+          topic.id === submittedTopicId ? { ...topic, completed: true } : topic,
         ),
       };
     });
@@ -2354,7 +2409,9 @@ export default function AgendaManagement() {
           template.name.toLowerCase() === normalizedName.toLowerCase(),
       )
     ) {
-      setGeneralError(`A saved pattern named "${normalizedName}" already exists.`);
+      setGeneralError(
+        `A saved pattern named "${normalizedName}" already exists.`,
+      );
       return;
     }
 
@@ -2470,7 +2527,9 @@ export default function AgendaManagement() {
       currentAgenda
         ? {
             ...currentAgenda,
-            topics: currentAgenda.topics.filter((_, index) => index !== topicIndex),
+            topics: currentAgenda.topics.filter(
+              (_, index) => index !== topicIndex,
+            ),
           }
         : currentAgenda,
     );
@@ -2519,7 +2578,9 @@ export default function AgendaManagement() {
       return;
     }
 
-    const updatedAgendas = agendas.filter((agenda) => agenda.id !== draftAgenda.id);
+    const updatedAgendas = agendas.filter(
+      (agenda) => agenda.id !== draftAgenda.id,
+    );
     mutation.mutate(updatedAgendas);
   };
 
@@ -2545,13 +2606,17 @@ export default function AgendaManagement() {
     }
 
     const isSecretaryRole = roleKey === "secretary";
-    const roleName = isSecretaryRole ? selectedAgenda.secretary : selectedAgenda.minuteChecker;
+    const roleName = isSecretaryRole
+      ? selectedAgenda.secretary
+      : selectedAgenda.minuteChecker;
     const canSign = isSecretaryRole
       ? canCurrentUserSignAsSecretary
       : canCurrentUserSignAsMinuteChecker;
 
     if (!roleName) {
-      setGeneralError(`Assign the ${isSecretaryRole ? "Secretary" : "Minute Checker"} before signing.`);
+      setGeneralError(
+        `Assign the ${isSecretaryRole ? "Secretary" : "Minute Checker"} before signing.`,
+      );
       return;
     }
 
@@ -2753,7 +2818,9 @@ export default function AgendaManagement() {
           <div className="max-h-[80vh] overflow-y-auto rounded-md border bg-white p-4 shadow">
             <div className="sticky top-0 z-10 mb-4 border-b bg-white pb-3">
               <div className="flex items-center justify-between gap-3">
-                <h3 className="text-lg font-semibold text-gray-700">Sections</h3>
+                <h3 className="text-lg font-semibold text-gray-700">
+                  Sections
+                </h3>
                 {isAdmin && (
                   <button
                     type="button"
@@ -2890,7 +2957,9 @@ export default function AgendaManagement() {
                 onRemoveTopic={handleRemoveTopic}
                 onDeleteAgenda={handleDeleteAgenda}
                 isSaving={mutation.isPending}
-                isUpdatingAttendanceTemplates={attendanceTemplateMutation.isPending}
+                isUpdatingAttendanceTemplates={
+                  attendanceTemplateMutation.isPending
+                }
                 sensors={sensors}
               />
             </div>
@@ -3028,7 +3097,9 @@ export default function AgendaManagement() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm">
           <div className="flex max-h-[80vh] w-full max-w-2xl flex-col rounded-2xl bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-              <h3 className="text-lg font-semibold text-gray-900">Applied Topics</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Applied Topics
+              </h3>
               <button
                 type="button"
                 onClick={() => setIsViewAppliedModalOpen(false)}
@@ -3055,17 +3126,23 @@ export default function AgendaManagement() {
                           checked={topicItem.completed === true}
                           onChange={(event) => {
                             const isChecked = event.target.checked;
-                            const updatedTopics = selectedAgenda.Topics.map((topic) =>
-                              topic.id === topicItem.id
-                                ? { ...topic, completed: isChecked ? true : null }
-                                : topic,
+                            const updatedTopics = selectedAgenda.Topics.map(
+                              (topic) =>
+                                topic.id === topicItem.id
+                                  ? {
+                                      ...topic,
+                                      completed: isChecked ? true : null,
+                                    }
+                                  : topic,
                             );
                             const updatedAgenda = {
                               ...selectedAgenda,
                               Topics: updatedTopics,
                             };
                             const updatedAgendas = agendas.map((agenda) =>
-                              agenda.id === updatedAgenda.id ? updatedAgenda : agenda,
+                              agenda.id === updatedAgenda.id
+                                ? updatedAgenda
+                                : agenda,
                             );
                             mutation.mutate(updatedAgendas);
                           }}
@@ -3082,23 +3159,25 @@ export default function AgendaManagement() {
                               type="button"
                               disabled={mutation.isPending}
                               onClick={() => {
-                                const shouldRemove = window.confirm(
-                                  "Remove this topic?",
-                                );
+                                const shouldRemove =
+                                  window.confirm("Remove this topic?");
 
                                 if (!shouldRemove) {
                                   return;
                                 }
 
-                                const updatedTopics = selectedAgenda.Topics.filter(
-                                  (topic) => topic.id !== topicItem.id,
-                                );
+                                const updatedTopics =
+                                  selectedAgenda.Topics.filter(
+                                    (topic) => topic.id !== topicItem.id,
+                                  );
                                 const updatedAgenda = {
                                   ...selectedAgenda,
                                   Topics: updatedTopics,
                                 };
                                 const updatedAgendas = agendas.map((agenda) =>
-                                  agenda.id === updatedAgenda.id ? updatedAgenda : agenda,
+                                  agenda.id === updatedAgenda.id
+                                    ? updatedAgenda
+                                    : agenda,
                                 );
                                 mutation.mutate(updatedAgendas);
                               }}

@@ -33,10 +33,10 @@ const defaultNewSchedule = {
   imageturnon: true,
   channelId: "",
   responseChannelId: "",
-  roleId: "", 
+  roleId: "",
   hour: "12",
   minutes: "00",
-  dayoftheweek: "1", 
+  dayoftheweek: "1",
   selectedDate: new Date(),
   daybefore: "0",
   seconds: "0",
@@ -47,7 +47,12 @@ const defaultNewSchedule = {
   Images: [],
 };
 
-function DiscordSchedulerForm({ initialData, onSubmit, onCancel, isSubmitting }) {
+function DiscordSchedulerForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  isSubmitting,
+}) {
   const [formData, setFormData] = useState(() => {
     const data = initialData ? { ...initialData } : { ...defaultNewSchedule };
     data.automaticResponses = Array.isArray(data.automaticResponses)
@@ -69,7 +74,7 @@ function DiscordSchedulerForm({ initialData, onSubmit, onCancel, isSubmitting })
   const [typeDropdownOpen, setTypeDropdownOpen] = useState(false);
   const [dayOfWeekDropdownOpen, setDayOfWeekDropdownOpen] = useState(false);
   const [isFileManagerOpen, setIsFileManagerOpen] = useState(false);
-  const [targetImageInputIndex, setTargetImageInputIndex] = useState(null); 
+  const [targetImageInputIndex, setTargetImageInputIndex] = useState(null);
 
   const { data: channels = [], isError: isChannelsError } = useQuery({
     queryKey: ["discordChannels"],
@@ -80,7 +85,7 @@ function DiscordSchedulerForm({ initialData, onSubmit, onCancel, isSubmitting })
   const { data: roles = [], isError: isRolesError } = useQuery({
     queryKey: ["discordRoles"],
     queryFn: fetchRoles,
-    staleTime: Infinity, 
+    staleTime: Infinity,
   });
 
   const handleChange = (e) => {
@@ -543,7 +548,9 @@ function DiscordSchedulerForm({ initialData, onSubmit, onCancel, isSubmitting })
             idx={"messageContent"}
             resp={{ content: formData.messageContent || "" }}
             handleNewAutoRespFieldChange={(idx, field, newText) =>
-              handleChange({ target: { name: "messageContent", value: newText } })
+              handleChange({
+                target: { name: "messageContent", value: newText },
+              })
             }
             RoleIDfetcher={formData.roleId}
             textDescrition={contetntText}

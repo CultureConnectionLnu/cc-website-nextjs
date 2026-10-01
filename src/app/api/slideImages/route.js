@@ -2,8 +2,18 @@ import { NextResponse } from "next/server";
 import path from "path";
 import { promises as fs } from "fs";
 
-const dataFilePath = path.join(process.cwd(), "public", "data", "slideImagesData.json");
-const settingsFilePath = path.join(process.cwd(), "public", "data", "sliderSettings.json");
+const dataFilePath = path.join(
+  process.cwd(),
+  "public",
+  "data",
+  "slideImagesData.json",
+);
+const settingsFilePath = path.join(
+  process.cwd(),
+  "public",
+  "data",
+  "sliderSettings.json",
+);
 
 export async function GET() {
   try {
@@ -15,7 +25,7 @@ export async function GET() {
 
     return NextResponse.json({
       data: jsonData,
-      settings: jsonSettings, 
+      settings: jsonSettings,
     });
   } catch (error) {
     console.error("[API GET] Failed to read slider data or settings:", error);
@@ -29,7 +39,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { newData, newSettings } = body; 
+    const { newData, newSettings } = body;
 
     if (!newData || !newSettings) {
       return NextResponse.json(
@@ -39,7 +49,11 @@ export async function POST(request) {
     }
 
     await fs.writeFile(dataFilePath, JSON.stringify(newData, null, 2), "utf8");
-    await fs.writeFile(settingsFilePath, JSON.stringify(newSettings, null, 2), "utf8");
+    await fs.writeFile(
+      settingsFilePath,
+      JSON.stringify(newSettings, null, 2),
+      "utf8",
+    );
 
     return NextResponse.json({
       message: "Slider data and settings updated successfully.",

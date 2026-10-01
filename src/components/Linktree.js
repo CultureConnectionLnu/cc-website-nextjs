@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchLinktreeLinks = async () => {
-  const response = await fetch('/api/main/linktree');
+  const response = await fetch("/api/main/linktree");
   if (!response.ok) {
     let errorMsg = `Error: ${response.status} ${response.statusText}`;
     try {
@@ -19,10 +19,10 @@ const fetchLinktreeLinks = async () => {
   }
   const data = await response.json();
   if (!Array.isArray(data)) {
-      console.error("API did not return an array:", data);
-      throw new Error("Invalid data format received from server.");
+    console.error("API did not return an array:", data);
+    throw new Error("Invalid data format received from server.");
   }
-  return data.filter(link => link.isEnabled === true);
+  return data.filter((link) => link.isEnabled === true);
 };
 
 const Linktree = () => {
@@ -32,7 +32,7 @@ const Linktree = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ['linktreePublicLinks'],
+    queryKey: ["linktreePublicLinks"],
     queryFn: fetchLinktreeLinks,
   });
 
@@ -41,11 +41,20 @@ const Linktree = () => {
   }
 
   if (isError) {
-    return <p className="text-center text-sm text-red-600 bg-red-100 p-2 rounded border border-red-300">Error: {error instanceof Error ? error.message : 'An unknown error occurred'}</p>;
+    return (
+      <p className="text-center text-sm text-red-600 bg-red-100 p-2 rounded border border-red-300">
+        Error:{" "}
+        {error instanceof Error ? error.message : "An unknown error occurred"}
+      </p>
+    );
   }
 
   if (enabledLinks.length === 0) {
-    return <p className="text-center text-sm text-gray-500">No active links available.</p>;
+    return (
+      <p className="text-center text-sm text-gray-500">
+        No active links available.
+      </p>
+    );
   }
 
   return (
@@ -64,12 +73,12 @@ const Linktree = () => {
               item.color?.startsWith("#") ? "" : item.color || "bg-gray-200"
             }`}
             style={
-              item.color?.startsWith("#")
-                ? { backgroundColor: item.color }
-                : {}
+              item.color?.startsWith("#") ? { backgroundColor: item.color } : {}
             }
           >
-            <p className={`text-xl font-bold ${item.textColor ?? 'text-black'}`}>
+            <p
+              className={`text-xl font-bold ${item.textColor ?? "text-black"}`}
+            >
               {item.text}
             </p>
           </div>

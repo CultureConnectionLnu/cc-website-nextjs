@@ -3,7 +3,10 @@ import fs from "fs/promises";
 import path from "path";
 
 // We store settings in a separate file to keep member data clean
-const settingsFilePath = path.join(process.cwd(), "public/data/BoardSettings.json");
+const settingsFilePath = path.join(
+  process.cwd(),
+  "public/data/BoardSettings.json",
+);
 
 function normalizeSettings(settings) {
   const safeSettings =
@@ -90,7 +93,8 @@ export async function POST(request) {
 
     if (
       Array.isArray(nextSettings.codentionOrder) &&
-      new Set(nextSettings.codentionOrder).size !== nextSettings.codentionOrder.length
+      new Set(nextSettings.codentionOrder).size !==
+        nextSettings.codentionOrder.length
     ) {
       return NextResponse.json(
         { error: "codentionOrder cannot contain duplicates" },
@@ -108,10 +112,7 @@ export async function POST(request) {
       );
     }
 
-    if (
-      body.defaultCodention !== undefined &&
-      !body.defaultCodention.trim()
-    ) {
+    if (body.defaultCodention !== undefined && !body.defaultCodention.trim()) {
       return NextResponse.json(
         { error: "defaultCodention cannot be empty" },
         { status: 400 },
@@ -122,6 +123,9 @@ export async function POST(request) {
 
     return NextResponse.json(nextSettings);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to save settings" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to save settings" },
+      { status: 500 },
+    );
   }
 }

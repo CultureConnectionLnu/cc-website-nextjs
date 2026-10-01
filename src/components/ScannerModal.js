@@ -147,8 +147,7 @@ function ScannerModal({ isOpen, onClose, onScanSuccess, onScanError }) {
       );
     } catch (err) {
       const errorMessage =
-        err.message ||
-        "Could not start QR Scanner. Check camera permissions.";
+        err.message || "Could not start QR Scanner. Check camera permissions.";
       console.error("Error starting scanner:", errorMessage);
       setCameraError(errorMessage);
       if (onScanError) onScanError(errorMessage);

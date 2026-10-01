@@ -9,11 +9,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "@clerk/nextjs";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import SliderEditModal from "./SliderEditModal";
 import toast from "react-hot-toast";
 
@@ -84,46 +80,48 @@ const CulturePictureSlider = ({ sliderId }) => {
     }
   }, [sliderId, sliderInfo]);
 
-const mutation = useMutation({
-  mutationFn: async ({ newData, newSettings }) => {
-    console.log("[Frontend] Sending save request:", { newData, newSettings }); // Debug log: Confirm data before send
-    const response = await fetch("/api/slideImages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ newData, newSettings }),
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to save data");
-    }
-    return response.json();
-  },
-  onMutate: async ({ newData, newSettings }) => {
-    await queryClient.cancelQueries({ queryKey: ["sliderData"] });
-    const previousData = queryClient.getQueryData(["sliderData"]);
-    queryClient.setQueryData(["sliderData"], {
-      data: newData,
-      settings: newSettings,
-    });
-    setIsModalOpen(false);
-    toast.success("Changes applied instantly!");
-    return { previousData };
-  },
-  onError: (err, variables, context) => {
-    if (context?.previousData) {
-      queryClient.setQueryData(["sliderData"], context.previousData);
-    }
-    console.error("[Frontend] Save error:", err); // Debug log
-    if (err.message.includes("Forbidden")) {
-      toast.error("Save failed: You don't have admin permissions. Check your account settings.");
-    } else {
-      toast.error("Failed to save changes. Reverting.");
-    }
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ["sliderData"] });
-  },
-});
+  const mutation = useMutation({
+    mutationFn: async ({ newData, newSettings }) => {
+      console.log("[Frontend] Sending save request:", { newData, newSettings }); // Debug log: Confirm data before send
+      const response = await fetch("/api/slideImages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newData, newSettings }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to save data");
+      }
+      return response.json();
+    },
+    onMutate: async ({ newData, newSettings }) => {
+      await queryClient.cancelQueries({ queryKey: ["sliderData"] });
+      const previousData = queryClient.getQueryData(["sliderData"]);
+      queryClient.setQueryData(["sliderData"], {
+        data: newData,
+        settings: newSettings,
+      });
+      setIsModalOpen(false);
+      toast.success("Changes applied instantly!");
+      return { previousData };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(["sliderData"], context.previousData);
+      }
+      console.error("[Frontend] Save error:", err); // Debug log
+      if (err.message.includes("Forbidden")) {
+        toast.error(
+          "Save failed: You don't have admin permissions. Check your account settings.",
+        );
+      } else {
+        toast.error("Failed to save changes. Reverting.");
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["sliderData"] });
+    },
+  });
 
   const allSlidesData = sliderInfo?.data;
   const currentImages =
@@ -192,9 +190,7 @@ const mutation = useMutation({
   const startAngleDeg = 110;
   const endAngleDeg = 160;
   const angleStepDeg =
-    numIndicators > 1
-      ? (endAngleDeg - startAngleDeg) / (numIndicators - 1)
-      : 0;
+    numIndicators > 1 ? (endAngleDeg - startAngleDeg) / (numIndicators - 1) : 0;
   const singleIndicatorAngleDeg = (startAngleDeg + endAngleDeg) / 2;
   const indicatorPathRadiusPercent = 48;
 
@@ -292,8 +288,8 @@ const mutation = useMutation({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         initialData={allSlidesData}
-        initialSettings={sliderInfo?.settings} 
-        onSave={(saveData) => mutation.mutate(saveData)} 
+        initialSettings={sliderInfo?.settings}
+        onSave={(saveData) => mutation.mutate(saveData)}
         isSaving={mutation.isPending}
       />
     </>

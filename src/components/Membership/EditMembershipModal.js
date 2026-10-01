@@ -55,8 +55,7 @@ export default function EditMembershipModal({
         websiteUrl: websiteUrl || null,
         googleMapUrl: googleMapUrl || null,
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   if (!isOpen) return null;
@@ -218,9 +217,7 @@ export default function EditMembershipModal({
               disabled={editMembershipMutation.isPending}
               className="w-full flex justify-center py-2 px-4 border-2 border-black rounded-md shadow-custom text-sm text-black bg-yellow-200 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 disabled:opacity-50 hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 font-semibold"
             >
-              {editMembershipMutation.isPending
-                ? "Saving..."
-                : "Save Changes"}
+              {editMembershipMutation.isPending ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

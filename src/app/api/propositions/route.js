@@ -14,7 +14,7 @@ const propositionsFilePath = path.join(
   process.cwd(),
   "public",
   "data",
-  "propositions.json"
+  "propositions.json",
 );
 
 function getUserFullName(user) {
@@ -40,7 +40,11 @@ async function readPropositions() {
 }
 
 async function writePropositions(data) {
-  await fs.writeFile(propositionsFilePath, JSON.stringify(data, null, 2), "utf8");
+  await fs.writeFile(
+    propositionsFilePath,
+    JSON.stringify(data, null, 2),
+    "utf8",
+  );
 }
 
 async function requireAdmin(request) {
@@ -63,7 +67,10 @@ async function requireAdmin(request) {
 export async function GET(request) {
   const adminCheck = await requireAdmin(request);
   if (!adminCheck.ok) {
-    return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
+    return NextResponse.json(
+      { error: adminCheck.error },
+      { status: adminCheck.status },
+    );
   }
 
   try {
@@ -94,7 +101,7 @@ export async function POST(request) {
       userFullName,
       sectionId: body.sectionId,
       sectionTitle: body.sectionTitle,
-      type: body.type, 
+      type: body.type,
       content: body.content,
       status: "pending",
       createdAt: submittedAt,
@@ -114,7 +121,10 @@ export async function POST(request) {
 export async function PATCH(request) {
   const adminCheck = await requireAdmin(request);
   if (!adminCheck.ok) {
-    return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
+    return NextResponse.json(
+      { error: adminCheck.error },
+      { status: adminCheck.status },
+    );
   }
 
   try {
@@ -122,17 +132,26 @@ export async function PATCH(request) {
     const { id, status } = body || {};
 
     if (!id || typeof id !== "string") {
-      return NextResponse.json({ error: "Invalid proposition id." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid proposition id." },
+        { status: 400 },
+      );
     }
 
     if (status !== "viewed") {
-      return NextResponse.json({ error: "Invalid status update." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid status update." },
+        { status: 400 },
+      );
     }
 
     const propositions = await readPropositions();
     const index = propositions.findIndex((prop) => prop.id === id);
     if (index < 0) {
-      return NextResponse.json({ error: "Proposition not found." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Proposition not found." },
+        { status: 404 },
+      );
     }
 
     propositions[index] = {
@@ -142,7 +161,10 @@ export async function PATCH(request) {
     };
 
     await writePropositions(propositions);
-    return NextResponse.json({ success: true, proposition: propositions[index] });
+    return NextResponse.json({
+      success: true,
+      proposition: propositions[index],
+    });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -151,7 +173,10 @@ export async function PATCH(request) {
 export async function DELETE(request) {
   const adminCheck = await requireAdmin(request);
   if (!adminCheck.ok) {
-    return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
+    return NextResponse.json(
+      { error: adminCheck.error },
+      { status: adminCheck.status },
+    );
   }
 
   try {
@@ -159,14 +184,20 @@ export async function DELETE(request) {
     const { id } = body || {};
 
     if (!id || typeof id !== "string") {
-      return NextResponse.json({ error: "Invalid proposition id." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid proposition id." },
+        { status: 400 },
+      );
     }
 
     const propositions = await readPropositions();
     const nextPropositions = propositions.filter((prop) => prop.id !== id);
 
     if (nextPropositions.length === propositions.length) {
-      return NextResponse.json({ error: "Proposition not found." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Proposition not found." },
+        { status: 404 },
+      );
     }
 
     await writePropositions(nextPropositions);

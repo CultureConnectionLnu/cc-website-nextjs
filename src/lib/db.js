@@ -77,7 +77,6 @@ try {
   db.exec(createIndexAchieved);
   db.exec(createIndexGameScoresUser);
   db.exec(createUserFavoritesTable);
-
 } catch (err) {
   console.error("Error connecting to or initializing SQLite database:", err);
   db = null;

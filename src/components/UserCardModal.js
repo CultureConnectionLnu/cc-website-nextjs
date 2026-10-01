@@ -272,11 +272,7 @@ export default function UserCardModal({ isOpen, onClose, user }) {
         )}
         <div
           className={`relative w-full h-full flex items-center justify-center
-            ${
-              effectiveSkinUrl
-                ? "p-6 md:p-8"
-                : "p-4 md:p-6"
-            }
+            ${effectiveSkinUrl ? "p-6 md:p-8" : "p-4 md:p-6"}
             ${cardBackgroundClass}
             z-20
             rounded-lg
@@ -352,13 +348,13 @@ export default function UserCardModal({ isOpen, onClose, user }) {
                       } text-inherit`
                 }`}
             >
-                        {statusInfo.styleKey !== "default" && (
-            <img
-              src="/cc.svg"
-              alt="Logo"
-              className="absolute z-30 w-12 md:h-12 opacity-70 pointer-events-none"
-            />
-          )}
+              {statusInfo.styleKey !== "default" && (
+                <img
+                  src="/cc.svg"
+                  alt="Logo"
+                  className="absolute z-30 w-12 md:h-12 opacity-70 pointer-events-none"
+                />
+              )}
               <h2
                 id="user-modal-title"
                 className="text-2xl text-stroke-1 text-stroke-black font-bold mb-1 drop-shadow-md"
@@ -383,9 +379,7 @@ export default function UserCardModal({ isOpen, onClose, user }) {
 
               <div
                 className={`pt-2 mt-2 border-t ${
-                  effectiveSkinUrl
-                    ? "border-white/30"
-                    : "border-gray-400/50"
+                  effectiveSkinUrl ? "border-white/30" : "border-gray-400/50"
                 }`}
               >
                 <h3
@@ -412,9 +406,7 @@ export default function UserCardModal({ isOpen, onClose, user }) {
                           key={index}
                           className={`w-24 h-24 overflow-hidden flex items-center justify-center`}
                           title={
-                            fav
-                              ? fav.title
-                              : `Empty Favorite Slot ${index + 1}`
+                            fav ? fav.title : `Empty Favorite Slot ${index + 1}`
                           }
                         >
                           {fav && (
@@ -453,7 +445,8 @@ export default function UserCardModal({ isOpen, onClose, user }) {
               </p>
               <Link
                 href="/membership"
-                className="w-full md:w-auto mt-1 md:mt-2 text-center px-4 md:px-6 py-2 md:py-2.5 rounded-lg border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-baseColor2 text-white font-semibold text-sm md:text-base">
+                className="w-full md:w-auto mt-1 md:mt-2 text-center px-4 md:px-6 py-2 md:py-2.5 rounded-lg border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-baseColor2 text-white font-semibold text-sm md:text-base"
+              >
                 Learn More
               </Link>
             </div>

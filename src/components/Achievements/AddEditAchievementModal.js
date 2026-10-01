@@ -104,8 +104,7 @@ export default function AddEditAchievementModal({
             : true,
         );
         setLevels(
-          initialData.level_config &&
-            Array.isArray(initialData.level_config)
+          initialData.level_config && Array.isArray(initialData.level_config)
             ? initialData.level_config.map((l, index) => ({
                 ...l,
                 id: l.id || `temp_${Date.now()}_${index}`,

@@ -34,7 +34,9 @@ const fetchApiItems = async (channelName = null) => {
     try {
       errorData = await response.json();
     } catch (parseError) {
-      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch: ${response.status} ${response.statusText}`,
+      );
     }
     throw new Error(
       errorData?.error ||
@@ -181,7 +183,9 @@ export function EventImageManager({ onImageSelect }) {
       setFilesToUpload(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
       setUploadError(null);
-      queryClient.invalidateQueries({ queryKey: ["eventImages", currentChannel] });
+      queryClient.invalidateQueries({
+        queryKey: ["eventImages", currentChannel],
+      });
       alert("Images uploaded successfully!");
     },
     onError: (error) => {
@@ -194,7 +198,9 @@ export function EventImageManager({ onImageSelect }) {
     onSuccess: () => {
       setDeleteError(null);
       setDeletingImage(null);
-      queryClient.invalidateQueries({ queryKey: ["eventImages", currentChannel] });
+      queryClient.invalidateQueries({
+        queryKey: ["eventImages", currentChannel],
+      });
       alert("Image deleted successfully!");
     },
     onError: (error) => {
@@ -412,7 +418,9 @@ export function EventImageManager({ onImageSelect }) {
             Create
           </button>
           {createError && (
-            <p className="text-red-600 text-xs mt-1 self-center">{createError}</p>
+            <p className="text-red-600 text-xs mt-1 self-center">
+              {createError}
+            </p>
           )}
         </form>
       )}
@@ -595,7 +603,11 @@ export function EventImageManager({ onImageSelect }) {
                             title="Delete Image"
                           >
                             {isBeingDeleted ? (
-                              <FontAwesomeIcon icon={faSpinner} spin size="xs" />
+                              <FontAwesomeIcon
+                                icon={faSpinner}
+                                spin
+                                size="xs"
+                              />
                             ) : (
                               <FontAwesomeIcon icon={faTrashAlt} size="xs" />
                             )}

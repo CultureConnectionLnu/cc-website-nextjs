@@ -9,7 +9,7 @@ import AddMembershipModal from "@/components/Membership/AddMembershipModal";
 import EditMembershipModal from "@/components/Membership/EditMembershipModal";
 import MembershipDetailModal from "@/components/Membership/MembershipDetailModal";
 import BecomeMemberModal from "@/components/BecomeMemberModal";
-import UserCardModal from "@/components/UserCardModal"; 
+import UserCardModal from "@/components/UserCardModal";
 import { AnimatePresence, motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
@@ -34,7 +34,9 @@ const createMembership = async (newMembershipData) => {
     body: JSON.stringify(newMembershipData),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -56,7 +58,9 @@ const editMembershipApi = async (updatedMembershipData) => {
     body: JSON.stringify(updatedMembershipData),
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -75,7 +79,9 @@ const deleteMembership = async (membershipId) => {
     method: "DELETE",
   });
   if (!response.ok) {
-    let errorData = { message: `Request failed with status ${response.status}` };
+    let errorData = {
+      message: `Request failed with status ${response.status}`,
+    };
     try {
       errorData = await response.json();
     } catch (e) {}
@@ -190,11 +196,7 @@ const AddMembershipCard = ({ onClick }) => {
         stroke="currentColor"
         strokeWidth={1.5}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 4v16m8-8H4"
-        />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
       </svg>
       <span className="text-lg font-medium">Add New Discount</span>
     </button>
@@ -205,7 +207,8 @@ export default function MembershipPage() {
   const { user, isLoaded, isSignedIn } = useUser();
   const queryClient = useQueryClient();
 
-  const [selectedMembershipDetail, setSelectedMembershipDetail] = useState(null);
+  const [selectedMembershipDetail, setSelectedMembershipDetail] =
+    useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [membershipToEdit, setMembershipToEdit] = useState(null);
@@ -283,10 +286,7 @@ export default function MembershipPage() {
     },
     onError: (error, membershipId, context) => {
       if (context?.previousMemberships) {
-        queryClient.setQueryData(
-          ["memberships"],
-          context.previousMemberships,
-        );
+        queryClient.setQueryData(["memberships"], context.previousMemberships);
       }
       toast.error(`Delete failed: ${error.message}`);
     },
@@ -361,17 +361,23 @@ export default function MembershipPage() {
               </h1>
 
               <p className="mt-4 text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto text-center">
-                Become a Culture Connection member, 
-                <span className="text-mainColor font-semibold"> it is FREE!</span>{' '}
+                Become a Culture Connection member,
+                <span className="text-mainColor font-semibold">
+                  {" "}
+                  it is FREE!
+                </span>{" "}
               </p>
 
               <section className="mt-6 max-w-3xl mx-auto">
-                <button 
+                <button
                   onClick={() => setIsPerksOpen(!isPerksOpen)}
                   className="w-full flex items-center justify-center gap-2 text-2xl md:text-3xl font-Header text-mainColor font-bold mb-4 hover:opacity-80 transition-opacity"
                 >
                   Perks You Get
-                  <FontAwesomeIcon icon={isPerksOpen ? faChevronUp : faChevronDown} className="h-6 w-6" />
+                  <FontAwesomeIcon
+                    icon={isPerksOpen ? faChevronUp : faChevronDown}
+                    className="h-6 w-6"
+                  />
                 </button>
                 <AnimatePresence>
                   {isPerksOpen && (
@@ -386,7 +392,7 @@ export default function MembershipPage() {
                         <li>
                           <span className="font-semibold">
                             Exclusive discounts from our local collaborators
-                          </span>{' '}
+                          </span>{" "}
                         </li>
                         <li>
                           <span className="font-semibold">
@@ -410,9 +416,12 @@ export default function MembershipPage() {
                           Verification
                         </h2>
                         <p className="text-gray-700 mb-4">
-                          Verification is free. Submit your{' '}
-                          <span className="text-mainColor font-semibold">full name</span> and our Secretary will approve
-                          within two working days. If you haven’t heard back, email{' '}
+                          Verification is free. Submit your{" "}
+                          <span className="text-mainColor font-semibold">
+                            full name
+                          </span>{" "}
+                          and our Secretary will approve within two working
+                          days. If you haven’t heard back, email{" "}
                           <a
                             href="mailto:secretary@cultureconnection.se"
                             className="text-mainColor font-semibold hover:underline"
@@ -422,10 +431,16 @@ export default function MembershipPage() {
                           .
                         </p>
                         <p className="text-gray-700">
-                          Memberships run{' '}
-                          <span className="text-mainColor font-semibold">August–January</span> and{' '}
-                          <span className="text-mainColor font-semibold">January–August</span>. Re-verify
-                          at the start of each period to keep enjoying your perks.
+                          Memberships run{" "}
+                          <span className="text-mainColor font-semibold">
+                            August–January
+                          </span>{" "}
+                          and{" "}
+                          <span className="text-mainColor font-semibold">
+                            January–August
+                          </span>
+                          . Re-verify at the start of each period to keep
+                          enjoying your perks.
                         </p>
                       </div>
                     </motion.div>

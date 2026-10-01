@@ -23,7 +23,7 @@ import {
   faInfinity,
   faClock,
   faSync,
-  faExpand
+  faExpand,
 } from "@fortawesome/free-solid-svg-icons";
 
 // --- SCANNER SUB-COMPONENTS ---
@@ -152,7 +152,7 @@ function ScannerModal({ isOpen, onClose, onScanSuccess, onScanError }) {
         { facingMode: "environment" },
         cfg,
         (text) => onScanSuccess?.(text),
-        () => {}
+        () => {},
       );
     } catch (e) {
       const msg =
@@ -208,18 +208,24 @@ export default function QRCodeGrantModal({
   const [activeTab, setActiveTab] = useState("qr");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserIdForAction, setSelectedUserIdForAction] = useState(null);
-  const [selectedUserNameForAction, setSelectedUserNameForAction] = useState(null);
-  const [manualActionStatus, setManualActionStatus] = useState({ message: "", error: false });
+  const [selectedUserNameForAction, setSelectedUserNameForAction] =
+    useState(null);
+  const [manualActionStatus, setManualActionStatus] = useState({
+    message: "",
+    error: false,
+  });
   const [userViewFilter, setUserViewFilter] = useState("all");
   const [scoreInput, setScoreInput] = useState("");
-  const [optimisticSelectedUserStatus, setOptimisticSelectedUserStatus] = useState(null);
+  const [optimisticSelectedUserStatus, setOptimisticSelectedUserStatus] =
+    useState(null);
 
   const [qrCodeValue, setQrCodeValue] = useState(null);
   const [isLoadingQrToken, setIsLoadingQrToken] = useState(false);
   const [qrTokenError, setQrTokenError] = useState(null);
 
   const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
-  const [userScanMessageInGrantTab, setUserScanMessageInGrantTab] = useState("");
+  const [userScanMessageInGrantTab, setUserScanMessageInGrantTab] =
+    useState("");
   const [isQrCodeZoomed, setIsQrCodeZoomed] = useState(false);
 
   // Safely handle potential undefined data
@@ -236,7 +242,7 @@ export default function QRCodeGrantModal({
   // --- REFRESH QR LOGIC ---
   const fetchQr = useCallback(() => {
     if (!achievementIdForQr) return;
-    
+
     // Only show loading spinner if we don't have a value yet (initial load)
     // or to give visual feedback on manual refresh
     if (!qrCodeValue) setIsLoadingQrToken(true);
@@ -270,27 +276,27 @@ export default function QRCodeGrantModal({
         intervalId = setInterval(fetchQr, 5000);
       }
     } else if (!isOpen) {
-       // Cleanup state on close
-       setQrCodeValue(null);
-       setQrTokenError(null);
-       setIsLoadingQrToken(false);
-       setActiveTab("qr");
-       setSearchTerm("");
-       setSelectedUserIdForAction(null);
-       setSelectedUserNameForAction(null);
-       setManualActionStatus({ message: "", error: false });
-       setUserViewFilter("all");
-       setScoreInput("");
-       setOptimisticSelectedUserStatus(null);
-       setUserScanMessageInGrantTab("");
-       setIsQrCodeZoomed(false);
-       setIsScannerModalOpen(false);
+      // Cleanup state on close
+      setQrCodeValue(null);
+      setQrTokenError(null);
+      setIsLoadingQrToken(false);
+      setActiveTab("qr");
+      setSearchTerm("");
+      setSelectedUserIdForAction(null);
+      setSelectedUserNameForAction(null);
+      setManualActionStatus({ message: "", error: false });
+      setUserViewFilter("all");
+      setScoreInput("");
+      setOptimisticSelectedUserStatus(null);
+      setUserScanMessageInGrantTab("");
+      setIsQrCodeZoomed(false);
+      setIsScannerModalOpen(false);
     } else if (activeTab !== "qr") {
-        setQrCodeValue(null);
+      setQrCodeValue(null);
     }
 
     return () => {
-        if (intervalId) clearInterval(intervalId);
+      if (intervalId) clearInterval(intervalId);
     };
   }, [isOpen, activeTab, achievementIdForQr, isStaticBadge]); // fetchQr is stable
 
@@ -302,12 +308,13 @@ export default function QRCodeGrantModal({
         return;
       }
       setUserScanMessageInGrantTab(
-        `User ${targetUserName} identified. Processing '${achievementTitle}'...`
+        `User ${targetUserName} identified. Processing '${achievementTitle}'...`,
       );
-      
+
       // Handle exploded ID just in case
       let targetAchId = achievementIdForQr;
-      if (targetAchId.includes("_lvl_")) targetAchId = targetAchId.split("_lvl_")[0];
+      if (targetAchId.includes("_lvl_"))
+        targetAchId = targetAchId.split("_lvl_")[0];
 
       const payload = {
         achievementId: targetAchId,
@@ -318,13 +325,13 @@ export default function QRCodeGrantModal({
       try {
         await patchUserMutation.mutateAsync(payload);
         setUserScanMessageInGrantTab(
-          `Action successful for ${targetUserName}.`
+          `Action successful for ${targetUserName}.`,
         );
       } catch (e) {
         setUserScanMessageInGrantTab(`Error: ${e.message}`);
       }
     },
-    [achievementIdForQr, achievementTitle, isAttendance, patchUserMutation]
+    [achievementIdForQr, achievementTitle, isAttendance, patchUserMutation],
   );
 
   const handleUserQrScan = useCallback(
@@ -342,7 +349,7 @@ export default function QRCodeGrantModal({
       } catch {}
       await handleGrantAfterUserScan(targetUserId, targetUserName);
     },
-    [handleGrantAfterUserScan]
+    [handleGrantAfterUserScan],
   );
 
   const userStatusMap = useMemo(() => {
@@ -369,7 +376,7 @@ export default function QRCodeGrantModal({
           u.username?.toLowerCase().includes(s) ||
           u.firstName?.toLowerCase().includes(s) ||
           u.lastName?.toLowerCase().includes(s) ||
-          u.primaryEmailAddress?.toLowerCase().includes(s)
+          u.primaryEmailAddress?.toLowerCase().includes(s),
       );
     }
     return us;
@@ -389,19 +396,25 @@ export default function QRCodeGrantModal({
   }, [selectedUserIdForAction, optimisticSelectedUserStatus, userStatusMap]);
 
   const handleManualAction = async (type) => {
-    if (!selectedUserIdForAction || !achievementIdForQr || patchUserMutation.isPending) return;
+    if (
+      !selectedUserIdForAction ||
+      !achievementIdForQr ||
+      patchUserMutation.isPending
+    )
+      return;
     setManualActionStatus({ message: "", error: false });
-    
+
     // Explicitly handle exploded ID stripping for manual actions
     let targetAchId = achievementIdForQr;
-    if (targetAchId.includes("_lvl_")) targetAchId = targetAchId.split("_lvl_")[0];
+    if (targetAchId.includes("_lvl_"))
+      targetAchId = targetAchId.split("_lvl_")[0];
 
     let payload = {
       achievementId: targetAchId,
       targetUserId: selectedUserIdForAction,
     };
     let pred = { ...selectedUserDisplayStatus };
-    
+
     if (type === "grant") {
       payload.action = "setAchieved";
       payload.achieved = true;
@@ -458,7 +471,7 @@ export default function QRCodeGrantModal({
     setSelectedUserNameForAction(
       `${u.firstName || ""} ${u.lastName || ""}`.trim() ||
         u.username ||
-        u.primaryEmailAddress
+        u.primaryEmailAddress,
     );
     setManualActionStatus({ message: "", error: false });
     setOptimisticSelectedUserStatus(null);
@@ -531,23 +544,29 @@ export default function QRCodeGrantModal({
               <div className="p-6 overflow-y-auto flex-grow">
                 {activeTab === "qr" && (
                   <div className="text-center flex flex-col items-center">
-                    
                     {/* MODE INDICATOR */}
                     <div className="mb-6 p-3 bg-white/50 rounded-lg border border-gray-200 inline-block text-left text-sm w-full max-w-md">
-                        <div className="flex items-start gap-2 mb-1">
-                            <span className={isStaticBadge ? "text-purple-600" : "text-amber-600"}>
-                                <FontAwesomeIcon icon={isStaticBadge ? faInfinity : faClock} />
-                            </span>
-                            <span className="font-bold text-gray-700">
-                                {isStaticBadge ? "Static Badge (Permanent)" : "Dynamic Badge (Rotating)"}
-                            </span>
-                        </div>
-                        <p className="text-xs text-gray-500 ml-6 leading-snug">
-                            {isStaticBadge 
-                             ? "URL is permanent. Safe to print on posters."
-                             : "URL changes every few seconds. Keep this screen open for attendees."
-                            }
-                        </p>
+                      <div className="flex items-start gap-2 mb-1">
+                        <span
+                          className={
+                            isStaticBadge ? "text-purple-600" : "text-amber-600"
+                          }
+                        >
+                          <FontAwesomeIcon
+                            icon={isStaticBadge ? faInfinity : faClock}
+                          />
+                        </span>
+                        <span className="font-bold text-gray-700">
+                          {isStaticBadge
+                            ? "Static Badge (Permanent)"
+                            : "Dynamic Badge (Rotating)"}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 ml-6 leading-snug">
+                        {isStaticBadge
+                          ? "URL is permanent. Safe to print on posters."
+                          : "URL changes every few seconds. Keep this screen open for attendees."}
+                      </p>
                     </div>
 
                     {/* INTERNAL SCANNER */}
@@ -559,76 +578,86 @@ export default function QRCodeGrantModal({
                       className="w-full max-w-xs px-4 py-2 mb-4 font-semibold bg-green-500 hover:bg-green-600 text-white rounded-lg shadow transition-colors flex items-center justify-center gap-2"
                       disabled={patchUserMutation.isPending}
                     >
-                      <FontAwesomeIcon icon={faQrcode} /> 
+                      <FontAwesomeIcon icon={faQrcode} />
                       Scan User ID (Internal)
                     </button>
-                    
+
                     {userScanMessageInGrantTab && (
                       <p className="text-sm text-gray-700 mb-4 bg-yellow-50 p-2 rounded border border-yellow-200">
                         {userScanMessageInGrantTab}
                       </p>
                     )}
-                    
+
                     <div className="my-4 border-t border-gray-300 w-3/4"></div>
 
                     <p className="font-semibold text-gray-600 mb-3">
-                       Public Scanning (Native Camera)
+                      Public Scanning (Native Camera)
                     </p>
 
                     {/* QR CODE CONTAINER - FIXED HEIGHT */}
                     <div className="relative w-64 h-64 bg-white rounded-xl shadow-inner border border-gray-200 flex items-center justify-center mb-2 overflow-hidden">
-                        {isLoadingQrToken && !qrCodeValue ? (
-                            <div className="text-indigo-500 animate-pulse flex flex-col items-center">
-                                <FontAwesomeIcon icon={faSync} spin className="text-3xl mb-2" />
-                                <span className="text-sm">Generating...</span>
-                            </div>
-                        ) : qrTokenError ? (
-                            <div className="text-red-500 text-center px-4">
-                                <p className="text-sm font-bold mb-1">Error</p>
-                                <p className="text-xs">{qrTokenError}</p>
-                            </div>
-                        ) : qrCodeValue ? (
-                            <motion.div
-                                layoutId={`qr-code-modal-${achievementIdForQr}`}
-                                onClick={() => setIsQrCodeZoomed(true)}
-                                className="cursor-pointer group relative p-2"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                            >
-                                <QRCodeCanvas
-                                    value={qrCodeValue}
-                                    size={220}
-                                    level="H"
-                                    includeMargin
-                                />
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/10 transition-opacity rounded-lg">
-                                    <FontAwesomeIcon icon={faExpand} className="text-white drop-shadow-md text-2xl" />
-                                </div>
-                            </motion.div>
-                        ) : null}
+                      {isLoadingQrToken && !qrCodeValue ? (
+                        <div className="text-indigo-500 animate-pulse flex flex-col items-center">
+                          <FontAwesomeIcon
+                            icon={faSync}
+                            spin
+                            className="text-3xl mb-2"
+                          />
+                          <span className="text-sm">Generating...</span>
+                        </div>
+                      ) : qrTokenError ? (
+                        <div className="text-red-500 text-center px-4">
+                          <p className="text-sm font-bold mb-1">Error</p>
+                          <p className="text-xs">{qrTokenError}</p>
+                        </div>
+                      ) : qrCodeValue ? (
+                        <motion.div
+                          layoutId={`qr-code-modal-${achievementIdForQr}`}
+                          onClick={() => setIsQrCodeZoomed(true)}
+                          className="cursor-pointer group relative p-2"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                        >
+                          <QRCodeCanvas
+                            value={qrCodeValue}
+                            size={220}
+                            level="H"
+                            includeMargin
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/10 transition-opacity rounded-lg">
+                            <FontAwesomeIcon
+                              icon={faExpand}
+                              className="text-white drop-shadow-md text-2xl"
+                            />
+                          </div>
+                        </motion.div>
+                      ) : null}
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => {
-                                setIsLoadingQrToken(true); 
-                                fetchQr();
-                            }}
-                            className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100 hover:bg-indigo-100 transition-colors"
-                        >
-                            <FontAwesomeIcon icon={faSync} className={isLoadingQrToken ? "animate-spin" : ""} />
-                            Refresh Code
-                        </button>
-                        
-                        {!isStaticBadge && (
-                            <span className="text-[10px] text-amber-600 font-mono bg-amber-50 px-2 py-1 rounded border border-amber-100">
-                                Auto-refreshing (5s)
-                            </span>
-                        )}
+                      <button
+                        onClick={() => {
+                          setIsLoadingQrToken(true);
+                          fetchQr();
+                        }}
+                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100 hover:bg-indigo-100 transition-colors"
+                      >
+                        <FontAwesomeIcon
+                          icon={faSync}
+                          className={isLoadingQrToken ? "animate-spin" : ""}
+                        />
+                        Refresh Code
+                      </button>
+
+                      {!isStaticBadge && (
+                        <span className="text-[10px] text-amber-600 font-mono bg-amber-50 px-2 py-1 rounded border border-amber-100">
+                          Auto-refreshing (5s)
+                        </span>
+                      )}
                     </div>
                   </div>
                 )}
-                
+
                 {/* MANUAL TAB */}
                 {activeTab === "manual" && isAdmin && (
                   <div>
@@ -662,7 +691,10 @@ export default function QRCodeGrantModal({
                               setSelectedUserIdForAction(null);
                               setSelectedUserNameForAction(null);
                               setOptimisticSelectedUserStatus(null);
-                              setManualActionStatus({ message: "", error: false });
+                              setManualActionStatus({
+                                message: "",
+                                error: false,
+                              });
                             }}
                             className="flex-grow px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                           />
@@ -839,7 +871,9 @@ export default function QRCodeGrantModal({
                             {isAttendance && (
                               <>
                                 <button
-                                  onClick={() => handleManualAction("increment")}
+                                  onClick={() =>
+                                    handleManualAction("increment")
+                                  }
                                   disabled={patchUserMutation?.isPending}
                                   className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
@@ -850,7 +884,9 @@ export default function QRCodeGrantModal({
                                   Count
                                 </button>
                                 <button
-                                  onClick={() => handleManualAction("decrement")}
+                                  onClick={() =>
+                                    handleManualAction("decrement")
+                                  }
                                   disabled={
                                     patchUserMutation?.isPending ||
                                     (selectedUserDisplayStatus.count ?? 0) <= 0
@@ -928,7 +964,7 @@ export default function QRCodeGrantModal({
                   </div>
                 )}
               </div>
-              
+
               {/* Zoomed QR View */}
               <AnimatePresence>
                 {isQrCodeZoomed && qrCodeValue && (
@@ -950,7 +986,9 @@ export default function QRCodeGrantModal({
                         level="H"
                         includeMargin
                       />
-                      <p className="text-center mt-2 text-sm text-gray-500">Tap outside to close</p>
+                      <p className="text-center mt-2 text-sm text-gray-500">
+                        Tap outside to close
+                      </p>
                     </motion.div>
                   </motion.div>
                 )}

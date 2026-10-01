@@ -116,7 +116,9 @@ function serializeGuidelineSection(section) {
   };
 
   if (Array.isArray(section.children) && section.children.length > 0) {
-    serializedSection.children = section.children.map(serializeGuidelineSection);
+    serializedSection.children = section.children.map(
+      serializeGuidelineSection,
+    );
   }
 
   return serializedSection;
@@ -155,9 +157,7 @@ async function readGuidelinesFile() {
     if (Array.isArray(data)) {
       return normalizeGuidelinesData(data);
     }
-    console.warn(
-      "Guidelines file format is invalid. Returning empty array.",
-    );
+    console.warn("Guidelines file format is invalid. Returning empty array.");
     return [];
   } catch (error) {
     if (error.code === "ENOENT") {
@@ -175,11 +175,7 @@ async function writeGuidelinesFile(data) {
     validateGuidelineSections(normalizedData);
     await fs.writeFile(
       guidelinesFilePath,
-      JSON.stringify(
-        normalizedData.map(serializeGuidelineSection),
-        null,
-        2,
-      ),
+      JSON.stringify(normalizedData.map(serializeGuidelineSection), null, 2),
       "utf8",
     );
   } catch (error) {

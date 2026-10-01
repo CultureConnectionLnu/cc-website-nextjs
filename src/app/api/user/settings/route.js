@@ -18,9 +18,7 @@ export async function POST(request) {
   );
 
   if (!clerkClient) {
-    console.error(
-      "API POST /api/user/settings: Clerk client not initialized.",
-    );
+    console.error("API POST /api/user/settings: Clerk client not initialized.");
     return NextResponse.json(
       { message: "Server configuration error" },
       { status: 500 },

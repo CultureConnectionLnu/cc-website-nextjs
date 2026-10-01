@@ -197,7 +197,9 @@ export default function SponsorManagement() {
 
   const handleMutationError = (error, action) => {
     console.error(`Error ${action} sponsor:`, error);
-    setGeneralError(error.message || `An error occurred while ${action} sponsor.`);
+    setGeneralError(
+      error.message || `An error occurred while ${action} sponsor.`,
+    );
   };
 
   const createMutation = useMutation({
@@ -232,7 +234,9 @@ export default function SponsorManagement() {
 
   const handleDeleteClick = (sponsorId, sponsorName) => {
     if (
-      window.confirm(`Are you sure you want to delete sponsor "${sponsorName}"?`)
+      window.confirm(
+        `Are you sure you want to delete sponsor "${sponsorName}"?`,
+      )
     ) {
       setGeneralError(null);
       deleteMutation.mutate(sponsorId);
@@ -261,9 +265,7 @@ export default function SponsorManagement() {
   return (
     <div className="bg-gray-50 p-4 rounded border mt-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Manage Sponsors
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-800">Manage Sponsors</h2>
         <button
           onClick={handleAddClick}
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
@@ -323,10 +325,7 @@ export default function SponsorManagement() {
             <tbody className="bg-white divide-y divide-gray-200">
               {sponsors.length === 0 && (
                 <tr>
-                  <td
-                    colSpan="5"
-                    className="text-center py-4 text-gray-500"
-                  >
+                  <td colSpan="5" className="text-center py-4 text-gray-500">
                     No sponsors found.
                   </td>
                 </tr>
@@ -377,7 +376,9 @@ export default function SponsorManagement() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDeleteClick(sponsor.id, sponsor.name)}
+                      onClick={() =>
+                        handleDeleteClick(sponsor.id, sponsor.name)
+                      }
                       disabled={isMutating}
                       className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
                     >

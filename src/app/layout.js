@@ -4,8 +4,9 @@ import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import ModalController from "@/components/Modals/ModalController";
 
 export const metadata = {
-  title: "Culture Connection", 
-  description: "We are a fun and active association that strives for inclusiveness, bridging and building communities with our variety of non-alcohol based events.", 
+  title: "Culture Connection",
+  description:
+    "We are a fun and active association that strives for inclusiveness, bridging and building communities with our variety of non-alcohol based events.",
   icons: {
     icon: "/cc.svg",
   },

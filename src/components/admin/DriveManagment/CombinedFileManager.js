@@ -18,9 +18,7 @@ export function CombinedFileManager({ onImageSelect }) {
   const renderContent = () => {
     switch (selectedSource) {
       case "publicOneCom":
-        return (
-          <OneComPublicFileManager onImageSelect={onImageSelect} />
-        );
+        return <OneComPublicFileManager onImageSelect={onImageSelect} />;
 
       case "privateApi":
         if (!customApiUrl) {
