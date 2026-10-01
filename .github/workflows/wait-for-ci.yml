@@ -18,5 +18,6 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+      - run: npx prettier . --check
       - run: npm run lint
       - run: npm test
