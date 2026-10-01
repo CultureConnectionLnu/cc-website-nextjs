@@ -136,6 +136,7 @@ export default function Header() {
                 <Link href="/" onClick={closeMenus} className="hover:translate-x-2 transition-transform">Home</Link>
                 <Link href="/about-us" onClick={closeMenus} className="hover:translate-x-2 transition-transform">About Us</Link>
                 <Link href="/events" onClick={closeMenus} className="hover:translate-x-2 transition-transform">Events</Link>
+                <Link href="/membership" onClick={closeMenus} className="hover:translate-x-2 transition-transform">Membership</Link>
                 
                 <SignedIn>
                   {isRegularUser && (
