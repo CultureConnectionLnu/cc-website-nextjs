@@ -197,6 +197,13 @@ export default function Header() {
                 >
                   Events
                 </Link>
+                <Link
+                  href="/membership"
+                  onClick={closeMenus}
+                  className="hover:translate-x-2 transition-transform"
+                >
+                  Membership
+                </Link>
 
                 <SignedIn>
                   {isRegularUser && (
