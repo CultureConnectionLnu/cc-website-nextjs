@@ -83,7 +83,7 @@ try {
 }
 
 process.on("exit", () => {
-	if (db && db.open) {
+	if (db?.open) {
 		db.close((err) => {
 			if (err) {
 				console.error("Error closing SQLite connection:", err.message);

@@ -33,9 +33,9 @@ export function processBadgeScan(userId, achievementId) {
 		const currentCount = userStatus ? userStatus.attendanceCount || 0 : 0;
 
 		// --- 3. COOLDOWN CHECK ---
-		if (userStatus && userStatus.last_scanned_at) {
+		if (userStatus?.last_scanned_at) {
 			const lastScan = new Date(userStatus.last_scanned_at).getTime();
-			const now = new Date().getTime();
+			const now = Date.now();
 			const diffHours = (now - lastScan) / (1000 * 60 * 60);
 
 			// Only enforce cooldown if it's a progress badge (attendanceCounter = 1)
