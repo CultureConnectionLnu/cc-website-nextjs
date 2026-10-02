@@ -1,4 +1,5 @@
             <svg
+            aria-label="right pointing arrow"
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 sm:h-8 sm:w-8"
               fill="none"
