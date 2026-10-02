@@ -11,7 +11,9 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "npx @biomejs/biome lint --write",
-		"format": "npx @biomejs/biome format --write"
+		"lint-check": "npx @biomejs/biome lint",
+		"format": "npx @biomejs/biome format --write",
+		"format-check": "npx @biomejs/biome format"
 	},
 	"dependencies": {
 		"@clerk/clerk-sdk-node": "^5.1.6",
