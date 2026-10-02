@@ -35,7 +35,7 @@ async function writeMemberships(data) {
 
 export async function GET(request) {
 	try {
-		let memberships = await readMemberships();
+		const memberships = await readMemberships();
 		memberships.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 		return NextResponse.json(memberships, { status: 200 });
 	} catch (error) {
@@ -81,7 +81,7 @@ export async function POST(request) {
 			createdAt: new Date().toISOString(),
 		};
 
-		let memberships = await readMemberships();
+		const memberships = await readMemberships();
 		memberships.unshift(newMembership);
 		await writeMemberships(memberships);
 
@@ -122,7 +122,7 @@ export async function PUT(request) {
 			);
 		}
 
-		let memberships = await readMemberships();
+		const memberships = await readMemberships();
 		const membershipIndex = memberships.findIndex((mem) => mem.id === id);
 
 		if (membershipIndex === -1) {

@@ -56,7 +56,7 @@ async function fetchAndMergeUserDetails(attendeesRaw) {
 		return { attendees: [], attendeeDetails: [] };
 	}
 	const attendeeUserIds = attendeesRaw.map((a) => a.user_id).filter(Boolean);
-	let userDetailsMap = new Map();
+	const userDetailsMap = new Map();
 	if (attendeeUserIds.length > 0) {
 		try {
 			const userListResponse = await clerkClient.users.getUserList({
@@ -117,7 +117,7 @@ export async function GET(request) {
 		const eventsStmt = db.prepare(`SELECT * FROM Events ORDER BY date DESC`);
 		const events = eventsStmt.all();
 		const eventIds = events.map((e) => e.id);
-		let attendeesByEvent = {};
+		const attendeesByEvent = {};
 		let allAttendeesRaw = [];
 		if (eventIds.length > 0) {
 			const placeholders = eventIds.map(() => "?").join(",");

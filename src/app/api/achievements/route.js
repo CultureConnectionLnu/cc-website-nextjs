@@ -646,7 +646,7 @@ export async function PATCH(request) {
 
 				if (statusCheck && intToBool(achievement.attendanceCounter)) {
 					let newAchievedStatusBasedOnLevels = false;
-					let oldAchievedStatusDb = intToBool(statusCheck.alreadyAchievedDb);
+					const oldAchievedStatusDb = intToBool(statusCheck.alreadyAchievedDb);
 
 					if (parsedLevelConfig.length > 0) {
 						const sortedLevels = [...parsedLevelConfig].sort(

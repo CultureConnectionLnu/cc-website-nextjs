@@ -163,7 +163,7 @@ function EventManageModal({
 
 	const filteredAttendees = useMemo(() => {
 		if (!attendeesList) return [];
-		let usersToFilter = attendeesList.map((att) => ({
+		const usersToFilter = attendeesList.map((att) => ({
 			...att,
 			displayVerified: getDisplayStatus(att.userID).verified,
 		}));

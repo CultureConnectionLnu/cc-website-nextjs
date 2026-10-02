@@ -243,7 +243,7 @@ export async function PUT(request) {
 			);
 		}
 
-		let finalMetadata = { ...existingMetadata, [metadataKey]: metadataValue };
+		const finalMetadata = { ...existingMetadata, [metadataKey]: metadataValue };
 
 		if (metadataKey === "admin" && metadataValue === true) {
 			finalMetadata.member = true;

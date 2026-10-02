@@ -26,7 +26,7 @@ export default function ClaimSuccessUI({ result }) {
 
 			const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
-			const interval = setInterval(function () {
+			const interval = setInterval(() => {
 				const timeLeft = animationEnd - Date.now();
 
 				if (timeLeft <= 0) {

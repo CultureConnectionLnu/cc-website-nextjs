@@ -85,7 +85,7 @@ const deleteAchievement = async (achievementId) => {
 };
 
 const patchUserAchievement = async (payload) => {
-	let body = { ...payload };
+	const body = { ...payload };
 	if (!body.action || !body.achievementId || !body.targetUserId) {
 		throw new Error("Invalid payload for patchUserAchievement");
 	}
@@ -410,7 +410,7 @@ export default function AchievementsPage() {
 					categoriesToDisplay: [],
 				};
 
-			let processedAchievements = achievementsData.filter(
+			const processedAchievements = achievementsData.filter(
 				(ach) => ach.isEnabled || canManage,
 			);
 
@@ -424,7 +424,7 @@ export default function AchievementsPage() {
 			});
 
 			let filteredForDisplay = processedAchievements;
-			let finalDisplayMode = filterMode;
+			const finalDisplayMode = filterMode;
 
 			if (filterMode === "achieved") {
 				filteredForDisplay = processedAchievements.filter(
@@ -457,7 +457,7 @@ export default function AchievementsPage() {
 				groups[category].push(ach);
 			});
 
-			let categoriesToRender = Object.keys(groups).sort((a, b) => {
+			const categoriesToRender = Object.keys(groups).sort((a, b) => {
 				if (a === "Uncategorized") return 1;
 				if (b === "Uncategorized") return -1;
 				return a.localeCompare(b);

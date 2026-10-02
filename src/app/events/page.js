@@ -611,7 +611,7 @@ export default function EventsPage() {
 					if (action === "attend") {
 						const confirmedCountForThisEvent =
 							eventToUpdate.attendeeDetails.filter((a) => !a.waiting).length;
-						let shouldBeOnWaitlist =
+						const shouldBeOnWaitlist =
 							eventToUpdate.isLimitEnabled &&
 							eventToUpdate.attendanceLimit > 0 &&
 							confirmedCountForThisEvent >= eventToUpdate.attendanceLimit;
@@ -672,7 +672,7 @@ export default function EventsPage() {
 								eventToUpdate.attendanceLimit > 0
 							) {
 								let promotedUser = null;
-								let firstWaitingNonFrozenUserIndex =
+								const firstWaitingNonFrozenUserIndex =
 									eventToUpdate.attendeeDetails.findIndex(
 										(att) =>
 											att.waiting &&
@@ -687,7 +687,7 @@ export default function EventsPage() {
 											firstWaitingNonFrozenUserIndex
 										];
 								} else {
-									let firstWaitingFrozenUserIndex =
+									const firstWaitingFrozenUserIndex =
 										eventToUpdate.attendeeDetails.findIndex(
 											(att) => att.waiting,
 										);

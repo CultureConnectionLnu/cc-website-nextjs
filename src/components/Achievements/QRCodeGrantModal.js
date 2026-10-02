@@ -409,7 +409,7 @@ export default function QRCodeGrantModal({
 		if (targetAchId.includes("_lvl_"))
 			targetAchId = targetAchId.split("_lvl_")[0];
 
-		let payload = {
+		const payload = {
 			achievementId: targetAchId,
 			targetUserId: selectedUserIdForAction,
 		};

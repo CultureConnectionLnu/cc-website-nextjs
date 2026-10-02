@@ -55,7 +55,7 @@ export async function POST(request) {
 
 		const userIdsToFreeze = unverifiedUsers.map((u) => u.user_id);
 		let frozenCount = 0;
-		let errors = [];
+		const errors = [];
 
 		for (const targetUserId of userIdsToFreeze) {
 			try {

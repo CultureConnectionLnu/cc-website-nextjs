@@ -5,7 +5,7 @@ import { useRef, useEffect } from "react";
 // Embedded Noise Library (combined directly into this file for reliability)
 // Original source: Public domain Perlin/Simplex noise by Stefan Gustavson et al.
 // (Your provided noise code is embedded here)
-(function (global) {
+((global) => {
 	var module = (global.noise = {});
 
 	function Grad(x, y, z) {
@@ -58,7 +58,7 @@ import { useRef, useEffect } from "react";
 	var perm = new Array(512);
 	var gradP = new Array(512);
 
-	module.seed = function (seed) {
+	module.seed = (seed) => {
 		if (seed > 0 && seed < 1) {
 			seed *= 65536;
 		}
@@ -89,7 +89,7 @@ import { useRef, useEffect } from "react";
 	var F3 = 1 / 3;
 	var G3 = 1 / 6;
 
-	module.simplex2 = function (xin, yin) {
+	module.simplex2 = (xin, yin) => {
 		var n0, n1, n2;
 		var s = (xin + yin) * F2;
 		var i = Math.floor(xin + s);
@@ -138,7 +138,7 @@ import { useRef, useEffect } from "react";
 		return 70 * (n0 + n1 + n2);
 	};
 
-	module.simplex3 = function (xin, yin, zin) {
+	module.simplex3 = (xin, yin, zin) => {
 		var n0, n1, n2, n3;
 		var s = (xin + yin + zin) * F3;
 		var i = Math.floor(xin + s);
@@ -252,7 +252,7 @@ import { useRef, useEffect } from "react";
 		return (1 - t) * a + t * b;
 	}
 
-	module.perlin2 = function (x, y) {
+	module.perlin2 = (x, y) => {
 		var X = Math.floor(x),
 			Y = Math.floor(y);
 		x = x - X;
@@ -267,7 +267,7 @@ import { useRef, useEffect } from "react";
 		return lerp(lerp(n00, n10, u), lerp(n01, n11, u), fade(y));
 	};
 
-	module.perlin3 = function (x, y, z) {
+	module.perlin3 = (x, y, z) => {
 		var X = Math.floor(x),
 			Y = Math.floor(y),
 			Z = Math.floor(z);

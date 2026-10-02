@@ -27,10 +27,10 @@ export function processBadgeScan(userId, achievementId) {
 		);
 		const userStatus = statusStmt.get(achievementId, userId);
 
-		let alreadyAchievedInDb = userStatus
+		const alreadyAchievedInDb = userStatus
 			? intToBool(userStatus.achieved)
 			: false;
-		let currentCount = userStatus ? userStatus.attendanceCount || 0 : 0;
+		const currentCount = userStatus ? userStatus.attendanceCount || 0 : 0;
 
 		// --- 3. COOLDOWN CHECK ---
 		if (userStatus && userStatus.last_scanned_at) {
