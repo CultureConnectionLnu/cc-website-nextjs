@@ -1,4 +1,4 @@
-import { createHmac } from "crypto";
+import { createHmac } from "node:crypto";
 
 const SECRET =
 	process.env.CLERK_SECRET_KEY || "fallback_secret_do_not_use_in_prod";

@@ -1,4 +1,4 @@
-import { createHmac } from "crypto";
+import { createHmac } from "node:crypto";
 
 const SECRET = process.env.QR_JWT_SECRET || "fallback-secret";
 
