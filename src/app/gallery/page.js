@@ -140,6 +140,7 @@ export default function GalleryPage() {
 								<div className="flex flex-wrap gap-3 justify-center max-w-4xl">
 									{categories.map((cat) => (
 										<button
+											type="button"
 											key={cat}
 											onClick={() => setActiveCategory(cat)}
 											className={`
@@ -258,6 +259,7 @@ export default function GalleryPage() {
 
 							{/* Close Button */}
 							<button
+								type="button"
 								onClick={() => setSelectedImage(null)}
 								className="absolute top-4 right-4 md:-right-12 md:top-0 bg-white/10 hover:bg-white/30 text-white rounded-full w-10 h-10 flex items-center justify-center transition-colors"
 							>

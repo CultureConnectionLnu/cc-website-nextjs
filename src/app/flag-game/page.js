@@ -114,6 +114,7 @@ export default function FlagGamePage() {
 			</div>
 
 			<button
+				type="button"
 				onClick={() => setSelectedMode("classic")}
 				className={`relative w-1/3 z-10 py-1.5 text-sm font-bold transition-colors duration-200 ${
 					selectedMode === "classic"
@@ -124,6 +125,7 @@ export default function FlagGamePage() {
 				Classic
 			</button>
 			<button
+				type="button"
 				onClick={() => setSelectedMode("blitz")}
 				className={`relative w-1/3 z-10 py-1.5 text-sm font-bold transition-colors duration-200 ${
 					selectedMode === "blitz"
@@ -134,6 +136,7 @@ export default function FlagGamePage() {
 				Blitz
 			</button>
 			<button
+				type="button"
 				onClick={() => setSelectedMode("training")}
 				className={`relative w-1/3 z-10 py-1.5 text-sm font-bold transition-colors duration-200 ${
 					selectedMode === "training"
@@ -149,6 +152,7 @@ export default function FlagGamePage() {
 	const RulesTooltip = () => (
 		<div className="relative inline-block z-30">
 			<button
+				type="button"
 				onClick={(e) => {
 					e.stopPropagation();
 					setShowRules(!showRules);
@@ -363,7 +367,10 @@ export default function FlagGamePage() {
 									<p className="mb-6 text-slate-300">
 										You need to be signed in to play.
 										<SignInButton mode="modal" afterSignInUrl="/flag-game">
-											<button className="ml-1 text-sky-400 underline hover:text-sky-300">
+											<button
+												type="button"
+												className="ml-1 text-sky-400 underline hover:text-sky-300"
+											>
 												sign in
 											</button>
 										</SignInButton>

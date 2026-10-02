@@ -446,6 +446,7 @@ const EventCard = ({
 						<>
 							{showBecomeMemberPromptButton && (
 								<button
+									type="button"
 									onClick={onOpenBecomeMemberModal}
 									className="w-full my-5 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-yellow-200 text-yellow-800 font-semibold hover:bg-yellow-300"
 								>
@@ -453,6 +454,7 @@ const EventCard = ({
 								</button>
 							)}
 							<button
+								type="button"
 								onClick={handleAttendUnattendClick}
 								disabled={isAttendButtonDisabled}
 								className={`w-full text-center p-3 mb-5 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 font-semibold ${buttonBgClass} ${buttonTextClass} ${buttonHoverBgClass} ${
@@ -484,6 +486,7 @@ const EventCard = ({
 					}`}
 				>
 					<button
+						type="button"
 						onClick={() => onOpenModal(event)}
 						className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-gray-100/70 text-black font-semibold"
 					>
@@ -491,6 +494,7 @@ const EventCard = ({
 					</button>
 					{canManageEvents && (
 						<button
+							type="button"
 							onClick={() => onOpenManageModal(event)}
 							className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-cyan-200 text-black font-semibold"
 						>
@@ -511,6 +515,7 @@ const EventCard = ({
 const AddEventCard = ({ onClick }) => {
 	return (
 		<button
+			type="button"
 			onClick={onClick}
 			className="bg-white shadow-md rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-gray-300 text-gray-500 hover:border-indigo-500 hover:text-indigo-500 transition-colors aspect-[3/4] md:aspect-auto min-h-[300px]"
 			aria-label="Add new event"
@@ -1092,6 +1097,7 @@ export default function EventsPage() {
 
 							<section className="mt-6 max-w-3xl mx-auto">
 								<button
+									type="button"
 									onClick={() => setIsHelpOpen(!isHelpOpen)}
 									className="w-full flex items-center justify-center gap-2 text-2xl md:text-3xl font-Header text-mainColor font-bold mb-4"
 								>
@@ -1164,6 +1170,7 @@ export default function EventsPage() {
 						<div className="flex flex-col justify-center items-center gap-4">
 							{isUserLoaded && user ? (
 								<button
+									type="button"
 									onClick={openScannerModal}
 									className="flex px-4 py-2 w-64 bg-green-300 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 									title="Scan Event QR Code"
@@ -1175,6 +1182,7 @@ export default function EventsPage() {
 							) : isUserLoaded && !user ? (
 								<SignInButton mode="modal">
 									<button
+										type="button"
 										className="flex px-4 py-2 w-64 bg-blue-300 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 										title="Sign In to Scan QR Code"
 										aria-label="Sign In to Scan QR Code"
@@ -1187,6 +1195,7 @@ export default function EventsPage() {
 								<div className="h-[52px] w-64 bg-gray-200 rounded animate-pulse"></div>
 							)}
 							<button
+								type="button"
 								onClick={() => setIsActivitiesOpen(!isActivitiesOpen)}
 								className="flex px-4 mb-6 py-2 w-64 bg-blue-300 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 								title="Toggle Activities"

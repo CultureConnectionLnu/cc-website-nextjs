@@ -51,6 +51,7 @@ export default function GenericActivityModal({
 				variants={motionVariants}
 			>
 				<button
+					type="button"
 					onClick={onClose}
 					className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 z-20 bg-white rounded-full p-1"
 					aria-label="Close modal"
@@ -145,6 +146,7 @@ export default function GenericActivityModal({
 									{galleryImages.length > 1 && (
 										<>
 											<button
+												type="button"
 												onClick={handlePrevImage}
 												className="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-1 rounded-full hover:bg-opacity-60"
 												aria-label="Previous image"
@@ -152,6 +154,7 @@ export default function GenericActivityModal({
 												&lt;
 											</button>
 											<button
+												type="button"
 												onClick={handleNextImage}
 												className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 text-white p-1 rounded-full hover:bg-opacity-60"
 												aria-label="Next image"

@@ -184,6 +184,7 @@ export default function BylawsManagement() {
 						Member Propositions
 					</h2>
 					<button
+						type="button"
 						onClick={() => setActiveTab("bylaws")}
 						className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm font-medium"
 					>
@@ -245,6 +246,7 @@ export default function BylawsManagement() {
 								<div className="flex justify-end gap-2 mt-3">
 									{prop.status !== "viewed" && (
 										<button
+											type="button"
 											onClick={() => markViewedMutation.mutate(prop.id)}
 											disabled={
 												markViewedMutation.isPending ||
@@ -259,6 +261,7 @@ export default function BylawsManagement() {
 										</button>
 									)}
 									<button
+										type="button"
 										onClick={() => {
 											if (
 												window.confirm("Delete this proposition permanently?")
@@ -293,12 +296,14 @@ export default function BylawsManagement() {
 					<h2 className="text-2xl font-semibold text-gray-800">Edit Bylaws</h2>
 					<div className="space-x-2">
 						<button
+							type="button"
 							onClick={handleSaveChanges}
 							className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
 						>
 							Save Changes
 						</button>
 						<button
+							type="button"
 							onClick={() => setIsEditing(false)}
 							className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm font-medium"
 						>
@@ -335,6 +340,7 @@ export default function BylawsManagement() {
 							}}
 						/>
 						<button
+							type="button"
 							onClick={() =>
 								setEditData(editData.filter((_, i) => i !== index))
 							}
@@ -345,6 +351,7 @@ export default function BylawsManagement() {
 					</div>
 				))}
 				<button
+					type="button"
 					onClick={() =>
 						setEditData([
 							...editData,
@@ -368,12 +375,14 @@ export default function BylawsManagement() {
 				{isAdmin && (
 					<div className="space-x-2">
 						<button
+							type="button"
 							onClick={() => setActiveTab("propositions")}
 							className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm font-medium"
 						>
 							View Propositions
 						</button>
 						<button
+							type="button"
 							onClick={handleEditToggle}
 							className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
 						>
@@ -389,6 +398,7 @@ export default function BylawsManagement() {
 						{bylaws.map((section) => (
 							<li key={section.id}>
 								<button
+									type="button"
 									onClick={() => setActiveSectionId(section.id)}
 									className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
 										activeSectionId === section.id

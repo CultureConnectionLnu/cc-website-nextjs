@@ -56,6 +56,7 @@ export default function CardSkinSelectionModal({
 								Select Card Skin
 							</h2>
 							<button
+								type="button"
 								onClick={onClose}
 								className="text-gray-400 hover:text-gray-700 z-20 bg-white rounded-full p-1 h-7 w-7 flex items-center justify-center"
 								aria-label="Close modal"
@@ -67,6 +68,7 @@ export default function CardSkinSelectionModal({
 						<div className="p-6 overflow-y-auto flex-grow">
 							<div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
 								<button
+									type="button"
 									onClick={() => handleSelect(null, null)}
 									className={`p-2 border-2 rounded-lg flex flex-col items-center justify-center h-36 transition-all
                     ${
@@ -89,6 +91,7 @@ export default function CardSkinSelectionModal({
 
 								{potentialSkins.map((skin) => (
 									<button
+										type="button"
 										key={skin.id}
 										onClick={() =>
 											skin.isUnlocked

@@ -482,6 +482,7 @@ function EventManageModal({
 							onClick={(e) => e.stopPropagation()}
 						>
 							<button
+								type="button"
 								onClick={onClose}
 								className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition-colors z-20 h-7 w-7 flex items-center justify-center bg-white/50 rounded-full"
 								aria-label="Close modal"
@@ -495,6 +496,7 @@ function EventManageModal({
 								</h2>
 								<div className="flex justify-center border-b border-gray-300">
 									<button
+										type="button"
 										onClick={() => setActiveTab("qr")}
 										className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
 											activeTab === "qr"
@@ -505,6 +507,7 @@ function EventManageModal({
 										<FontAwesomeIcon icon={faQrcode} /> QR Check-in
 									</button>
 									<button
+										type="button"
 										onClick={() => setActiveTab("attendees")}
 										className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
 											activeTab === "attendees"
@@ -515,6 +518,7 @@ function EventManageModal({
 										<FontAwesomeIcon icon={faUsers} /> Attendees
 									</button>
 									<button
+										type="button"
 										onClick={() => setActiveTab("edit")}
 										className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
 											activeTab === "edit"
@@ -1193,6 +1197,7 @@ function EventManageModal({
 								includeMargin={true}
 							/>
 							<button
+								type="button"
 								onClick={() => setIsQrFullScreen(false)}
 								className="absolute -top-4 -right-4 text-white bg-gray-800 hover:bg-black transition-colors z-20 h-10 w-10 flex items-center justify-center rounded-full shadow-lg"
 								aria-label="Close full-screen QR code"

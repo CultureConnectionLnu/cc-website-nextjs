@@ -57,6 +57,7 @@ const DesktopView = ({ onClose, cameraError }) => (
 			variants={scannerModalVariants}
 		>
 			<button
+				type="button"
 				onClick={onClose}
 				className="absolute top-3 right-3 z-10 flex h-7 w-7 items-center justify-center text-gray-500 hover:text-gray-800"
 				aria-label="Close scanner"
@@ -93,6 +94,7 @@ const MobileView = ({ onClose, cameraError }) => (
 	>
 		<div id={SCANNER_ELEMENT_ID} className="absolute inset-0" />
 		<button
+			type="button"
 			onClick={onClose}
 			className="absolute top-5 right-5 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/60"
 			aria-label="Close scanner"
@@ -506,6 +508,7 @@ export default function QRCodeGrantModal({
 							onClick={(e) => e.stopPropagation()}
 						>
 							<button
+								type="button"
 								onClick={onClose}
 								className="absolute top-3 right-3 h-7 w-7 bg-white/50 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-800"
 								aria-label="Close modal"
@@ -518,6 +521,7 @@ export default function QRCodeGrantModal({
 								</h2>
 								<div className="flex justify-center border-b border-gray-300">
 									<button
+										type="button"
 										onClick={() => setActiveTab("qr")}
 										className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 ${
 											activeTab === "qr"
@@ -529,6 +533,7 @@ export default function QRCodeGrantModal({
 									</button>
 									{isAdmin && (
 										<button
+											type="button"
 											onClick={() => setActiveTab("manual")}
 											className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 ${
 												activeTab === "manual"
@@ -571,6 +576,7 @@ export default function QRCodeGrantModal({
 
 										{/* INTERNAL SCANNER */}
 										<button
+											type="button"
 											onClick={() => {
 												setUserScanMessageInGrantTab("");
 												setIsScannerModalOpen(true);
@@ -636,6 +642,7 @@ export default function QRCodeGrantModal({
 
 										<div className="flex items-center gap-3">
 											<button
+												type="button"
 												onClick={() => {
 													setIsLoadingQrToken(true);
 													fetchQr();
@@ -847,6 +854,7 @@ export default function QRCodeGrantModal({
 														{!isAttendance && (
 															<>
 																<button
+																	type="button"
 																	onClick={() => handleManualAction("grant")}
 																	disabled={
 																		patchUserMutation?.isPending ||
@@ -857,6 +865,7 @@ export default function QRCodeGrantModal({
 																	Grant Badge
 																</button>
 																<button
+																	type="button"
 																	onClick={() => handleManualAction("revoke")}
 																	disabled={
 																		patchUserMutation?.isPending ||
@@ -871,6 +880,7 @@ export default function QRCodeGrantModal({
 														{isAttendance && (
 															<>
 																<button
+																	type="button"
 																	onClick={() =>
 																		handleManualAction("increment")
 																	}
@@ -884,6 +894,7 @@ export default function QRCodeGrantModal({
 																	Count
 																</button>
 																<button
+																	type="button"
 																	onClick={() =>
 																		handleManualAction("decrement")
 																	}
@@ -900,6 +911,7 @@ export default function QRCodeGrantModal({
 																	Count
 																</button>
 																<button
+																	type="button"
 																	onClick={() => handleManualAction("revoke")}
 																	disabled={
 																		patchUserMutation?.isPending ||
@@ -936,6 +948,7 @@ export default function QRCodeGrantModal({
 																disabled={patchUserMutation?.isPending}
 															/>
 															<button
+																type="button"
 																onClick={() => handleManualAction("setScore")}
 																disabled={patchUserMutation?.isPending}
 																className="px-3 py-1 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded disabled:opacity-50"

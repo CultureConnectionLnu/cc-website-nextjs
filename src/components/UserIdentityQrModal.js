@@ -95,6 +95,7 @@ export default function UserIdentityQrModal({ isOpen, onClose, userName }) {
 							My Identity QR Code
 						</h2>
 						<button
+							type="button"
 							onClick={onClose}
 							className="text-gray-400 hover:text-gray-700 z-20 bg-white rounded-full p-1 h-7 w-7 flex items-center justify-center"
 							aria-label="Close modal"

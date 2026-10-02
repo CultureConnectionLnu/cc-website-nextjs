@@ -35,6 +35,7 @@ const ArrowButton = ({
 	className,
 }) => (
 	<button
+		type="button"
 		onClick={onClick}
 		disabled={disabled}
 		className={`absolute top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 transform items-center justify-center rounded-full bg-white/50 text-mainColor transition-all hover:bg-white/80 focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:opacity-30 disabled:cursor-not-allowed ${

@@ -91,6 +91,7 @@ export function SettingsView({
 					Please sign in to manage your display settings.
 				</p>
 				<button
+					type="button"
 					onClick={onBackToMenu}
 					className="rounded-lg bg-blue-500 px-8 py-3 text-lg font-semibold text-white shadow-md transition-colors duration-150 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-75"
 				>
@@ -116,6 +117,7 @@ export function SettingsView({
 						Show my name on scoreboard
 					</label>
 					<button
+						type="button"
 						id="showNameToggle"
 						onClick={() => setShowNamePubliclyLocal(!showNamePubliclyLocal)}
 						disabled={mutation.isPending}
@@ -189,6 +191,7 @@ export function SettingsView({
 
 			<div className="mt-8 flex flex-col items-center space-y-3">
 				<button
+					type="button"
 					onClick={handleSaveSettings}
 					disabled={mutation.isPending}
 					className="w-full rounded-lg bg-green-500 px-8 py-3 text-lg font-semibold text-white shadow-md transition-colors duration-150 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-opacity-75 disabled:opacity-50"
@@ -196,6 +199,7 @@ export function SettingsView({
 					Save Settings
 				</button>
 				<button
+					type="button"
 					onClick={onBackToMenu}
 					className="w-full rounded-lg bg-blue-500 px-8 py-3 text-lg font-semibold text-white shadow-md transition-colors duration-150 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-75"
 				>

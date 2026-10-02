@@ -280,6 +280,7 @@ export default function UserCardModal({ isOpen, onClose, user }) {
           `}
 				>
 					<button
+						type="button"
 						onClick={(e) => {
 							e.stopPropagation();
 							onClose();

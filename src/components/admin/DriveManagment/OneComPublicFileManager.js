@@ -371,6 +371,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 			<div className="flex flex-wrap gap-2 border-b pb-2 items-end">
 				{categories.map((cat) => (
 					<button
+						type="button"
 						key={cat}
 						onClick={() => {
 							setActiveCategory(cat);
@@ -387,6 +388,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 					</button>
 				))}
 				<button
+					type="button"
 					onClick={handleCreateCategory}
 					className="px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded mb-0.5"
 				>
@@ -454,6 +456,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 										className="w-full h-full object-cover rounded border"
 									/>
 									<button
+										type="button"
 										onClick={() => {
 											setSelectedUploadFiles((s) =>
 												s.filter((_, x) => x !== i),
@@ -468,6 +471,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 							))}
 						</div>
 						<button
+							type="button"
 							onClick={handleUpload}
 							disabled={statusMsg.text?.startsWith("Uploading")}
 							className="w-full bg-purple-600 text-white py-2 rounded font-medium hover:bg-purple-700 disabled:opacity-50"
@@ -511,6 +515,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 						{selectedForDelete.length > 0 ? (
 							<div className="flex items-center gap-3 w-full">
 								<button
+									type="button"
 									onClick={handleBulkDelete}
 									className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm font-bold shadow-md flex items-center gap-2"
 								>
@@ -518,6 +523,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 									Delete {selectedForDelete.length} Items
 								</button>
 								<button
+									type="button"
 									onClick={() => setSelectedForDelete([])}
 									className="text-gray-500 text-sm hover:underline"
 								>
@@ -586,6 +592,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 										{/* Hover Overlay */}
 										<div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
 											<button
+												type="button"
 												onClick={() => {
 													if (onImageSelect) onImageSelect(fullUrl);
 													else {
@@ -603,7 +610,10 @@ export function OneComPublicFileManager({ onImageSelect }) {
 														: "Copy URL"}
 											</button>
 											<div className="relative group/move">
-												<button className="text-[10px] text-white hover:text-purple-200 flex items-center gap-1 uppercase font-bold tracking-wide">
+												<button
+													type="button"
+													className="text-[10px] text-white hover:text-purple-200 flex items-center gap-1 uppercase font-bold tracking-wide"
+												>
 													Move <FontAwesomeIcon icon={faArrowRight} />
 												</button>
 												<div className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover/move:block bg-white text-gray-800 shadow-xl rounded py-1 min-w-[120px] z-20 border max-h-40 overflow-y-auto">
@@ -611,6 +621,7 @@ export function OneComPublicFileManager({ onImageSelect }) {
 														.filter((c) => c !== activeCategory)
 														.map((cat) => (
 															<button
+																type="button"
 																key={cat}
 																onClick={() => handleMove(item.name, cat)}
 																className="block w-full text-left px-3 py-1.5 text-xs hover:bg-purple-50 hover:text-purple-700"

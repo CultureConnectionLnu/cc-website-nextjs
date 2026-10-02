@@ -112,6 +112,7 @@ export default function BecomeMemberModal({ isOpen, onClose, user }) {
 						onClick={(e) => e.stopPropagation()}
 					>
 						<button
+							type="button"
 							onClick={onClose}
 							className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition-colors"
 							aria-label="Close modal"
@@ -154,6 +155,7 @@ export default function BecomeMemberModal({ isOpen, onClose, user }) {
 								<p className="text-gray-500">Checking status...</p>
 							) : (
 								<button
+									type="button"
 									onClick={handleAddToVerification}
 									disabled={isInList || isLoadingAdd}
 									className={`w-full md:w-auto mt-1 md:mt-2 text-center px-4 md:px-6 py-2 md:py-2.5 rounded-lg border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-baseColor text-white font-semibold text-sm md:text-base ${

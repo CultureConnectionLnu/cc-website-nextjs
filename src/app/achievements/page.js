@@ -720,6 +720,7 @@ export default function AchievementsPage() {
 							<div className="flex justify-center items-center gap-3 md:gap-5 p-3 bg-gray-100 rounded-lg shadow">
 								{favoriteSlotsDisplay.map((fav, index) => (
 									<button
+										type="button"
 										key={index}
 										onClick={() => openFavoriteSelectionModal(index + 1)}
 										className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-dashed border-gray-400 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none transition-all duration-150 ease-in-out flex items-center justify-center overflow-hidden bg-gray-200 hover:bg-gray-300 group"
@@ -749,6 +750,7 @@ export default function AchievementsPage() {
 								{isSimpleUser ? (
 									<>
 										<button
+											type="button"
 											onClick={openBecomeMemberModal}
 											className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-yellow-200 text-yellow-800 font-semibold hover:bg-yellow-300"
 											title="Become a Member"
@@ -764,6 +766,7 @@ export default function AchievementsPage() {
 								) : (
 									<>
 										<button
+											type="button"
 											onClick={openCardSkinModal}
 											className="flex px-4 py-2 w-64 bg-purple-300 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 											title="Select Card Skin"
@@ -773,6 +776,7 @@ export default function AchievementsPage() {
 											<FontAwesomeIcon icon={faPalette} className="h-5 w-5" />
 										</button>
 										<button
+											type="button"
 											onClick={openScannerModal}
 											className="flex px-4 py-2 w-64 bg-green-300 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 											title="Scan Achievement QR Code"
@@ -783,6 +787,7 @@ export default function AchievementsPage() {
 											<FontAwesomeIcon icon={faQrcode} className="h-5 w-5" />
 										</button>
 										<button
+											type="button"
 											onClick={openUserIdentityModal}
 											className="flex px-4 py-2 w-64 bg-sky-300 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 											title="Show My Identity QR Code"
@@ -804,6 +809,7 @@ export default function AchievementsPage() {
 							allSortedCategoryNames.length > 0) && (
 							<div className="flex flex-wrap justify-center gap-2 mb-8 px-4">
 								<button
+									type="button"
 									onClick={() => handleFilterClick("all")}
 									className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500
                            ${
@@ -815,6 +821,7 @@ export default function AchievementsPage() {
 									All
 								</button>
 								<button
+									type="button"
 									onClick={() => handleFilterClick("achieved")}
 									className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-amber-500
                            ${
@@ -826,6 +833,7 @@ export default function AchievementsPage() {
 									My Badges
 								</button>
 								<button
+									type="button"
 									onClick={() => handleFilterClick("uncompleted")}
 									className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-500
                            ${
@@ -838,6 +846,7 @@ export default function AchievementsPage() {
 								</button>
 								{allSortedCategoryNames.map((category) => (
 									<button
+										type="button"
 										key={category}
 										onClick={() => handleFilterClick("category", category)}
 										className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500
@@ -855,6 +864,7 @@ export default function AchievementsPage() {
 						)}
 					{canManage && (
 						<button
+							type="button"
 							onClick={openAddModal}
 							className="flex my-10 px-4 py-2 mx-auto w-64 bg-blue-400 font-bold justify-center text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 items-center gap-2"
 							disabled={createAchievementMutation.isPending}

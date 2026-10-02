@@ -98,6 +98,7 @@ export default function BylawsPage() {
 					<div className="space-x-4 print:hidden">
 						{isLoaded && isSignedIn && (
 							<button
+								type="button"
 								onClick={() => setIsModalOpen(true)}
 								className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 font-medium transition-colors"
 							>
@@ -105,6 +106,7 @@ export default function BylawsPage() {
 							</button>
 						)}
 						<button
+							type="button"
 							onClick={handlePrint}
 							className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 font-medium transition-colors"
 						>

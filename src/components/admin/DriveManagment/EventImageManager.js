@@ -344,6 +344,7 @@ export function EventImageManager({ onImageSelect }) {
 				<div className="flex items-center gap-4">
 					{currentChannel && (
 						<button
+							type="button"
 							onClick={handleBackClick}
 							disabled={isFetching}
 							className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
@@ -361,6 +362,7 @@ export function EventImageManager({ onImageSelect }) {
 				{totalPages > 1 && (
 					<div className="flex items-center gap-2">
 						<button
+							type="button"
 							onClick={() => handlePageChange(currentPage - 1)}
 							disabled={currentPage === 1 || isFetching}
 							className="p-1 disabled:opacity-50 text-gray-600 hover:text-black"
@@ -372,6 +374,7 @@ export function EventImageManager({ onImageSelect }) {
 							Page {currentPage} of {totalPages}
 						</span>
 						<button
+							type="button"
 							onClick={() => handlePageChange(currentPage + 1)}
 							disabled={currentPage === totalPages || isFetching}
 							className="p-1 disabled:opacity-50 text-gray-600 hover:text-black"
@@ -449,6 +452,7 @@ export function EventImageManager({ onImageSelect }) {
 						/>
 					</div>
 					<button
+						type="button"
 						onClick={handleUploadSubmit}
 						disabled={
 							uploadImagesMutation.isPending ||
@@ -487,6 +491,7 @@ export function EventImageManager({ onImageSelect }) {
 					{queryData.type === "imageList" && (
 						<div className="mb-4 p-1 bg-gray-200 rounded-lg inline-flex">
 							<button
+								type="button"
 								onClick={() => setActiveView("website")}
 								className={`px-4 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
 									activeView === "website"
@@ -497,6 +502,7 @@ export function EventImageManager({ onImageSelect }) {
 								Website Optimized
 							</button>
 							<button
+								type="button"
 								onClick={() => setActiveView("original")}
 								className={`px-4 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
 									activeView === "original"
@@ -594,6 +600,7 @@ export function EventImageManager({ onImageSelect }) {
 												</span>
 												{!onImageSelect && (
 													<button
+														type="button"
 														onClick={() =>
 															!isBeingDeleted &&
 															handleDeleteImageClick(image.url)

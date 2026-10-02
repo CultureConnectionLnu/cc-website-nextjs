@@ -706,12 +706,14 @@ export default function GuidelinesManagement() {
 
 							<div className="flex flex-wrap gap-2">
 								<button
+									type="button"
 									onClick={() => handleAddSubsection(currentPath)}
 									className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs font-medium"
 								>
 									+ Add Subsection
 								</button>
 								<button
+									type="button"
 									onClick={() => handleDeleteSection(currentPath)}
 									className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs font-medium"
 								>
@@ -751,6 +753,7 @@ export default function GuidelinesManagement() {
 				return (
 					<li key={section.id}>
 						<button
+							type="button"
 							onClick={() => handleNavLinkClick(section.id)}
 							className={`flex w-full items-center justify-between gap-2 text-left rounded-md transition-colors ${
 								depth === 0 ? "px-3 py-2 text-sm" : "px-2 py-1.5 text-xs"
@@ -871,6 +874,7 @@ export default function GuidelinesManagement() {
 					</h2>
 					<div className="space-x-2">
 						<button
+							type="button"
 							onClick={handleSaveChanges}
 							disabled={mutation.isPending}
 							className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium disabled:opacity-50"
@@ -878,6 +882,7 @@ export default function GuidelinesManagement() {
 							{mutation.isPending ? "Saving..." : "Save Changes"}
 						</button>
 						<button
+							type="button"
 							onClick={handleCancelEdit}
 							disabled={mutation.isPending}
 							className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 text-sm font-medium"
@@ -912,6 +917,7 @@ export default function GuidelinesManagement() {
 				)}
 
 				<button
+					type="button"
 					onClick={handleAddSection}
 					className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm font-medium"
 				>
@@ -930,6 +936,7 @@ export default function GuidelinesManagement() {
 					</h2>
 					{isAdmin && (
 						<button
+							type="button"
 							onClick={handleEditToggle}
 							className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
 						>
@@ -953,6 +960,7 @@ export default function GuidelinesManagement() {
 				</h2>
 				{isAdmin && (
 					<button
+						type="button"
 						onClick={handleEditToggle}
 						className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
 					>

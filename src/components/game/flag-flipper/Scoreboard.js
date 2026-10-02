@@ -203,12 +203,14 @@ export function Scoreboard({ onBackToMenu, initialGameMode = "classic" }) {
 					</div>
 
 					<button
+						type="button"
 						onClick={() => setViewMode("classic")}
 						className={`relative w-1/2 z-10 py-1 text-sm font-bold transition-colors ${viewMode === "classic" ? "text-white" : "text-slate-400 hover:text-white"}`}
 					>
 						Classic
 					</button>
 					<button
+						type="button"
 						onClick={() => setViewMode("blitz")}
 						className={`relative w-1/2 z-10 py-1 text-sm font-bold transition-colors ${viewMode === "blitz" ? "text-white" : "text-slate-400 hover:text-white"}`}
 					>
@@ -337,6 +339,7 @@ export function Scoreboard({ onBackToMenu, initialGameMode = "classic" }) {
 
 				{isAdmin && (
 					<button
+						type="button"
 						onClick={handleResetScoreboard}
 						disabled={resetScoreboardMutation.isPending}
 						className="text-xs text-red-400/50 hover:text-red-400 transition-colors"
