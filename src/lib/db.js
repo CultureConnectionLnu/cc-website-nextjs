@@ -6,17 +6,17 @@ const dbPath = path.join(process.cwd(), "data", "achievements.db");
 
 const dbDir = path.dirname(dbPath);
 if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+	fs.mkdirSync(dbDir, { recursive: true });
 }
 
 let db;
 
 try {
-  db = new Database(dbPath, {});
-  db.pragma("journal_mode = WAL");
-  db.pragma("foreign_keys = ON");
+	db = new Database(dbPath, {});
+	db.pragma("journal_mode = WAL");
+	db.pragma("foreign_keys = ON");
 
-  const createAchievementsTable = `
+	const createAchievementsTable = `
     CREATE TABLE IF NOT EXISTS Achievements (
         id TEXT PRIMARY KEY,
         title TEXT NOT NULL,
@@ -31,7 +31,7 @@ try {
         onScore INTEGER NOT NULL DEFAULT 0
     );`;
 
-  const createUserStatusTable = `
+	const createUserStatusTable = `
     CREATE TABLE IF NOT EXISTS UserAchievementStatus (
         achievement_id TEXT NOT NULL,
         user_id TEXT NOT NULL,
@@ -45,7 +45,7 @@ try {
             ON UPDATE CASCADE
     );`;
 
-  const createUserFavoritesTable = `
+	const createUserFavoritesTable = `
   CREATE TABLE IF NOT EXISTS UserFavoriteAchievements (
       user_id TEXT NOT NULL,
       achievement_id TEXT NOT NULL,
@@ -56,7 +56,7 @@ try {
           ON UPDATE CASCADE
   );`;
 
-  const createGameScoresTable = `
+	const createGameScoresTable = `
     CREATE TABLE IF NOT EXISTS GameScores (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id TEXT NOT NULL,
@@ -66,30 +66,30 @@ try {
         UNIQUE(user_id, game_name)
     );`;
 
-  const createIndexUserStatus = `CREATE INDEX IF NOT EXISTS idx_user_achievement ON UserAchievementStatus (user_id, achievement_id);`;
-  const createIndexAchieved = `CREATE INDEX IF NOT EXISTS idx_achieved ON UserAchievementStatus (achievement_id, achieved);`;
-  const createIndexGameScoresUser = `CREATE INDEX IF NOT EXISTS idx_game_scores_user_game ON GameScores (user_id, game_name);`;
+	const createIndexUserStatus = `CREATE INDEX IF NOT EXISTS idx_user_achievement ON UserAchievementStatus (user_id, achievement_id);`;
+	const createIndexAchieved = `CREATE INDEX IF NOT EXISTS idx_achieved ON UserAchievementStatus (achievement_id, achieved);`;
+	const createIndexGameScoresUser = `CREATE INDEX IF NOT EXISTS idx_game_scores_user_game ON GameScores (user_id, game_name);`;
 
-  db.exec(createAchievementsTable);
-  db.exec(createUserStatusTable);
-  db.exec(createGameScoresTable);
-  db.exec(createIndexUserStatus);
-  db.exec(createIndexAchieved);
-  db.exec(createIndexGameScoresUser);
-  db.exec(createUserFavoritesTable);
+	db.exec(createAchievementsTable);
+	db.exec(createUserStatusTable);
+	db.exec(createGameScoresTable);
+	db.exec(createIndexUserStatus);
+	db.exec(createIndexAchieved);
+	db.exec(createIndexGameScoresUser);
+	db.exec(createUserFavoritesTable);
 } catch (err) {
-  console.error("Error connecting to or initializing SQLite database:", err);
-  db = null;
+	console.error("Error connecting to or initializing SQLite database:", err);
+	db = null;
 }
 
 process.on("exit", () => {
-  if (db && db.open) {
-    db.close((err) => {
-      if (err) {
-        console.error("Error closing SQLite connection:", err.message);
-      }
-    });
-  }
+	if (db && db.open) {
+		db.close((err) => {
+			if (err) {
+				console.error("Error closing SQLite connection:", err.message);
+			}
+		});
+	}
 });
 process.on("SIGINT", () => process.exit());
 

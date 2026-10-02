@@ -7,33 +7,33 @@ import db from "@/lib/db";
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
 
 export async function GET(request, { params }) {
-  const { userId: requestingUserId } = getAuth(request);
-  if (!requestingUserId) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
+	const { userId: requestingUserId } = getAuth(request);
+	if (!requestingUserId) {
+		return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+	}
 
-  const { userId: targetUserId } = params;
-  if (!targetUserId) {
-    return NextResponse.json(
-      { message: "Target user ID is required." },
-      { status: 400 },
-    );
-  }
+	const { userId: targetUserId } = params;
+	if (!targetUserId) {
+		return NextResponse.json(
+			{ message: "Target user ID is required." },
+			{ status: 400 },
+		);
+	}
 
-  if (!db) {
-    return NextResponse.json(
-      { message: "Database connection failed." },
-      { status: 500 },
-    );
-  }
+	if (!db) {
+		return NextResponse.json(
+			{ message: "Database connection failed." },
+			{ status: 500 },
+		);
+	}
 
-  try {
-    const targetUser = await clerkClient.users.getUser(targetUserId);
-    const userName =
-      `${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() ||
-      targetUser.username;
+	try {
+		const targetUser = await clerkClient.users.getUser(targetUserId);
+		const userName =
+			`${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() ||
+			targetUser.username;
 
-    const stmt = db.prepare(`
+		const stmt = db.prepare(`
       SELECT
         a.id,
         a.title,
@@ -46,20 +46,20 @@ export async function GET(request, { params }) {
       ORDER BY a.category, a.title
     `);
 
-    const achievements = stmt.all(targetUserId);
+		const achievements = stmt.all(targetUserId);
 
-    return NextResponse.json({
-      userName,
-      achievements,
-    });
-  } catch (error) {
-    console.error(`GET /api/user/${targetUserId}/profile Error:`, error);
-    if (error.clerkError) {
-      return NextResponse.json({ message: "User not found." }, { status: 404 });
-    }
-    return NextResponse.json(
-      { message: error.message || "Failed to load user profile." },
-      { status: 500 },
-    );
-  }
+		return NextResponse.json({
+			userName,
+			achievements,
+		});
+	} catch (error) {
+		console.error(`GET /api/user/${targetUserId}/profile Error:`, error);
+		if (error.clerkError) {
+			return NextResponse.json({ message: "User not found." }, { status: 404 });
+		}
+		return NextResponse.json(
+			{ message: error.message || "Failed to load user profile." },
+			{ status: 500 },
+		);
+	}
 }
