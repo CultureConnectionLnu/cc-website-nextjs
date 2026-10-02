@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 
-const intToBool = (val) => (val === 1);
+const intToBool = (val) => val === 1;
 const COOLDOWN_HOURS = 12;
 
 export function processBadgeScan(userId, achievementId) {

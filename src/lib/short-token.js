@@ -50,8 +50,8 @@ export function verifyShortToken(token) {
 		}
 
 		return achId;
-    } catch (e) {
-        console.error("Failed to verify short token:", e);
+	} catch (e) {
+		console.error("Failed to verify short token:", e);
 		return null;
 	}
 }
