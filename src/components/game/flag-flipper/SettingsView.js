@@ -67,7 +67,7 @@ export function SettingsView({
 	});
 
 	const handleSaveSettings = () => {
-		if (!isSignedInFromPage || !userFromPage || !userFromPage.id) {
+		if (!isSignedInFromPage || !userFromPage?.id) {
 			toast.error(
 				"You must be signed in to change settings, or user ID is missing.",
 			);

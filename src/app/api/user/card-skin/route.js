@@ -41,7 +41,7 @@ export async function POST(request) {
       `);
 			const achievement = achievementStmt.get(achievementIdForSkin);
 
-			if (!achievement || !achievement.card_skin_image_url) {
+			if (!achievement?.card_skin_image_url) {
 				return NextResponse.json(
 					{ message: "Selected achievement does not grant a skin." },
 					{ status: 400 },

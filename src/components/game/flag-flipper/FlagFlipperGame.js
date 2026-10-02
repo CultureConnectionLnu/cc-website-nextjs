@@ -352,7 +352,7 @@ export function FlagFlipperGame({ onGameEnd, gameMode = "classic" }) {
 				clearTimeout(wrongAnswerFreezeTimeoutRef.current);
 			}
 			if (!isTraining && score > 0 && !isSavingScore) {
-				if (isLoaded && isSignedIn && user && user.id) {
+				if (isLoaded && isSignedIn && user?.id) {
 					saveScore({ score: score, isCheckpoint: false });
 				} else {
 					toast.error("Could not save score: User session issue.");

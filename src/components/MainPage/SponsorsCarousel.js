@@ -18,7 +18,7 @@ const fetchSponsors = async () => {
 		let errorMsg = `Error: ${response.status} ${response.statusText}`;
 		try {
 			const errorData = await response.json();
-			if (errorData && errorData.error) {
+			if (errorData?.error) {
 				errorMsg = errorData.error;
 			}
 		} catch (jsonError) {}

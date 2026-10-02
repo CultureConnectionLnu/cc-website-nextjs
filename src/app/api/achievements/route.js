@@ -353,7 +353,7 @@ export async function PUT(request) {
 		// --- FIX FOR EXPLODED IDs ---
 		// If ID looks like "ach_123_lvl_1", strip the "_lvl_1" part
 		let realAchievementId = body.id;
-		if (realAchievementId && realAchievementId.includes("_lvl_")) {
+		if (realAchievementId?.includes("_lvl_")) {
 			realAchievementId = realAchievementId.split("_lvl_")[0];
 		}
 		// ----------------------------
@@ -546,7 +546,7 @@ export async function PATCH(request) {
 			// --- FIX FOR PATCH ---
 			// Exploded ID stripping just in case
 			let realAchievementId = achievementId;
-			if (realAchievementId && realAchievementId.includes("_lvl_")) {
+			if (realAchievementId?.includes("_lvl_")) {
 				realAchievementId = realAchievementId.split("_lvl_")[0];
 			}
 			// ---------------------

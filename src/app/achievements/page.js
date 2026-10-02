@@ -362,7 +362,7 @@ export default function AchievementsPage() {
 		...commonMutationOptions("Card skin updated!"),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user"] });
-			if (user && user.reload) {
+			if (user?.reload) {
 				user.reload();
 			}
 			closeCardSkinModal();

@@ -150,7 +150,7 @@ export default function EditEventModal({
 			setActiveTab("main");
 			return;
 		}
-		if (!liveEventData || !liveEventData.id) {
+		if (!liveEventData?.id) {
 			setError("Cannot save event: Original event data is missing.");
 			return;
 		}
@@ -191,7 +191,7 @@ export default function EditEventModal({
 	};
 
 	const handleResetAttendeesClick = () => {
-		if (!liveEventData || !liveEventData.id) {
+		if (!liveEventData?.id) {
 			setError("Cannot reset attendees: Event data is missing.");
 			return;
 		}
@@ -205,7 +205,7 @@ export default function EditEventModal({
 	};
 
 	const handleDeleteClick = () => {
-		if (!liveEventData || !liveEventData.id || !deleteEventMutation) return;
+		if (!liveEventData?.id || !deleteEventMutation) return;
 		if (
 			confirm(
 				`Are you sure you want to permanently delete the event "${liveEventData.title}"? This cannot be undone.`,

@@ -83,7 +83,7 @@ const TipTapEditor = ({ content, onChange }) => {
 	});
 
 	useEffect(() => {
-		if (editor && editor.isEditable && editor.getHTML() !== content) {
+		if (editor?.isEditable && editor.getHTML() !== content) {
 			setTimeout(() => editor.commands.setContent(content, false), 0);
 		}
 	}, [content, editor]);

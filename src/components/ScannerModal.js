@@ -110,7 +110,7 @@ function ScannerModal({ isOpen, onClose, onScanSuccess, onScanError }) {
 	}, []);
 
 	const stopScanner = useCallback(() => {
-		if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
+		if (html5QrCodeRef.current?.isScanning) {
 			html5QrCodeRef.current.stop().catch((err) => {
 				console.error(
 					"Failed to stop the scanner, may have already been stopped.",
@@ -144,7 +144,7 @@ function ScannerModal({ isOpen, onClose, onScanSuccess, onScanError }) {
 			await qrCodeInstance.start(
 				{ facingMode: "environment" },
 				config,
-				(decodedText) => onScanSuccess && onScanSuccess(decodedText),
+				(decodedText) => onScanSuccess?.(decodedText),
 				(errorMessage) => {},
 			);
 		} catch (err) {

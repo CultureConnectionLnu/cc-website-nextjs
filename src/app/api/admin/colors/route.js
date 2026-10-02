@@ -26,7 +26,7 @@ async function verifyAdmin(request) {
 			status: 500,
 		};
 	}
-	if (!authResult || !authResult.userId)
+	if (!authResult?.userId)
 		return {
 			authorized: false,
 			error: "Authentication context missing.",

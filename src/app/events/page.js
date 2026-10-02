@@ -59,7 +59,7 @@ const createEvent = async (newEventData) => {
 };
 
 const editEvent = async (updatedEventData) => {
-	if (!updatedEventData || !updatedEventData.id) {
+	if (!updatedEventData?.id) {
 		throw new Error("Event ID is required for editing.");
 	}
 	const response = await fetch("/api/events", {

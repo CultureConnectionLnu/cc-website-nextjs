@@ -9,7 +9,7 @@ const fetchLinktreeLinks = async () => {
 			const errorText = await response.text();
 			console.debug("Error response text:", errorText);
 			const errorData = JSON.parse(errorText);
-			if (errorData && errorData.error) {
+			if (errorData?.error) {
 				errorMsg = errorData.error;
 			}
 		} catch (parseError) {

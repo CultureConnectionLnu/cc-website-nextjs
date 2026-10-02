@@ -28,7 +28,7 @@ export async function POST(request) {
 		// --- CRITICAL FIX FOR MULTI-LEVEL 404 ---
 		// Frontend sends "ach_123_lvl_2". We must convert to "ach_123"
 		let realId = body.achievementId;
-		if (realId && realId.includes("_lvl_")) {
+		if (realId?.includes("_lvl_")) {
 			realId = realId.split("_lvl_")[0];
 		}
 		// ----------------------------------------
