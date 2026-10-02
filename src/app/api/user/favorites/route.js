@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 
 const intToBool = (val) => (val === 1 ? true : false);

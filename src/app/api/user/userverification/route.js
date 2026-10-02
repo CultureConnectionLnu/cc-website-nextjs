@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import fs from "fs/promises";
+import { NextResponse } from "next/server";
 import path from "path";
 
 const dataDir = path.join(process.cwd(), "public", "data");

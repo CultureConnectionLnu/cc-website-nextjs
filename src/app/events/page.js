@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useUser, SignInButton } from "@clerk/nextjs";
-import Header from "@/components/Header";
-import { BackgroundEvent } from "@/components/Background";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import GenericActivityModal from "@/components/ActivitiesModal/GenericActivityModal";
-import AddEventModal from "@/components/Events/AddEventModal";
-import EventManageModal from "@/components/Events/EventManageModal";
-import ScannerModal from "@/components/ScannerModal";
-import BecomeMemberModal from "@/components/BecomeMemberModal";
-import { AnimatePresence } from "framer-motion";
-import toast, { Toaster } from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import {
-	faQrcode,
-	faSignInAlt,
 	faChevronDown,
 	faChevronUp,
+	faQrcode,
+	faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence } from "framer-motion";
+import { useMemo, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import GenericActivityModal from "@/components/ActivitiesModal/GenericActivityModal";
+import { BackgroundEvent } from "@/components/Background";
+import BecomeMemberModal from "@/components/BecomeMemberModal";
+import AddEventModal from "@/components/Events/AddEventModal";
+import EventManageModal from "@/components/Events/EventManageModal";
+import Header from "@/components/Header";
 import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
+import ScannerModal from "@/components/ScannerModal";
 import "react-datepicker/dist/react-datepicker.css";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";

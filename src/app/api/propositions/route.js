@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
-import path from "path";
+import { getAuth } from "@clerk/nextjs/server";
 import { promises as fs } from "fs";
+import { NextResponse } from "next/server";
+import path from "path";
 
 const initializeClerk = () => {
 	const secretKey = process.env.CLERK_SECRET_KEY;

@@ -1,16 +1,15 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faExclamationTriangle,
 	faHourglassHalf,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import ClaimSuccessUI from "@/components/Claim/ClaimSuccessUI";
 // Internal Logic
 import { processBadgeScan } from "@/lib/badge-service";
 import { verifyShortToken } from "@/lib/short-token";
-import ClaimSuccessUI from "@/components/Claim/ClaimSuccessUI";
 
 export default async function ClaimTokenPage({ params }) {
 	const { token } = await params;

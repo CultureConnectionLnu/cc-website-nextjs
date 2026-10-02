@@ -1,12 +1,12 @@
 "use client";
 
 import Background from "@/components/Background";
-import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
-import Main from "@/components/MainPage/Main";
-import BoardMembers from "@/components/MainPage/BoardMembers";
-import SponsorsCarousel from "@/components/MainPage/SponsorsCarousel";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
+import BoardMembers from "@/components/MainPage/BoardMembers";
+import Main from "@/components/MainPage/Main";
+import SponsorsCarousel from "@/components/MainPage/SponsorsCarousel";
 
 export default function Home() {
 	return (

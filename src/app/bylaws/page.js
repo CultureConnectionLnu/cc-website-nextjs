@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 
 export default function BylawsPage() {

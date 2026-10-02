@@ -1,19 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as FlagDataModule from "@/lib/flag-data";
+
 const { flags, getRandomFlag, getRandomOptions } = FlagDataModule;
 
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
-import toast from "react-hot-toast";
-import confetti from "canvas-confetti";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faDoorOpen,
 	faGraduationCap,
 	faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import confetti from "canvas-confetti";
+import toast from "react-hot-toast";
 
 // --- SECURITY IMPORT ---
 import { encryptScore } from "@/lib/secure-score";

@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserLock, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { SignInButton } from "@clerk/nextjs";
+import { faUserLock, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function LoginRequiredModal({ isOpen, onClose }) {
 	// If not open, render nothing

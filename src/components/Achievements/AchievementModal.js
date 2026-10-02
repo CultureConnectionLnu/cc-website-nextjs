@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faXmark,
+	faCheckCircle,
 	faChevronLeft,
 	faChevronRight,
 	faLock,
-	faCheckCircle,
+	faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const modalVariants = {
 	hidden: { opacity: 0, scale: 0.95 },

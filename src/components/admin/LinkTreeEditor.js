@@ -1,6 +1,6 @@
+import PropTypes from "prop-types";
 import { HexColorPicker } from "react-colorful";
 import ColorPicker from "../ColorPicker";
-import PropTypes from "prop-types";
 
 function LinkTreeEditor({
 	links,

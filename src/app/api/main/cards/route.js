@@ -1,7 +1,8 @@
 // app/api/main/cards/route.js
+
+import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
-import { promises as fs } from "fs";
 
 export async function GET(request) {
 	try {

@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { getAuth } from "@clerk/nextjs/server";
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 import { env } from "@/env";
 
 const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });

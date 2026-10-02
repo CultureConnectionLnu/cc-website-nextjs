@@ -1,6 +1,6 @@
-import { motion, AnimatePresence } from "framer-motion";
-import PropTypes from "prop-types";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import PropTypes from "prop-types";
 
 const MOBILE_CARD_HEIGHT = "60vh";
 const MAX_MOBILE_CARD_WIDTH = "90vw";

@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { getAuth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 import SftpClient from "ssh2-sftp-client";
 
 const initializeClerk = () => {

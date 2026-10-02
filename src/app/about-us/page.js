@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import Header from "@/components/Header";
-import CulturePictureSlider from "@/components/CulturePictureSlider";
-import { BackgroundAboutus } from "@/components/Background";
-import Footer from "@/components/Footer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import gsap from "gsap";
+import { useEffect, useRef } from "react";
+import { BackgroundAboutus } from "@/components/Background";
+import CulturePictureSlider from "@/components/CulturePictureSlider";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 export default function MainPage() {
 	const animationRef = useRef(null);

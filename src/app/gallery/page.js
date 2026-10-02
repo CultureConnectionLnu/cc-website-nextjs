@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import Header from "@/components/Header";
+import {
+	faExpand,
+	faImage,
+	faSpinner,
+	faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BackgroundEvent } from "@/components/Background";
 import Footer from "@/components/Footer";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faSpinner,
-	faExpand,
-	faTimes,
-	faImage,
-} from "@fortawesome/free-solid-svg-icons";
+import Header from "@/components/Header";
 
 // --- Configuration ---
 const BATCH_SIZE = 10; // Load 10 images at a time

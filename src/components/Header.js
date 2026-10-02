@@ -1,31 +1,30 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faQrcode,
-	faIdCardClip,
-	faBars,
-	faTimes,
-	faChevronDown,
-	faUserPlus,
-} from "@fortawesome/free-solid-svg-icons";
 import {
 	SignedIn,
 	SignedOut,
 	SignInButton,
 	SignOutButton,
-	useUser,
 	UserButton,
+	useUser,
 } from "@clerk/nextjs";
-
-import SocialIcons from "./Socialmedia";
-import Linktree from "./Linktree";
-import UserCardModal from "./UserCardModal";
-import BecomeMemberModal from "./BecomeMemberModal";
+import {
+	faBars,
+	faChevronDown,
+	faIdCardClip,
+	faQrcode,
+	faTimes,
+	faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import UserIdentityQrModal from "@/components/UserIdentityQrModal";
+import BecomeMemberModal from "./BecomeMemberModal";
+import Linktree from "./Linktree";
+import SocialIcons from "./Socialmedia";
+import UserCardModal from "./UserCardModal";
 
 export default function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import AchievementBadge from "./AchievementBadge";
+import { faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence, motion } from "framer-motion";
+import AchievementBadge from "./AchievementBadge";
 
 const modalVariants = {
 	hidden: { opacity: 0, scale: 0.95 },

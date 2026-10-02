@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useMemo, useEffect } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import confetti from "canvas-confetti"; // Import confetti
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faCheckCircle,
 	faArrowRight,
+	faCheckCircle,
 	faLock,
 	faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import confetti from "canvas-confetti"; // Import confetti
+import { motion } from "framer-motion";
+import Link from "next/link";
+import React, { useEffect, useMemo } from "react";
 
 export default function ClaimSuccessUI({ result }) {
 	const { achievement, newCount, achievedNow, message } = result;

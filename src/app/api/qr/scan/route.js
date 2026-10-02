@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
-import { processBadgeScan } from "@/lib/badge-service"; // Importing shared logic
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
+import { processBadgeScan } from "@/lib/badge-service"; // Importing shared logic
 
 const QR_JWT_SECRET = process.env.QR_JWT_SECRET;
 

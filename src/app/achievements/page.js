@@ -1,34 +1,34 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
+import {
+	faFilter,
+	faIdBadge,
+	faPalette,
+	faPlus,
+	faQrcode,
+	faStar,
+	faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Header from "@/components/Header";
-import { BackgroundAchievements } from "@/components/Background";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import AchievementBadge from "@/components/Achievements/AchievementBadge";
 import AchievementModal from "@/components/Achievements/AchievementModal";
 import AddEditAchievementModal from "@/components/Achievements/AddEditAchievementModal";
-import QRCodeGrantModal from "@/components/Achievements/QRCodeGrantModal";
-import ScannerModal from "@/components/ScannerModal";
-import FavoriteBadgeSelectionModal from "@/components/Achievements/FavoriteBadgeSelectionModal";
 import CardSkinSelectionModal from "@/components/Achievements/CardSkinSelectionModal";
-import UserIdentityQrModal from "@/components/UserIdentityQrModal";
+import FavoriteBadgeSelectionModal from "@/components/Achievements/FavoriteBadgeSelectionModal";
+import QRCodeGrantModal from "@/components/Achievements/QRCodeGrantModal";
 import UserProfileModal from "@/components/Achievements/UserProfileModal";
+import { BackgroundAchievements } from "@/components/Background";
 import BecomeMemberModal from "@/components/BecomeMemberModal";
-import { AnimatePresence } from "framer-motion";
-import toast, { Toaster } from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faQrcode,
-	faStar,
-	faPalette,
-	faIdBadge,
-	faPlus,
-	faFilter,
-	faUserPlus,
-} from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import ScannerModal from "@/components/ScannerModal";
+import UserIdentityQrModal from "@/components/UserIdentityQrModal";
 
 const fetchAchievements = async () => {
 	const response = await fetch("/api/achievements");

@@ -1,32 +1,33 @@
 // src/components/Events/EventManageModal.js
-import React, {
-	useState,
-	useMemo,
-	useEffect,
-	useRef,
-	useCallback,
-} from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { QRCodeCanvas } from "qrcode.react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
-	faXmark,
-	faQrcode,
-	faUsers,
 	faCheck,
-	faUserSlash,
-	faSnowflake,
-	faUserCheck,
-	faUserTimes,
 	faEdit,
+	faQrcode,
 	faSave,
+	faSnowflake,
 	faTrashAlt,
+	faUserCheck,
+	faUserSlash,
+	faUsers,
 	faUsersSlash,
+	faUserTimes,
+	faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import { QRCodeCanvas } from "qrcode.react";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ColorPicker from "@/components/ColorPicker";
 import toast from "react-hot-toast";
+import ColorPicker from "@/components/ColorPicker";
 
 const modalVariants = {
 	hidden: { opacity: 0, scale: 0.9 },

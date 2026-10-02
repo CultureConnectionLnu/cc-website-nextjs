@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useUser } from "@clerk/nextjs";
 import {
-	faChevronRight,
 	faChevronLeft,
+	faChevronRight,
 	faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import { useUser } from "@clerk/nextjs";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import SliderEditModal from "./SliderEditModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import SliderEditModal from "./SliderEditModal";
 
 const cultureConnectionLogoUrl = "/cc.svg";
 

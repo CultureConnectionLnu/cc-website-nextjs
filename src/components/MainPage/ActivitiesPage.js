@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import GenericActivityModal from "../ActivitiesModal/GenericActivityModal";
 import ActivitiesMobile from "./mobile/ActivitiesMobile";

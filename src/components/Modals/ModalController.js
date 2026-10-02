@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, Suspense } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect } from "react";
 
 // Make sure these paths match where you actually put the files
 import BecomeMemberModal from "./BecomeMemberModal";

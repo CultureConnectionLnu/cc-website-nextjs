@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
-import Blop from "./Blop";
 import Link from "next/link";
+import React, { useEffect, useMemo, useState } from "react";
+import Blop from "./Blop";
 
 const getUserStatusInfo = (user) => {
 	if (!user) return { text: "N/A", color: "gray", styleKey: "default" };

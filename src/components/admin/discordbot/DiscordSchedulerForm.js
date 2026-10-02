@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import DatePicker from "react-datepicker";
 import { useQuery } from "@tanstack/react-query";
-import EditableTextArea from "./EditableTextArea";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
 import CombinedFileManager from "../DriveManagment/CombinedFileManager";
+import EditableTextArea from "./EditableTextArea";
 import "react-datepicker/dist/react-datepicker.css";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_DISCORD_URL;

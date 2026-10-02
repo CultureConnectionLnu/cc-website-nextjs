@@ -1,20 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faFolder,
 	faArrowLeft,
-	faSpinner,
-	faExclamationTriangle,
 	faChevronLeft,
 	faChevronRight,
-	faUpload,
+	faExclamationTriangle,
+	faFolder,
 	faPlus,
+	faSpinner,
 	faTrashAlt,
+	faUpload,
 } from "@fortawesome/free-solid-svg-icons";
-import { motion, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_FETCHPICTURE_URL;
 const ITEMS_PER_PAGE = 48;

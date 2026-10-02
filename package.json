@@ -10,8 +10,8 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "eslint .",
-		"format": "prettier . --write"
+		"lint": "npx @biomejs/biome lint --write",
+		"format": "npx @biomejs/biome format --write"
 	},
 	"dependencies": {
 		"@clerk/clerk-sdk-node": "^5.1.6",

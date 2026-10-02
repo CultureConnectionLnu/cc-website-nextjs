@@ -1,12 +1,12 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
+import { faLock, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import BecomeMemberModal from "@/components/Modals/BecomeMemberModal";
 import LoginRequiredModal from "@/components/Modals/LoginRequiredModal";
 import ClaimSuccessUI from "./ClaimSuccessUI";
-import { useUser } from "@clerk/nextjs";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function ClaimGatekeeper({ status, result, returnUrl }) {
 	const { user, isLoaded } = useUser();

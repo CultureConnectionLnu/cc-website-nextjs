@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 export default function GenericActivityModal({
 	isOpen,

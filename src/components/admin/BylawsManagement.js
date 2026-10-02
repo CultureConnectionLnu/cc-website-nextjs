@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef, useId } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
-import Underline from "@tiptap/extension-underline";
-import TextStyle from "@tiptap/extension-text-style";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Color } from "@tiptap/extension-color";
+import Link from "@tiptap/extension-link";
+import TextStyle from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useEffect, useId, useRef, useState } from "react";
 import TipTapToolbar from "../TipTapToolbar";
 
 const fetchBylaws = async () => {

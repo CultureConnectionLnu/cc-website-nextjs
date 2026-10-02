@@ -1,7 +1,7 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import LinkTreeEditor from "./LinkTreeEditor";
 
 const fetchLinks = async () => {

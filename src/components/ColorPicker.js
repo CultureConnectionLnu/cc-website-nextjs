@@ -1,7 +1,7 @@
 "use client";
-import { useMemo } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 const fetchAdminColors = async () => {
 	const response = await fetch("/api/admin/colors");

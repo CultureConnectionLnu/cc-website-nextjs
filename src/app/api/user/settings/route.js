@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const settingsSchemaWithUserId = z.object({

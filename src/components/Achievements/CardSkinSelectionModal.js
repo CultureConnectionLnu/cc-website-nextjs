@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { faBan, faLock, faXmark } from "@fortawesome/free-solid-svg-icons"; // Added faLock
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faBan, faLock } from "@fortawesome/free-solid-svg-icons"; // Added faLock
+import { AnimatePresence, motion } from "framer-motion";
 
 const modalVariants = {
 	hidden: { opacity: 0, scale: 0.95 },

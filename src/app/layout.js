@@ -1,7 +1,7 @@
 import "./globals.css";
-import { ClerkProviderWrapper } from "./clerk-provider";
-import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import ModalController from "@/components/Modals/ModalController";
+import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
+import { ClerkProviderWrapper } from "./clerk-provider";
 
 export const metadata = {
 	title: "Culture Connection",

@@ -1,7 +1,5 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	closestCenter,
 	DndContext,
@@ -19,7 +17,9 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const staticPositions = [
 	"President",

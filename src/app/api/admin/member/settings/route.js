@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import fs from "fs/promises";
+import { NextResponse } from "next/server";
 import path from "path";
 
 // We store settings in a separate file to keep member data clean

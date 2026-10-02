@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { BackgroundFlagame } from "@/components/Background";
+import Footer from "@/components/Footer";
 import { FlagFlipperGame } from "@/components/game/flag-flipper/FlagFlipperGame";
 import { Scoreboard } from "@/components/game/flag-flipper/Scoreboard";
 import { SettingsView } from "@/components/game/flag-flipper/SettingsView";
-import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
-import { useQueryClient } from "@tanstack/react-query";
-import Footer from "@/components/Footer";
-import { BackgroundFlagame } from "@/components/Background";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 
 export default function FlagGamePage() {

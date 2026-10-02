@@ -3,17 +3,16 @@
 import { useUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-
-import UserManagement from "@/components/admin/UserManagement";
-import CardManagement from "@/components/admin/CardManagement";
+import AgendaManagement from "@/components/admin/AgendaManagement";
 import BoardMemberManagement from "@/components/admin/BoardMemberManagement";
+import BylawsManagement from "@/components/admin/BylawsManagement";
+import CardManagement from "@/components/admin/CardManagement";
+import CombinedFileManager from "@/components/admin/DriveManagment/CombinedFileManager";
+import DiscordSchedulerManagement from "@/components/admin/discordbot/DiscordSchedulerManagement";
+import GuidelinesManagement from "@/components/admin/GuidelinesManagement";
 import LinktreeManagement from "@/components/admin/LinktreeManagement";
 import SponsorManagement from "@/components/admin/SponsorManagement";
-import DiscordSchedulerManagement from "@/components/admin/discordbot/DiscordSchedulerManagement";
-import CombinedFileManager from "@/components/admin/DriveManagment/CombinedFileManager";
-import GuidelinesManagement from "@/components/admin/GuidelinesManagement";
-import BylawsManagement from "@/components/admin/BylawsManagement";
-import AgendaManagement from "@/components/admin/AgendaManagement";
+import UserManagement from "@/components/admin/UserManagement";
 import Header from "@/components/Header";
 
 const adminSections = [

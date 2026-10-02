@@ -1,12 +1,12 @@
-import { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+	faArrowDown,
+	faArrowUp,
 	faPlus,
 	faTrash,
-	faArrowUp,
-	faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
 
 const modalVariants = {
 	hidden: { opacity: 0, y: 20 },

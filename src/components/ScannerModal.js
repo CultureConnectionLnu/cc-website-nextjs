@@ -1,11 +1,11 @@
 // src/components/ScannerModal.js
 "use client";
 
-import React, { useEffect, useRef, useCallback, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Html5Qrcode, Html5QrcodeScanType } from "html5-qrcode";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import { Html5Qrcode, Html5QrcodeScanType } from "html5-qrcode";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const modalVariants = {
 	hidden: { opacity: 0, scale: 0.95 },

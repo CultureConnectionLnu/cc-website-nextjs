@@ -1,20 +1,20 @@
 "use client";
 
+import { SignInButton, useUser } from "@clerk/nextjs";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { useUser, SignInButton } from "@clerk/nextjs";
-import Header from "@/components/Header";
+import toast, { Toaster } from "react-hot-toast";
 import { BackgroundEvent } from "@/components/Background";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import BecomeMemberModal from "@/components/BecomeMemberModal";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import AddMembershipModal from "@/components/Membership/AddMembershipModal";
 import EditMembershipModal from "@/components/Membership/EditMembershipModal";
 import MembershipDetailModal from "@/components/Membership/MembershipDetailModal";
-import BecomeMemberModal from "@/components/BecomeMemberModal";
 import UserCardModal from "@/components/UserCardModal";
-import { AnimatePresence, motion } from "framer-motion";
-import toast, { Toaster } from "react-hot-toast";
-import Footer from "@/components/Footer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 const fetchMemberships = async () => {
 	const response = await fetch("/api/memberships");

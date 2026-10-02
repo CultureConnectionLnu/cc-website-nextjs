@@ -1,11 +1,11 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-	faInstagram,
 	faDiscord,
-	faWhatsapp,
 	faFacebook,
+	faInstagram,
+	faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 library.add(faInstagram, faDiscord, faWhatsapp, faFacebook);
 

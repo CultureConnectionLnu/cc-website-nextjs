@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 // Embedded Noise Library (combined directly into this file for reliability)
 // Original source: Public domain Perlin/Simplex noise by Stefan Gustavson et al.

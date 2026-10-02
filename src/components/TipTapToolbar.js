@@ -3,15 +3,15 @@
 import React from "react";
 import {
 	FaBold,
+	FaEraser,
 	FaItalic,
-	FaUnderline,
-	FaStrikethrough,
+	FaLink,
 	FaListOl,
 	FaListUl,
-	FaLink,
-	FaUnlink,
 	FaPaintBrush,
-	FaEraser,
+	FaStrikethrough,
+	FaUnderline,
+	FaUnlink,
 } from "react-icons/fa";
 
 const TipTapToolbar = ({ editor }) => {

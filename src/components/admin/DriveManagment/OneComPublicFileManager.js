@@ -1,20 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faSpinner,
-	faCloudUploadAlt,
-	faCheck,
-	faTimes,
-	faSearch,
-	faFolder,
 	faArrowRight,
+	faCheck,
+	faCloudUploadAlt,
 	faCompressArrowsAlt,
+	faFolder,
 	faPlus,
+	faSearch,
+	faSpinner,
+	faTimes,
 	faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useRef, useState } from "react";
 
 const MAX_WIDTH = 1920;
 const COMPRESSION_QUALITY = 0.8;

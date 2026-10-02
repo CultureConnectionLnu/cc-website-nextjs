@@ -1,30 +1,30 @@
 "use client";
 
-import React, {
-	useState,
-	useMemo,
-	useEffect,
-	useRef,
-	useCallback,
-} from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { QRCodeCanvas } from "qrcode.react";
-import { Html5Qrcode, Html5QrcodeScanType } from "html5-qrcode";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	faXmark,
-	faQrcode,
-	faUsers,
 	faCheck,
+	faClock,
+	faExpand,
+	faFloppyDisk,
+	faInfinity,
 	faMinus,
 	faPlus,
-	faFloppyDisk,
+	faQrcode,
 	faRotateLeft,
-	faInfinity,
-	faClock,
 	faSync,
-	faExpand,
+	faUsers,
+	faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
+import { Html5Qrcode, Html5QrcodeScanType } from "html5-qrcode";
+import { QRCodeCanvas } from "qrcode.react";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 
 // --- SCANNER SUB-COMPONENTS ---
 

@@ -1,8 +1,9 @@
 // app/api/admin/users/route.js
-import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+
 import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { getAuth } from "@clerk/nextjs/server";
 import fs from "fs/promises";
+import { NextResponse } from "next/server";
 import path from "path";
 
 const initializeClerk = () => {
