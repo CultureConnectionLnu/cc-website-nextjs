@@ -1,6 +1,7 @@
 {
 	"name": "cc-website-nextjs",
 	"version": "0.1.0",
+	"type": "module",
 	"private": true,
 	"engines": {
 		"node": "20.x",
@@ -13,7 +14,8 @@
 		"lint": "npx @biomejs/biome lint --write",
 		"lint-check": "npx @biomejs/biome lint",
 		"format": "npx @biomejs/biome format --write",
-		"format-check": "npx @biomejs/biome format"
+		"format-check": "npx @biomejs/biome format",
+		"typecheck": "npx tsc --noEmit"
 	},
 	"dependencies": {
 		"@clerk/clerk-sdk-node": "^5.1.6",
@@ -73,6 +75,14 @@
 		"@biomejs/biome": "2.5.15",
 		"autoprefixer": "^10.4.27",
 		"eslint": "^9.39.4",
-		"eslint-config-next": "^16.2.1"
+		"eslint-config-next": "^16.2.1",
+		"@tailwindcss/postcss": "^4.2.2",
+		"@types/better-sqlite3": "^9.6.0",
+		"@types/node": "^26.6.4",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"postcss": "^8.5.8",
+		"tailwindcss": "^4.2.2",
+		"typescript": "^7.0.2"
 	}
 }
