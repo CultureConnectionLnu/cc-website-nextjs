@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type CreateEmailResponseSuccess, Resend } from "resend";
 
-const resendKey = process.env.RESEND_API_KEY;
+const resendKey = process.env.RESEND_API_KEY as string;
 const resend = new Resend(resendKey);
-const notificationEmail = process.env.NOTIFICATION_EMAIL;
+const notificationEmail = process.env.NOTIFICATION_EMAIL as string;
 
 type ContactBody = {
 	name: string;
@@ -49,6 +49,6 @@ export async function POST(req: NextRequest) {
 		);
 	}
 
-	console.log(`Email sent successfully: ${JSON.stringify(email_res)}`);
+	console.log(`Email sent successfully: ${JSON.stringify(emailResponse)}`);
 	return NextResponse.json({ message: "Email sent successfully." });
 }

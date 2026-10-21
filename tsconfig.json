@@ -9,7 +9,7 @@
 		},
 		// Environment Settings
 		// See also https://aka.ms/tsconfig/module
-		"module": "nodenext",
+		"module": "esnext",
 		"target": "esnext",
 		"types": [],
 		// For nodejs:
@@ -49,7 +49,7 @@
 				"name": "next"
 			}
 		],
-		"moduleResolution": "nodenext"
+		"moduleResolution": "bundler"
 	},
 	"include": [
 		"next-env.d.ts",
