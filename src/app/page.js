@@ -7,6 +7,7 @@ import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
 import BoardMembers from "@/components/MainPage/BoardMembers";
 import Main from "@/components/MainPage/Main";
 import SponsorsCarousel from "@/components/MainPage/SponsorsCarousel";
+import ContactUs from "@/components/MainPage/ContactUs";
 
 export default function Home() {
 	return (
@@ -26,7 +27,10 @@ export default function Home() {
 					</section>
 					<section id="sponsors-section">
 						<SponsorsCarousel />
-					</section>
+                    </section>
+                    <section id="contact-section">
+                        <ContactUs/>
+                    </section>
 				</main>
 				<Footer />
 			</div>
