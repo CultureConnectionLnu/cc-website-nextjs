@@ -5,10 +5,9 @@ const resendKey = process.env.RESEND_API_KEY as string;
 const resend = new Resend(resendKey);
 const notificationEmail = process.env.NOTIFICATION_EMAIL as string;
 
-type ContactBody = {
+export type ContactBody = {
 	name: string;
 	email: string;
-	subject: string;
 	content: string;
 };
 
@@ -24,8 +23,8 @@ export async function POST(req: NextRequest) {
 	try {
 		const { data, error } = await resend.emails.send({
 			from: notificationEmail,
-			to: "cultureconnectionlnu@gmail.com",
-			subject: contactData.subject,
+            to: "cultureconnectionlnu@gmail.com",
+			subject: `Contact Inquiry from ${contactData?.name}`,
 			html: `Name: ${contactData?.name}\nEmail: ${contactData?.email}\nMessage: ${contactData?.content}`,
 		});
 
