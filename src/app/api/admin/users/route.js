@@ -24,7 +24,7 @@ async function verifyUserLoggedIn(request) {
 	let authResult;
 	try {
 		authResult = getAuth(request);
-		if (!authResult || !authResult.userId) {
+		if (!authResult?.userId) {
 			console.error("verifyUserLoggedIn: Failed to get userId from getAuth.");
 			return {
 				authorized: false,

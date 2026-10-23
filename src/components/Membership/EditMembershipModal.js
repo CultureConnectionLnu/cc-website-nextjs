@@ -75,6 +75,7 @@ export default function EditMembershipModal({
 				variants={modalVariants}
 			>
 				<button
+					type="button"
 					onClick={onClose}
 					className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 z-20 bg-white rounded-full p-1"
 					aria-label="Close modal"

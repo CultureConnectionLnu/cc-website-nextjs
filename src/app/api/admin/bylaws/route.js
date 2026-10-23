@@ -23,7 +23,7 @@ async function checkUserPermission(request, allowedRoleKeys = ["admin"]) {
 	let authResult;
 	try {
 		authResult = getAuth(request);
-		if (!authResult || !authResult.userId) {
+		if (!authResult?.userId) {
 			return {
 				authorized: false,
 				error: "Authentication context missing.",

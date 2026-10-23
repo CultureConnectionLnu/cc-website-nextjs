@@ -13,7 +13,7 @@ const initializeClerk = () => {
 
 async function verifyAdmin(request) {
 	const authResult = getAuth(request);
-	if (!authResult || !authResult.userId) {
+	if (!authResult?.userId) {
 		return { authorized: false, error: "Unauthorized", status: 401 };
 	}
 	const { userId } = authResult;

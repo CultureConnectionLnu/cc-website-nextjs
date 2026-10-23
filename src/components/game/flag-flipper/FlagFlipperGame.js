@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as FlagDataModule from "@/lib/flag-data";
 
 const { flags, getRandomFlag, getRandomOptions } = FlagDataModule;
@@ -75,7 +75,7 @@ export function FlagFlipperGame({ onGameEnd, gameMode = "classic" }) {
 			(a) => a.id === targetId || a.original_id === targetId,
 		);
 
-		if (badgeEntry && badgeEntry.level_config) {
+		if (badgeEntry?.level_config) {
 			const levels = [...badgeEntry.level_config].sort(
 				(a, b) => a.progressNeeded - b.progressNeeded,
 			);
@@ -352,7 +352,7 @@ export function FlagFlipperGame({ onGameEnd, gameMode = "classic" }) {
 				clearTimeout(wrongAnswerFreezeTimeoutRef.current);
 			}
 			if (!isTraining && score > 0 && !isSavingScore) {
-				if (isLoaded && isSignedIn && user && user.id) {
+				if (isLoaded && isSignedIn && user?.id) {
 					saveScore({ score: score, isCheckpoint: false });
 				} else {
 					toast.error("Could not save score: User session issue.");
@@ -541,13 +541,14 @@ export function FlagFlipperGame({ onGameEnd, gameMode = "classic" }) {
 					<div className="grid grid-cols-2 gap-4 md:gap-8 flex-1 min-h-0">
 						{options.map((option, index) => (
 							<button
+								type="button"
 								key={option.code || index}
 								onClick={() => handleAnswer(option)}
 								disabled={isTransitioning}
 								className="group relative flex h-full w-full flex-col items-center justify-center rounded-xl bg-slate-700 p-4 shadow-lg transition-all duration-150 hover:bg-sky-600 hover:scale-[1.02] hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-sky-500 disabled:cursor-not-allowed disabled:opacity-60 overflow-hidden"
 							>
 								<div className="relative w-full h-full flex items-center justify-center">
-									<img
+									<Image
 										src={option.imageUrl}
 										alt={`Flag Option ${index + 1}`}
 										className="max-h-full max-w-full object-contain shadow-sm pointer-events-none"
@@ -562,6 +563,7 @@ export function FlagFlipperGame({ onGameEnd, gameMode = "classic" }) {
 			{isTraining && (
 				<div className="mt-4 flex justify-center">
 					<button
+						type="button"
 						onClick={handleLeaveGame}
 						className="flex items-center gap-2 px-6 py-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors text-sm font-semibold"
 					>

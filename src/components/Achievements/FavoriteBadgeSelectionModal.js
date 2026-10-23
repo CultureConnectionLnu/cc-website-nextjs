@@ -66,6 +66,7 @@ export default function FavoriteBadgeSelectionModal({
 								</p>
 							</div>
 							<button
+								type="button"
 								onClick={onClose}
 								className="text-gray-400 hover:text-gray-700 bg-white rounded-full p-2 hover:bg-gray-100 transition shadow-sm border border-gray-200"
 								aria-label="Close modal"
@@ -123,6 +124,7 @@ export default function FavoriteBadgeSelectionModal({
 						{currentFavoriteInSlot && onRemoveFavorite && (
 							<div className="p-4 bg-white border-t border-gray-200 flex justify-end shadow-inner z-10">
 								<button
+									type="button"
 									onClick={handleRemove}
 									className="px-5 py-2 text-sm font-medium bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 hover:text-red-700 transition flex items-center gap-2"
 								>

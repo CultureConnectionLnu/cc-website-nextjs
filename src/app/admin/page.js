@@ -138,6 +138,7 @@ export default function AdminPage() {
 									committeeAllowedSectionKeys.includes(section.key));
 							return (
 								<button
+									type="button"
 									key={section.key}
 									onClick={() => {
 										if (isAllowedForCurrentUser) {

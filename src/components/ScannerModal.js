@@ -37,6 +37,7 @@ const DesktopView = ({ onClose, cameraError }) => (
 			variants={modalVariants}
 		>
 			<button
+				type="button"
 				onClick={onClose}
 				className="absolute top-3 right-3 z-10 flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:text-gray-800"
 				aria-label="Close scanner"
@@ -74,6 +75,7 @@ const MobileView = ({ onClose, cameraError }) => (
 	>
 		<div id={SCANNER_ELEMENT_ID} className="absolute inset-0" />
 		<button
+			type="button"
 			onClick={onClose}
 			className="absolute top-5 right-5 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
 			aria-label="Close scanner"
@@ -108,7 +110,7 @@ function ScannerModal({ isOpen, onClose, onScanSuccess, onScanError }) {
 	}, []);
 
 	const stopScanner = useCallback(() => {
-		if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
+		if (html5QrCodeRef.current?.isScanning) {
 			html5QrCodeRef.current.stop().catch((err) => {
 				console.error(
 					"Failed to stop the scanner, may have already been stopped.",
@@ -142,7 +144,7 @@ function ScannerModal({ isOpen, onClose, onScanSuccess, onScanError }) {
 			await qrCodeInstance.start(
 				{ facingMode: "environment" },
 				config,
-				(decodedText) => onScanSuccess && onScanSuccess(decodedText),
+				(decodedText) => onScanSuccess?.(decodedText),
 				(errorMessage) => {},
 			);
 		} catch (err) {

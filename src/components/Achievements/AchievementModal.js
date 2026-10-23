@@ -164,6 +164,7 @@ export default function AchievementModal({
 					>
 						{/* Close Button */}
 						<button
+							type="button"
 							onClick={onClose}
 							className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 z-30 bg-white/80 rounded-full p-1 h-8 w-8 flex items-center justify-center backdrop-blur-sm shadow-sm"
 							aria-label="Close modal"
@@ -178,6 +179,7 @@ export default function AchievementModal({
 								<>
 									{currentSlide > 0 && (
 										<button
+											type="button"
 											onClick={() => paginate(-1)}
 											className="absolute left-2 top-1/3 z-20 text-gray-400 hover:text-indigo-600 p-2 transition-colors"
 										>
@@ -189,6 +191,7 @@ export default function AchievementModal({
 									)}
 									{currentSlide < sortedLevels.length - 1 && (
 										<button
+											type="button"
 											onClick={() => paginate(1)}
 											className="absolute right-2 top-1/3 z-20 text-gray-400 hover:text-indigo-600 p-2 transition-colors"
 										>
@@ -320,18 +323,21 @@ export default function AchievementModal({
 						{isAdminOrCommittee && (
 							<div className="p-4 bg-gray-50 border-t border-gray-200 flex flex-wrap justify-center gap-3 z-10">
 								<button
+									type="button"
 									onClick={onOpenQrCodeModal}
 									className="px-4 py-2 text-xs font-semibold bg-white text-cyan-600 border border-cyan-200 rounded-lg shadow-sm hover:bg-cyan-50 transition hover:-translate-y-0.5"
 								>
 									Generate QR
 								</button>
 								<button
+									type="button"
 									onClick={onEdit}
 									className="px-4 py-2 text-xs font-semibold bg-white text-amber-600 border border-amber-200 rounded-lg shadow-sm hover:bg-amber-50 transition hover:-translate-y-0.5"
 								>
 									Edit Badge
 								</button>
 								<button
+									type="button"
 									onClick={onDelete}
 									className="px-4 py-2 text-xs font-semibold bg-white text-red-600 border border-red-200 rounded-lg shadow-sm hover:bg-red-50 transition hover:-translate-y-0.5"
 								>

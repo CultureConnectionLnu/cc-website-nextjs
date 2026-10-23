@@ -606,6 +606,7 @@ function SortableDesktopMemberRow({
 				{member.bio ? (
 					<div className="relative inline-block">
 						<button
+							type="button"
 							onClick={() => toggleBio(member.id)}
 							className="px-2 py-1 bg-black text-white text-xs rounded"
 						>
@@ -626,6 +627,7 @@ function SortableDesktopMemberRow({
 				className={`${dataCellClasses} ${columnStyles.actions} font-medium space-x-2 whitespace-nowrap`}
 			>
 				<button
+					type="button"
 					onClick={() => handleEditClick(member)}
 					disabled={isMutating || isFormOpen}
 					className="text-indigo-600 hover:text-indigo-900 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -633,6 +635,7 @@ function SortableDesktopMemberRow({
 					Edit
 				</button>
 				<button
+					type="button"
 					onClick={() => handleDeleteClick(member.id, member.name)}
 					disabled={
 						isMutating || (isFormOpen && editingMember?.id === member.id)
@@ -695,6 +698,7 @@ function SortableCodentionTab({
 			}`}
 		>
 			<button
+				type="button"
 				onClick={() => onSelect(codention)}
 				className={`px-3 py-1.5 pr-14 rounded-md text-sm font-medium transition-colors ${
 					isActive
@@ -718,6 +722,7 @@ function SortableCodentionTab({
 			</button>
 
 			<button
+				type="button"
 				onClick={(e) => {
 					e.stopPropagation();
 					onSetDefault(codention);
@@ -1042,6 +1047,7 @@ export default function BoardMemberManagement() {
 					Manage Board Members
 				</h2>
 				<button
+					type="button"
 					onClick={handleAddClick}
 					className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
 					disabled={isMutating || isFormOpen}
@@ -1080,6 +1086,7 @@ export default function BoardMemberManagement() {
 					</div>
 
 					<button
+						type="button"
 						onClick={() => setActiveCodentionTab(ALL_MEMBERS_TAB_KEY)}
 						className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
 							activeCodentionTab === ALL_MEMBERS_TAB_KEY
@@ -1293,6 +1300,7 @@ export default function BoardMemberManagement() {
 										{member.bio ? (
 											<>
 												<button
+													type="button"
 													onClick={() => toggleBio(member.id)}
 													className="ml-2 px-2 py-1 bg-black text-white text-xs rounded"
 												>
@@ -1311,6 +1319,7 @@ export default function BoardMemberManagement() {
 								</dl>
 								<div className="mt-4 flex justify-end space-x-3">
 									<button
+										type="button"
 										onClick={() => handleEditClick(member)}
 										disabled={isMutating || isFormOpen}
 										className="text-indigo-600 hover:text-indigo-900 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
@@ -1318,6 +1327,7 @@ export default function BoardMemberManagement() {
 										Edit
 									</button>
 									<button
+										type="button"
 										onClick={() => handleDeleteClick(member.id, member.name)}
 										disabled={
 											isMutating ||

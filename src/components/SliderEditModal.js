@@ -237,6 +237,7 @@ const SliderEditModal = ({
 								Edit Slider Images and Settings
 							</h2>
 							<button
+								type="button"
 								onClick={onClose}
 								className="text-gray-500 hover:text-gray-800"
 							>
@@ -267,6 +268,7 @@ const SliderEditModal = ({
 										))}
 									</select>
 									<button
+										type="button"
 										onClick={handleDeletePreset}
 										disabled={!canDeletePreset}
 										className="p-2 text-red-500 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -299,6 +301,7 @@ const SliderEditModal = ({
 													{image.src}
 												</p>
 												<button
+													type="button"
 													onClick={() => handleDeleteImage(image.id)}
 													className="text-red-500 hover:text-red-700 ml-3 p-1"
 													aria-label="Delete image"
@@ -333,6 +336,7 @@ const SliderEditModal = ({
 										className="w-full p-2 border rounded-md"
 									/>
 									<button
+										type="button"
 										onClick={handleAddImage}
 										disabled={!newImageUrl.trim()}
 										className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold disabled:bg-blue-300"
@@ -360,6 +364,7 @@ const SliderEditModal = ({
 										className="w-full p-2 border rounded-md"
 									/>
 									<button
+										type="button"
 										onClick={handleCreatePreset}
 										disabled={!newPresetName.trim()}
 										className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-semibold disabled:bg-green-300"
@@ -423,6 +428,7 @@ const SliderEditModal = ({
 													))}
 												</select>
 												<button
+													type="button"
 													onClick={() => handleDeleteMapping(mappingId)}
 													className="text-red-500 hover:text-red-700 p-1"
 													aria-label="Delete mapping"
@@ -462,6 +468,7 @@ const SliderEditModal = ({
 											))}
 										</select>
 										<button
+											type="button"
 											onClick={handleAddMapping}
 											disabled={!newMappingId.trim() || !newMappingPreset}
 											className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold disabled:bg-blue-300"
@@ -475,6 +482,7 @@ const SliderEditModal = ({
 
 						<div className="flex items-center justify-end p-4 border-t space-x-3">
 							<button
+								type="button"
 								onClick={onClose}
 								className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold"
 								disabled={isSaving}
@@ -482,6 +490,7 @@ const SliderEditModal = ({
 								Cancel
 							</button>
 							<button
+								type="button"
 								onClick={handleSave}
 								className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-semibold disabled:bg-indigo-300"
 								disabled={isSaving}

@@ -271,6 +271,7 @@ export default function UserManagement() {
 			<div className="flex flex-wrap justify-between items-center gap-4 mb-3">
 				<h2 className="text-xl font-semibold text-gray-800">User Management</h2>
 				<button
+					type="button"
 					onClick={handleRemoveAllMembers}
 					disabled={isBulkRemoving || isLoadingUsers}
 					className={`px-3 py-1.5 rounded text-white text-sm font-semibold transition-colors duration-150 ease-in-out ${
@@ -303,6 +304,7 @@ export default function UserManagement() {
 					</span>
 					{filterOptions.map((option) => (
 						<button
+							type="button"
 							key={option.key}
 							onClick={() => setActiveFilter(option.key)}
 							className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
@@ -430,6 +432,7 @@ export default function UserManagement() {
 									<td className="px-4 py-2 whitespace-nowrap text-sm font-medium space-x-1 relative">
 										{!user.isAdmin ? (
 											<button
+												type="button"
 												onClick={() =>
 													handleConfirmMakeAdmin(user.id, userName)
 												}
@@ -445,6 +448,7 @@ export default function UserManagement() {
 											</button>
 										) : (
 											<button
+												type="button"
 												onClick={() =>
 													handleUpdateMetadata(user.id, "admin", false)
 												}
@@ -461,6 +465,7 @@ export default function UserManagement() {
 										)}
 
 										<button
+											type="button"
 											onClick={() =>
 												handleUpdateMetadata(
 													user.id,
@@ -490,6 +495,7 @@ export default function UserManagement() {
 										</button>
 
 										<button
+											type="button"
 											onClick={() =>
 												handleUpdateMetadata(user.id, "member", !user.isMember)
 											}
@@ -528,6 +534,7 @@ export default function UserManagement() {
 										</button>
 
 										<button
+											type="button"
 											onClick={() =>
 												handleUpdateMetadata(
 													user.id,
@@ -639,6 +646,7 @@ export default function UserManagement() {
 							<div className="mt-4 flex flex-wrap gap-2 justify-end">
 								{!user.isAdmin ? (
 									<button
+										type="button"
 										onClick={() => handleConfirmMakeAdmin(user.id, userName)}
 										disabled={isLoadingThisUser}
 										className={`px-2 py-1 rounded text-white text-xs font-semibold transition-colors duration-150 ease-in-out ${
@@ -652,6 +660,7 @@ export default function UserManagement() {
 									</button>
 								) : (
 									<button
+										type="button"
 										onClick={() =>
 											handleUpdateMetadata(user.id, "admin", false)
 										}
@@ -668,6 +677,7 @@ export default function UserManagement() {
 								)}
 
 								<button
+									type="button"
 									onClick={() =>
 										handleUpdateMetadata(
 											user.id,
@@ -695,6 +705,7 @@ export default function UserManagement() {
 								</button>
 
 								<button
+									type="button"
 									onClick={() =>
 										handleUpdateMetadata(user.id, "member", !user.isMember)
 									}
@@ -733,6 +744,7 @@ export default function UserManagement() {
 								</button>
 
 								<button
+									type="button"
 									onClick={() =>
 										handleUpdateMetadata(user.id, "freezed", !user.isFreezed)
 									}
@@ -763,6 +775,7 @@ export default function UserManagement() {
 			{totalPages > 1 && (
 				<div className="flex justify-center items-center mt-4 space-x-2">
 					<button
+						type="button"
 						onClick={() => handlePageChange(currentPage - 1)}
 						disabled={currentPage === 1}
 						className={`px-3 py-1 rounded text-sm font-medium ${
@@ -777,6 +790,7 @@ export default function UserManagement() {
 						Page {currentPage} of {totalPages}
 					</span>
 					<button
+						type="button"
 						onClick={() => handlePageChange(currentPage + 1)}
 						disabled={currentPage === totalPages}
 						className={`px-3 py-1 rounded text-sm font-medium ${
