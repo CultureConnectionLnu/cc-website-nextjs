@@ -8,6 +8,8 @@ export const env = createEnv({
 		CLERK_WEBHOOK_SECRET: z.string().min(1),
 		QR_JWT_SECRET: z.string().min(1),
 		PICTURE_API_URL: z.string().url().optional(),
+		RESEND_API_KEY: z.string().min(1),
+		NOTIFICATION_EMAIL: z.string().email(),
 	},
 
 	client: {

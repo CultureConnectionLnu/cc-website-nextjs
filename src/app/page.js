@@ -7,6 +7,8 @@ import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
 import BoardMembers from "@/components/MainPage/BoardMembers";
 import Main from "@/components/MainPage/Main";
 import SponsorsCarousel from "@/components/MainPage/SponsorsCarousel";
+import ContactUs from "@/components/MainPage/ContactUs";
+import { Toaster } from "react-hot-toast";
 
 export default function Home() {
 	return (
@@ -27,9 +29,13 @@ export default function Home() {
 					<section id="sponsors-section">
 						<SponsorsCarousel />
 					</section>
+					<section id="contact-section">
+						<ContactUs />
+					</section>
 				</main>
 				<Footer />
 			</div>
+			<Toaster />
 		</div>
 	);
 }
