@@ -1,15 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type CreateEmailResponseSuccess, Resend } from "resend";
+import { type ContactBody } from "@/types/main/contact";
 
 const resendKey = process.env.RESEND_API_KEY as string;
 const resend = new Resend(resendKey);
 const notificationEmail = process.env.NOTIFICATION_EMAIL as string;
-
-export type ContactBody = {
-	name: string;
-	email: string;
-	content: string;
-};
+const contactEmail = process.env.CONTACT_TARGET_EMAIL as string;
 
 export async function POST(req: NextRequest) {
 	let contactData: ContactBody;
@@ -23,9 +19,9 @@ export async function POST(req: NextRequest) {
 	try {
 		const { data, error } = await resend.emails.send({
 			from: notificationEmail,
-            to: "cultureconnectionlnu@gmail.com",
+			to: contactEmail,
 			subject: `Contact Inquiry from ${contactData?.name}`,
-			html: `Name: ${contactData?.name}\nEmail: ${contactData?.email}\nMessage: ${contactData?.content}`,
+			text: `Name: ${contactData?.name}\nEmail: ${contactData?.email}\nMessage: ${contactData?.content}`,
 		});
 
 		if (error) {
