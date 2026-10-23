@@ -27,10 +27,10 @@ export default function Home() {
 					</section>
 					<section id="sponsors-section">
 						<SponsorsCarousel />
-                    </section>
-                    <section id="contact-section">
-                        <ContactUs/>
-                    </section>
+					</section>
+					<section id="contact-section">
+						<ContactUs />
+					</section>
 				</main>
 				<Footer />
 			</div>
