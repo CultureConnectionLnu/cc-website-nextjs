@@ -199,6 +199,7 @@ const CulturePictureSlider = ({ sliderId }) => {
 			<div className="relative flex flex-col w-full max-w-xl mx-auto px-4">
 				{isAdmin && (
 					<button
+						type="button"
 						onClick={() => setIsModalOpen(true)}
 						className="absolute top-0 right-0 z-30 bg-blue-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2"
 						aria-label="Edit Slider"

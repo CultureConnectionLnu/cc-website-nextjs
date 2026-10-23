@@ -514,6 +514,7 @@ function CardForm({ initialData, onSubmit, onCancel, isSubmitting }) {
 						<div className="flex justify-between items-center p-4 border-b">
 							<h4 className="text-lg font-semibold">Select Image</h4>
 							<button
+								type="button"
 								onClick={() => setIsFileManagerOpen(false)}
 								className="text-gray-500 hover:text-gray-800 text-2xl leading-none"
 								aria-label="Close"
@@ -620,6 +621,7 @@ export default function CardManagement() {
 					Manage Activities/Cards
 				</h2>
 				<button
+					type="button"
 					onClick={handleAddClick}
 					className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
 				>
@@ -709,6 +711,7 @@ export default function CardManagement() {
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap text-sm font-medium space-x-2">
 										<button
+											type="button"
 											onClick={() => handleEditClick(card)}
 											disabled={isMutating}
 											className="text-indigo-600 hover:text-indigo-900 disabled:opacity-50"
@@ -716,6 +719,7 @@ export default function CardManagement() {
 											Edit
 										</button>
 										<button
+											type="button"
 											onClick={() => handleDeleteClick(card.id)}
 											disabled={isMutating}
 											className="text-red-600 hover:text-red-900 disabled:opacity-50"

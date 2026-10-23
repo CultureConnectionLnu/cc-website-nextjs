@@ -22,6 +22,7 @@ export default function LoginRequiredModal({ isOpen, onClose }) {
 					onClick={(e) => e.stopPropagation()}
 				>
 					<button
+						type="button"
 						onClick={onClose}
 						className="absolute top-4 right-4 text-gray-400"
 					>
@@ -38,7 +39,10 @@ export default function LoginRequiredModal({ isOpen, onClose }) {
 					</p>
 
 					<SignInButton mode="modal">
-						<button className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl">
+						<button
+							type="button"
+							className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl"
+						>
 							Log In / Sign Up
 						</button>
 					</SignInButton>

@@ -1,4 +1,4 @@
-import { createHmac } from "crypto";
+import { createHmac } from "node:crypto";
 
 const SECRET = process.env.QR_JWT_SECRET || "fallback-secret";
 
@@ -51,6 +51,7 @@ export function verifyShortToken(token) {
 
 		return achId;
 	} catch (e) {
+		console.error("Failed to verify short token:", e);
 		return null;
 	}
 }

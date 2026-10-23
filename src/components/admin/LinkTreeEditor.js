@@ -55,6 +55,7 @@ function LinkTreeEditor({
 
 					<div className="flex justify-center space-x-4 mt-2 p-2">
 						<button
+							type="button"
 							onClick={() => handleEditLink(index)}
 							disabled={isSaving}
 							className="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition-all duration-200 disabled:opacity-50"
@@ -62,6 +63,7 @@ function LinkTreeEditor({
 							{editIndex === index ? "Cancel" : "Edit"}
 						</button>
 						<button
+							type="button"
 							onClick={() => handleDeleteLink(index)}
 							disabled={isSaving}
 							className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition-all duration-200 disabled:opacity-50"
@@ -69,6 +71,7 @@ function LinkTreeEditor({
 							Delete
 						</button>
 						<button
+							type="button"
 							onClick={() => handleToggleEnable(index)}
 							disabled={isSaving}
 							className={`p-2 rounded text-white transition-all duration-200 disabled:opacity-50 ${
@@ -80,6 +83,7 @@ function LinkTreeEditor({
 							{item.isEnabled ? "Disable" : "Enable"}
 						</button>
 						<button
+							type="button"
 							onClick={() => handleMoveUp(index)}
 							disabled={index === 0 || isSaving}
 							className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition-all duration-200 disabled:opacity-50"
@@ -87,6 +91,7 @@ function LinkTreeEditor({
 							Up
 						</button>
 						<button
+							type="button"
 							onClick={() => handleMoveDown(index)}
 							disabled={index === links.length - 1 || isSaving}
 							className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition-all duration-200 disabled:opacity-50"
@@ -192,6 +197,7 @@ function LinkTreeEditor({
 							</div>
 
 							<button
+								type="button"
 								onClick={handleSaveEdit}
 								disabled={isSaving}
 								className="sm:w-96 flex justify-center mx-auto mt-6 text-center p-4 rounded py-3 bg-green-400 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 disabled:opacity-50"
@@ -380,6 +386,7 @@ function LinkTreeEditor({
 					</div>
 
 					<button
+						type="button"
 						onClick={handleAddLink}
 						disabled={isSaving}
 						className="flex justify-center sm:w-96 mx-auto mt-6 text-center p-4 rounded py-3 bg-blue-500 border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-1 translate-y-1 disabled:opacity-50"

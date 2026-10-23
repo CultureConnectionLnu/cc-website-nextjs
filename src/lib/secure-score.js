@@ -19,6 +19,7 @@ export function decryptScore(encryptedString) {
 		const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 		return decryptedData;
 	} catch (e) {
+		console.error("Failed to decrypt score:", e);
 		return null;
 	}
 }

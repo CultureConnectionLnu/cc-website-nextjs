@@ -200,6 +200,7 @@ export default function ActivitiesPage() {
 					return (
 						<div key={card.id} className="relative">
 							<button
+								type="button"
 								onClick={() => jumpToCard(index)}
 								className={`pw-full md:w-auto mt-1 md:mt-2 text-center px-4 md:px-6 py-2 md:py-2.5 rounded-lg border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-baseColor font-semibold text-sm md:text-base ${
 									card.bgColor || "bg-gray-200"
@@ -425,6 +426,7 @@ function CardContent({ card, isStack, openModal }) {
 					</div>
 					{!isStack && openModal && (
 						<button
+							type="button"
 							onClick={(e) => {
 								e.stopPropagation();
 								openModal(card);

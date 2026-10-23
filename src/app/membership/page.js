@@ -146,6 +146,7 @@ const DiscountCard = ({
 				</p>
 				<div className="mt-auto pt-2 flex flex-col gap-2">
 					<button
+						type="button"
 						onClick={() => onOpenModal(membership)}
 						className="w-full text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-gray-100/70 text-black font-semibold"
 					>
@@ -154,12 +155,14 @@ const DiscountCard = ({
 					{canManage && (
 						<div className="flex gap-2">
 							<button
+								type="button"
 								onClick={() => onEdit(membership)}
 								className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-yellow-200 text-yellow-800 font-semibold hover:bg-yellow-300"
 							>
 								Edit
 							</button>
 							<button
+								type="button"
 								onClick={() => {
 									if (
 										window.confirm(
@@ -184,6 +187,7 @@ const DiscountCard = ({
 const AddMembershipCard = ({ onClick }) => {
 	return (
 		<button
+			type="button"
 			onClick={onClick}
 			className="bg-white shadow-md rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-gray-300 text-gray-500 hover:border-indigo-500 hover:text-indigo-500 transition-colors aspect-[3/4] md:aspect-auto min-h-[300px] md:min-h-[450px]"
 			aria-label="Add new membership discount"
@@ -370,6 +374,7 @@ export default function MembershipPage() {
 
 							<section className="mt-6 max-w-3xl mx-auto">
 								<button
+									type="button"
 									onClick={() => setIsPerksOpen(!isPerksOpen)}
 									className="w-full flex items-center justify-center gap-2 text-2xl md:text-3xl font-Header text-mainColor font-bold mb-4 hover:opacity-80 transition-opacity"
 								>
@@ -451,6 +456,7 @@ export default function MembershipPage() {
 							{isLoaded && isSignedIn && !isUserMember && (
 								<div className="mt-6">
 									<button
+										type="button"
 										onClick={openBecomeMemberModal}
 										className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-yellow-200 text-yellow-800 font-semibold hover:bg-yellow-300"
 									>
@@ -461,6 +467,7 @@ export default function MembershipPage() {
 							{isLoaded && isSignedIn && isUserMember && (
 								<div className="mt-6">
 									<button
+										type="button"
 										onClick={openUserCardModal}
 										className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-blue-200 text-blue-800 font-semibold hover:bg-blue-300"
 									>
@@ -478,7 +485,10 @@ export default function MembershipPage() {
 										afterSignInUrl="/membership"
 										afterSignUpUrl="/membership"
 									>
-										<button className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-blue-200 text-blue-800 font-semibold hover:bg-blue-300">
+										<button
+											type="button"
+											className="flex-1 text-center p-3 rounded border-2 border-black shadow-custom hover:shadow-none transition-all hover:translate-x-0.5 hover:translate-y-0.5 bg-blue-200 text-blue-800 font-semibold hover:bg-blue-300"
+										>
 											Sign In to Join
 										</button>
 									</SignInButton>

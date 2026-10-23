@@ -702,6 +702,7 @@ function DiscordSchedulerForm({
 						<div className="flex justify-between items-center p-4 border-b">
 							<h4 className="text-lg font-semibold">Select Image</h4>
 							<button
+								type="button"
 								onClick={() => setIsFileManagerOpen(false)}
 								className="text-gray-500 hover:text-gray-800 text-2xl leading-none"
 								aria-label="Close"

@@ -49,7 +49,7 @@ async function writePropositions(data) {
 
 async function requireAdmin(request) {
 	const authResult = getAuth(request);
-	if (!authResult || !authResult.userId) {
+	if (!authResult?.userId) {
 		return { ok: false, error: "Unauthorized", status: 401 };
 	}
 
@@ -83,7 +83,7 @@ export async function GET(request) {
 
 export async function POST(request) {
 	const authResult = getAuth(request);
-	if (!authResult || !authResult.userId) {
+	if (!authResult?.userId) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 

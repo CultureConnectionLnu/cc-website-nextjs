@@ -86,6 +86,7 @@ export default function BoardMembers() {
 				<div className="md:hidden flex overflow-x-auto pb-4 gap-2 no-scrollbar -mx-4 px-4 sticky top-20 z-20 bg-white/80 backdrop-blur-sm">
 					{allCodentions.map((c) => (
 						<button
+							type="button"
 							key={c}
 							onClick={() => setSelectedCodention(c)}
 							className={`whitespace-nowrap px-6 py-2 rounded-full border-2 border-black font-bold text-sm transition-all ${
@@ -108,6 +109,7 @@ export default function BoardMembers() {
 							{allCodentions.map((c) => (
 								<li key={c}>
 									<button
+										type="button"
 										onClick={() => setSelectedCodention(c)}
 										className={`w-full text-left px-4 py-2 rounded-lg font-bold transition-all ${
 											selectedCodention === c

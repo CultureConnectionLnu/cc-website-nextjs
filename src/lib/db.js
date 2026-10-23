@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 const dbPath = path.join(process.cwd(), "data", "achievements.db");
 
@@ -83,7 +83,7 @@ try {
 }
 
 process.on("exit", () => {
-	if (db && db.open) {
+	if (db?.open) {
 		db.close((err) => {
 			if (err) {
 				console.error("Error closing SQLite connection:", err.message);

@@ -83,6 +83,7 @@ export default function Header() {
 							/>
 						</Link>
 						<button
+							type="button"
 							onClick={openMenu}
 							className="text-white p-2 hover:scale-110 transition-transform"
 						>
@@ -95,6 +96,7 @@ export default function Header() {
 							<div className="flex items-center gap-4 md:gap-6">
 								{isRegularUser && (
 									<button
+										type="button"
 										onClick={() => setIsBecomeMemberModalOpen(true)}
 										className="hidden md:flex bg-[#4ade80] text-black px-4 py-1.5 rounded-full border-2 border-black font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-0.5 hover:bg-[#22c55e] transition-all items-center gap-2"
 									>
@@ -104,6 +106,7 @@ export default function Header() {
 								)}
 
 								<button
+									type="button"
 									onClick={() => setIsUserCardModalOpen(true)}
 									className="text-white hover:text-gray-200 transition-colors"
 								>
@@ -114,6 +117,7 @@ export default function Header() {
 								</button>
 
 								<button
+									type="button"
 									onClick={() => setIsUserIdentityModalOpen(true)}
 									className="text-white hover:text-gray-200 transition-colors"
 								>
@@ -131,7 +135,10 @@ export default function Header() {
 
 						<SignedOut>
 							<SignInButton mode="modal">
-								<button className="bg-white text-black px-6 py-2.5 rounded-full border-2 border-black font-Main font-bold text-sm uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-0.5 hover:bg-gray-100 transition-all">
+								<button
+									type="button"
+									className="bg-white text-black px-6 py-2.5 rounded-full border-2 border-black font-Main font-bold text-sm uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-0.5 hover:bg-gray-100 transition-all"
+								>
 									Sign In
 								</button>
 							</SignInButton>
@@ -167,6 +174,7 @@ export default function Header() {
 									</span>
 								</div>
 								<button
+									type="button"
 									onClick={closeMenus}
 									className="text-white p-2 hover:rotate-90 transition-transform duration-300"
 								>
@@ -207,6 +215,7 @@ export default function Header() {
 								<SignedIn>
 									{isRegularUser && (
 										<button
+											type="button"
 											onClick={() => {
 												setIsBecomeMemberModalOpen(true);
 												closeMenus();

@@ -267,6 +267,7 @@ export default function SponsorManagement() {
 			<div className="flex justify-between items-center mb-4">
 				<h2 className="text-xl font-semibold text-gray-800">Manage Sponsors</h2>
 				<button
+					type="button"
 					onClick={handleAddClick}
 					className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
 					disabled={isMutating || isFormOpen}
@@ -369,6 +370,7 @@ export default function SponsorManagement() {
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap text-sm font-medium space-x-2">
 										<button
+											type="button"
 											onClick={() => handleEditClick(sponsor)}
 											disabled={isMutating || isFormOpen}
 											className="text-indigo-600 hover:text-indigo-900 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -376,6 +378,7 @@ export default function SponsorManagement() {
 											Edit
 										</button>
 										<button
+											type="button"
 											onClick={() =>
 												handleDeleteClick(sponsor.id, sponsor.name)
 											}

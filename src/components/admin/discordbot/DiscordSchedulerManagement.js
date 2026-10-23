@@ -185,6 +185,7 @@ export default function DiscordSchedulerManagement() {
 					Discord Scheduled Messages
 				</h2>
 				<button
+					type="button"
 					onClick={handleAddClick}
 					className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
 					disabled={isMutating || isFormOpen}
@@ -281,6 +282,7 @@ export default function DiscordSchedulerManagement() {
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap text-sm font-medium space-x-2">
 										<button
+											type="button"
 											onClick={() => handleEditClick(schedule)}
 											disabled={isMutating || isFormOpen}
 											className="text-indigo-600 hover:text-indigo-900 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -288,6 +290,7 @@ export default function DiscordSchedulerManagement() {
 											Edit
 										</button>
 										<button
+											type="button"
 											onClick={() =>
 												handleDeleteClick(schedule.id || index, schedule.name)
 											}

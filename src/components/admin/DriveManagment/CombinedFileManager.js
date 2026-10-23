@@ -45,6 +45,7 @@ export function CombinedFileManager({ onImageSelect }) {
 			<div className="mb-6 flex flex-wrap justify-center items-center gap-4 border-b pb-4">
 				<h3 className="text-xl font-semibold mr-4">Select Image Source:</h3>
 				<button
+					type="button"
 					onClick={() => setSelectedSource("publicOneCom")}
 					className={`px-4 py-2 rounded text-sm font-medium
             ${
@@ -56,6 +57,7 @@ export function CombinedFileManager({ onImageSelect }) {
 					Public (one.com)
 				</button>
 				<button
+					type="button"
 					onClick={() => setSelectedSource("privateApi")}
 					className={`px-4 py-2 rounded text-sm font-medium
             ${
