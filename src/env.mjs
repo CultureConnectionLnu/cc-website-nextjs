@@ -9,7 +9,7 @@ export const env = createEnv({
 		QR_JWT_SECRET: z.string().min(1),
 		PICTURE_API_URL: z.string().url().optional(),
 		RESEND_API_KEY: z.string().min(1),
-        NOTIFICATION_EMAIL: z.string().email(),
+		NOTIFICATION_EMAIL: z.string().email(),
 		CONTACT_TARGET_EMAIL: z.string().email(),
 	},
 
@@ -62,9 +62,9 @@ export const env = createEnv({
 			process.env.NEXT_PUBLIC_GOOGLE_DRIVE_ROOT_FOLDER_ID,
 		NEXT_PUBLIC_API_DISCORD_URL: process.env.NEXT_PUBLIC_API_DISCORD_URL,
 		NEXT_PUBLIC_ONE_COM_PUBLIC_FILES_BASE_URL:
-            process.env.NEXT_PUBLIC_ONE_COM_PUBLIC_FILES_BASE_URL,
-        RESEND_API_KEY: process.env.RESEND_API_KEY,
-        NOTIFICATION_EMAIL: process.env.NOTIFICATION_EMAIL,
+			process.env.NEXT_PUBLIC_ONE_COM_PUBLIC_FILES_BASE_URL,
+		RESEND_API_KEY: process.env.RESEND_API_KEY,
+		NOTIFICATION_EMAIL: process.env.NOTIFICATION_EMAIL,
 		CONTACT_TARGET_EMAIL: process.env.CONTACT_TARGET_EMAIL,
 	},
 

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type CreateEmailResponseSuccess, Resend } from "resend";
-import { type ContactBody } from "@/types/main/contact";
+import type { ContactBody } from "@/types/main/contact";
 
 const resendKey = process.env.RESEND_API_KEY as string;
 const resend = new Resend(resendKey);

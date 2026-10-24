@@ -1,14 +1,14 @@
 "use client";
 
+import { Toaster } from "react-hot-toast";
 import Background from "@/components/Background";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ActivitiesPage from "@/components/MainPage/ActivitiesPage";
 import BoardMembers from "@/components/MainPage/BoardMembers";
+import ContactUs from "@/components/MainPage/ContactUs";
 import Main from "@/components/MainPage/Main";
 import SponsorsCarousel from "@/components/MainPage/SponsorsCarousel";
-import ContactUs from "@/components/MainPage/ContactUs";
-import { Toaster } from "react-hot-toast";
 
 export default function Home() {
 	return (
