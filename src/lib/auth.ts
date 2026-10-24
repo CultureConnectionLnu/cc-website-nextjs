@@ -1,9 +1,11 @@
-import { auth, clerkClient, getAuth } from "@clerk/nextjs/server";
-import { stat } from "fs/promises";
-import { handler } from "next/dist/server/route-modules/pages/builtin/_error";
-import { NextRequest, NextResponse } from "next/server";
+import { auth, clerkClient, type User } from "@clerk/nextjs/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-const Role = ["admin", "committee", "member"] as const;
+export const Role = {
+    admin: "admin",
+    committee: "committee",
+    member: "member",
+} as const;
 export type Role = (typeof Role)[keyof typeof Role];
 export type PublicMetadata = Readonly<Record<string, unknown>>;
 
@@ -11,7 +13,8 @@ export interface AuthUser {
     userId: string;
     sessionId: string | null;
     roles: readonly Role[];
-    publicMetadata: Record<string, any>;
+    publicMetadata: PublicMetadata;
+    clerkUser: User;
 }
 
 export async function requireUser(): Promise<AuthUser> {
@@ -21,13 +24,16 @@ export async function requireUser(): Promise<AuthUser> {
 
     const clerkUser = await (await clerkClient()).users.getUser(userId);
     const publicMetadata = (clerkUser.publicMetadata ?? {}) as PublicMetadata;
-    const roles = Role.filter((role) => publicMetadata[role] == true);
+    const roles = Object.values(Role).filter(
+        (role) => publicMetadata[role],
+    );
 
     return {
         userId,
         sessionId: sessionId ?? null,
         roles,
         publicMetadata,
+        clerkUser,
     };
 }
 
@@ -45,7 +51,7 @@ export async function requireRole(
     const mode = options?.mode ?? "any";
 
     const allowed =
-        mode == "any"
+        mode === "any"
             ? requiredRoles.some((role) => user.roles.includes(role))
             : requiredRoles.every((role) => user.roles.includes(role));
 
@@ -60,7 +66,7 @@ export async function requireRole(
 }
 
 export class AuthError extends Error {
-    readonly status: number = 401 | 403;
+    readonly status: 401 | 403;
     constructor(status: 401 | 403, message: string) {
         super(message);
         this.name = "AuthError";
@@ -68,7 +74,7 @@ export class AuthError extends Error {
     }
 
     response() {
-        const code = this.status == 401 ? "Unauthorized" : "Forbidden";
+        const code = this.status === 401 ? "Unauthorized" : "Forbidden";
         return NextResponse.json(
             { error: { code, message: this.message } },
             { status: this.status },
@@ -78,36 +84,43 @@ export class AuthError extends Error {
 
 export type AuthenticatedHandler<P = Record<string, string>> = (
     request: NextRequest,
-    response: NextResponse,
+    response: Context<P>,
     user: AuthUser,
 ) => Promise<Response>;
 
 type AuthOptions = {
-    mode: "all" | "any",
-    roles: Role | readonly Role[],
-}
+    mode: "all" | "any";
+    roles: Role | readonly Role[];
+};
 
-export function withAuth(
-    optionsOrHandler: AuthOptions | AuthenticatedHandler,
-    maybeHandler?: AuthenticatedHandler,
+export type Context<P = Record<string, string>> = {
+    params: Promise<P>;
+};
+
+export function withAuth<P>(
+    optionsOrHandler: AuthOptions | AuthenticatedHandler<P>,
+    maybeHandler?: AuthenticatedHandler<P>,
 ) {
-    const options = typeof optionsOrHandler == "function" ? null : optionsOrHandler;
-    const handler = typeof optionsOrHandler == "function" ? optionsOrHandler : maybeHandler;
+    const options =
+        typeof optionsOrHandler === "function" ? null : optionsOrHandler;
+    const handler =
+        typeof optionsOrHandler === "function" ? optionsOrHandler : maybeHandler;
 
     if (!handler) {
         throw new TypeError("Handler function is required");
     }
 
-    return async (req: NextRequest, res: NextResponse) => {
+    return async (req: NextRequest, ctx: Context<P>) => {
         try {
-            const user = options?.roles !== null
-                ? await requireRole(options?.roles!)
+            const user = options
+                ? await requireRole(options?.roles, { mode: options.mode })
                 : await requireUser();
+            return await handler(req, ctx, user);
         } catch (error) {
             if (error instanceof AuthError) {
                 return error.response();
             }
             throw error;
         }
-    }
+    };
 }
