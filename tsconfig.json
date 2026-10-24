@@ -5,13 +5,14 @@
 		"rootDir": ".",
 		// "outDir": "./dist",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"react": [ "./node_modules/@types/react" ]
 		},
 		// Environment Settings
 		// See also https://aka.ms/tsconfig/module
 		"module": "esnext",
 		"target": "esnext",
-		"types": [],
+		"types": ["mdx"],
 		// For nodejs:
 		// "lib": ["esnext"],
 		// "types": ["node"],
@@ -57,7 +58,9 @@
 		".next/dev/types/**/*.ts",
 		"**/*.mts",
 		"**/*.ts",
-		"**/*.tsx"
+		"**/*.tsx",
+		"**/*.mdx",
+		"**/*.md"
 	],
 	"exclude": ["node_modules"]
 }
