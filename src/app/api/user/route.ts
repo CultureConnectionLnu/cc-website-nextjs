@@ -6,7 +6,7 @@ type Params = {};
 
 export const GET = withAuth<Params>(
 	{ roles: [Role.admin, Role.committee] },
-	async (req, { params }, user) => {
+	async (_req, _context, _user) => {
 		try {
 			const userListResponse = await (await clerkClient()).users.getUserList({
 				orderBy: "+created_at",
