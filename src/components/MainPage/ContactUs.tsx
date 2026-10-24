@@ -1,9 +1,9 @@
 "use client";
 
-import { type ContactBody } from "@/types/main/contact";
 import type React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import type { ContactBody } from "@/types/main/contact";
 
 async function sendContactEmail(fd: FormData) {
 	const formData: ContactBody = {

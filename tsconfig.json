@@ -6,7 +6,7 @@
 		// "outDir": "./dist",
 		"paths": {
 			"@/*": ["./src/*"],
-			"react": [ "./node_modules/@types/react" ]
+			"react": ["./node_modules/@types/react"]
 		},
 		// Environment Settings
 		// See also https://aka.ms/tsconfig/module
