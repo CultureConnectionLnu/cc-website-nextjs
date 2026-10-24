@@ -24,11 +24,11 @@ export async function requireUser(): Promise<AuthUser> {
 
 	const clerkUser = await (await clerkClient()).users.getUser(userId);
 	const publicMetadata = (clerkUser.publicMetadata ?? {}) as PublicMetadata;
-	const roles = Object.values(Role).filter((role) => publicMetadata[role]);
+	const roles = Object.values(Role).filter((role) => publicMetadata[role] === true);
 
 	return {
 		userId,
-		sessionId: sessionId ?? null,
+		sessionId: sessionId,
 		roles,
 		publicMetadata,
 		clerkUser,
@@ -46,7 +46,10 @@ export async function requireRole(
 	const requiredRoles: readonly Role[] = Array.isArray(required)
 		? required
 		: [required];
-	const mode = options?.mode ?? "any";
+    if (requiredRoles.length === 0) {
+        throw new AuthError(403, "Server error: No roles specified for authorization check.");
+	}
+    const mode = options?.mode ?? "any";
 
 	const allowed =
 		mode === "any"
@@ -82,12 +85,12 @@ export class AuthError extends Error {
 
 export type AuthenticatedHandler<P = Record<string, string>> = (
 	request: NextRequest,
-	response: Context<P>,
+	context: Context<P>,
 	user: AuthUser,
 ) => Promise<Response>;
 
 type AuthOptions = {
-	mode: "all" | "any";
+	mode?: "all" | "any";
 	roles: Role | readonly Role[];
 };
 
@@ -111,7 +114,7 @@ export function withAuth<P>(
 	return async (req: NextRequest, ctx: Context<P>) => {
 		try {
 			const user = options
-				? await requireRole(options?.roles, { mode: options.mode })
+				? await requireRole(options?.roles, { mode: options.mode ?? "any" })
 				: await requireUser();
 			return await handler(req, ctx, user);
 		} catch (error) {

@@ -23,14 +23,13 @@ export const GET = withAuth<Params>(async (req, { params }, user) => {
 		);
 	}
 
-	const clerk = await clerkClient();
 	let targetUser: User;
 	try {
-		targetUser =
-			targetUserId === user.userId
-				? user.clerkUser
-				: await clerk.users.getUser(targetUserId);
-	} catch (error) {
+        targetUser =
+            targetUserId === user.userId
+                ? user.clerkUser
+                : await (await clerkClient()).users.getUser(targetUserId);
+    } catch {
 		return NextResponse.json({ message: "User not found." }, { status: 404 });
 	}
 
@@ -38,7 +37,7 @@ export const GET = withAuth<Params>(async (req, { params }, user) => {
 		(`${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() ||
 			targetUser.username) ??
 		"";
-	const achievements = await getAchievements(db, targetUserId);
+	const achievements = getAchievements(db, targetUserId);
 
 	return NextResponse.json({
 		userName,
@@ -46,7 +45,7 @@ export const GET = withAuth<Params>(async (req, { params }, user) => {
 	});
 });
 
-async function getAchievements(db: Database, userId: string) {
+function getAchievements(db: Database, userId: string) {
 	const stmt = db.prepare(`
         SELECT
           a.id,
