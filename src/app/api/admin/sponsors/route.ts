@@ -44,8 +44,8 @@ export const GET = withAuth<NoParams>(
 		try {
 			const sponsors = await readSponsors();
 			return NextResponse.json(sponsors);
-        } catch {
-            console.error("Error fetching sponsors");
+		} catch {
+			console.error("Error fetching sponsors");
 			return NextResponse.json(
 				{ error: "Failed to fetch sponsors" },
 				{ status: 500 },
@@ -80,8 +80,8 @@ export const POST = withAuth<NoParams>(
 			await writeSponsors(sponsors);
 
 			return NextResponse.json(newSponsor, { status: 201 });
-        } catch (error) {
-            console.error("Error creating sponsor:", error);
+		} catch (error) {
+			console.error("Error creating sponsor:", error);
 			return NextResponse.json(
 				{ error: "Failed to create sponsor" },
 				{ status: 500 },
@@ -113,20 +113,19 @@ export const PUT = withAuth<NoParams>(
 				);
 			}
 
-            const current = sponsors[sponsorIndex]!;
-            sponsors[sponsorIndex] = {
-                
+			const current = sponsors[sponsorIndex]!;
+			sponsors[sponsorIndex] = {
 				...current,
-                name: updatedSponsorData.name,
-                imageUrl: updatedSponsorData.imageUrl ?? current.imageUrl,
+				name: updatedSponsorData.name,
+				imageUrl: updatedSponsorData.imageUrl ?? current.imageUrl,
 				websiteUrl: updatedSponsorData.websiteUrl ?? current.websiteUrl,
 			};
 
 			await writeSponsors(sponsors);
 
 			return NextResponse.json(sponsors[sponsorIndex]);
-        } catch (error) {
-            console.error("Error updating sponsor:", error);
+		} catch (error) {
+			console.error("Error updating sponsor:", error);
 			return NextResponse.json(
 				{ error: "Failed to update sponsor" },
 				{ status: 500 },
@@ -159,8 +158,8 @@ export const DELETE = withAuth<NoParams>(
 			return NextResponse.json({
 				message: `Sponsor ${sponsorId} deleted successfully.`,
 			});
-        } catch (error) {
-            console.error("Error deleting sponsor:", error);
+		} catch (error) {
+			console.error("Error deleting sponsor:", error);
 			return NextResponse.json(
 				{ error: "Failed to delete sponsor" },
 				{ status: 500 },
