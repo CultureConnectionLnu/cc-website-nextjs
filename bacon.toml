@@ -1,0 +1,25 @@
+[jobs.lint]
+env.RAYON_NUM_THREADS = "1" # for constant ordering of items
+command = [
+    "npx", "@biomejs/biome", "lint",
+    "--colors", "force",
+    "./src",
+    "--skip", "complexity/useArrowFunction",
+    "--skip", "style/useTemplate",
+]
+need_stdout = true
+analyzer = "biome"
+watch = ["src"]
+
+[jobs.format]
+env.RAYON_NUM_THREADS = "1" # for constant ordering of items
+command = [
+    "npx", "@biomejs/biome", "format",
+    "--colors", "force",
+    "./src",
+    "--skip", "complexity/useArrowFunction",
+    "--skip", "style/useTemplate",
+]
+need_stdout = true
+analyzer = "biome"
+watch = ["src"]
