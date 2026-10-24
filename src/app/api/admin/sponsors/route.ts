@@ -44,7 +44,8 @@ export const GET = withAuth<NoParams>(
 		try {
 			const sponsors = await readSponsors();
 			return NextResponse.json(sponsors);
-		} catch {
+        } catch {
+            console.error("Error fetching sponsors");
 			return NextResponse.json(
 				{ error: "Failed to fetch sponsors" },
 				{ status: 500 },
@@ -66,7 +67,7 @@ export const POST = withAuth<NoParams>(
 				);
 			}
 
-			const newId = `sp${Date.now()}`;
+			const newId = `sp${crypto.randomUUID()}`;
 			const newSponsor = {
 				id: newId,
 				name: newSponsorData.name,
@@ -79,7 +80,8 @@ export const POST = withAuth<NoParams>(
 			await writeSponsors(sponsors);
 
 			return NextResponse.json(newSponsor, { status: 201 });
-		} catch {
+        } catch (error) {
+            console.error("Error creating sponsor:", error);
 			return NextResponse.json(
 				{ error: "Failed to create sponsor" },
 				{ status: 500 },
@@ -111,15 +113,20 @@ export const PUT = withAuth<NoParams>(
 				);
 			}
 
-			sponsors[sponsorIndex] = {
-				...sponsors[sponsorIndex],
-				...updatedSponsorData,
+            const current = sponsors[sponsorIndex]!;
+            sponsors[sponsorIndex] = {
+                
+				...current,
+                name: updatedSponsorData.name,
+                imageUrl: updatedSponsorData.imageUrl ?? current.imageUrl,
+				websiteUrl: updatedSponsorData.websiteUrl ?? current.websiteUrl,
 			};
 
 			await writeSponsors(sponsors);
 
 			return NextResponse.json(sponsors[sponsorIndex]);
-		} catch (error) {
+        } catch (error) {
+            console.error("Error updating sponsor:", error);
 			return NextResponse.json(
 				{ error: "Failed to update sponsor" },
 				{ status: 500 },
@@ -152,7 +159,8 @@ export const DELETE = withAuth<NoParams>(
 			return NextResponse.json({
 				message: `Sponsor ${sponsorId} deleted successfully.`,
 			});
-		} catch (error) {
+        } catch (error) {
+            console.error("Error deleting sponsor:", error);
 			return NextResponse.json(
 				{ error: "Failed to delete sponsor" },
 				{ status: 500 },
