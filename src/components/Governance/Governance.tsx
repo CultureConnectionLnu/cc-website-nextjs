@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 
 function H1({ children }: { children: React.ReactNode }) {
     return (
-        <h1 className="text-3xl font-bold text-gray-800 print:text-black">
+        <h1 className="text-3xl my-4 font-bold text-gray-800 print:text-black">
             {children}
         </h1>
     );
@@ -10,7 +10,7 @@ function H1({ children }: { children: React.ReactNode }) {
 
 function H2({ children }: { children: React.ReactNode }) {
     return (
-        <h2 className="text-2xl pt-4 m-2 font-semibold text-purple-700 mb-4 print:text-black">
+        <h2 className="text-2xl pt-4 m-2 font-semibold text-purple-800 mb-4 print:text-black">
             {children}
         </h2>
     );
