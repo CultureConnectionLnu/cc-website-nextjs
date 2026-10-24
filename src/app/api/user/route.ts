@@ -1,13 +1,11 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { Role, withAuth } from "@/lib/auth";
-
-type Params = {};
+import { type NoParams, Role, withAuth } from "@/lib/auth";
 
 /**
  * Fetch all the users from clerk
  */
-export const GET = withAuth<Params>(
+export const GET = withAuth<NoParams>(
 	{ roles: [Role.admin, Role.committee] },
 	async (_req, _context, _user) => {
 		try {

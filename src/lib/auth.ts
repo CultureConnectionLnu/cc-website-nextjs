@@ -103,6 +103,8 @@ export type Context<P = Record<string, string>> = {
 	params: Promise<P>;
 };
 
+export type NoParams = Record<string, never>;
+
 export function withAuth<P>(
 	optionsOrHandler: AuthOptions | AuthenticatedHandler<P>,
 	maybeHandler?: AuthenticatedHandler<P>,
