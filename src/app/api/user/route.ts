@@ -4,6 +4,9 @@ import { Role, withAuth } from "@/lib/auth";
 
 type Params = {};
 
+/**
+ * Fetch all the users from clerk
+ */
 export const GET = withAuth<Params>(
 	{ roles: [Role.admin, Role.committee] },
 	async (_req, _context, _user) => {

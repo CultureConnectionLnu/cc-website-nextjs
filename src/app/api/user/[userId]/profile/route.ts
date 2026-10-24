@@ -6,6 +6,9 @@ import db from "@/lib/db";
 
 type Params = { userId: string };
 
+/**
+ * Fetch profile data for a particular user
+ */
 export const GET = withAuth<Params>(async (req, { params }, user) => {
 	const targetUserId = (await params).userId;
 
