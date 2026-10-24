@@ -83,12 +83,12 @@ try {
 }
 
 process.on("exit", () => {
-    if (db?.open) {
-        try {
-            db.close();
-        } catch {
-            console.error("Error closing SQLite database on exit.");
-        }
+	if (db?.open) {
+		try {
+			db.close();
+		} catch {
+			console.error("Error closing SQLite database on exit.");
+		}
 	}
 });
 process.on("SIGINT", () => process.exit());

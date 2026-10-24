@@ -25,11 +25,11 @@ export const GET = withAuth<Params>(async (req, { params }, user) => {
 
 	let targetUser: User;
 	try {
-        targetUser =
-            targetUserId === user.userId
-                ? user.clerkUser
-                : await (await clerkClient()).users.getUser(targetUserId);
-    } catch {
+		targetUser =
+			targetUserId === user.userId
+				? user.clerkUser
+				: await (await clerkClient()).users.getUser(targetUserId);
+	} catch {
 		return NextResponse.json({ message: "User not found." }, { status: 404 });
 	}
 

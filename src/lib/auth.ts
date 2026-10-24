@@ -24,7 +24,9 @@ export async function requireUser(): Promise<AuthUser> {
 
 	const clerkUser = await (await clerkClient()).users.getUser(userId);
 	const publicMetadata = (clerkUser.publicMetadata ?? {}) as PublicMetadata;
-	const roles = Object.values(Role).filter((role) => publicMetadata[role] === true);
+	const roles = Object.values(Role).filter(
+		(role) => publicMetadata[role] === true,
+	);
 
 	return {
 		userId,
@@ -46,10 +48,13 @@ export async function requireRole(
 	const requiredRoles: readonly Role[] = Array.isArray(required)
 		? required
 		: [required];
-    if (requiredRoles.length === 0) {
-        throw new AuthError(403, "Server error: No roles specified for authorization check.");
+	if (requiredRoles.length === 0) {
+		throw new AuthError(
+			403,
+			"Server error: No roles specified for authorization check.",
+		);
 	}
-    const mode = options?.mode ?? "any";
+	const mode = options?.mode ?? "any";
 
 	const allowed =
 		mode === "any"
