@@ -83,7 +83,7 @@ try {
 }
 
 process.on("exit", () => {
-    if (db?.open) {
+	if (db?.open) {
 		db.close();
 	}
 });
