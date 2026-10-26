@@ -1,8 +1,65 @@
+import { withAuth } from "@/lib/auth";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
 import { getAuth } from "@clerk/nextjs/server";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
+import * as z from "zod";
+
+const AgendaTopic = z.object({
+    id: z.string(),
+    label: z.string(),
+    content: z.string(),
+    voting: z.object({
+        enabled: z.boolean(),
+        reason: z.string(),
+        approve: z.array(z.string()),
+        disapprove: z.array(z.string()),
+        abstain: z.array(z.string()),
+    })
+})
+
+const AgendaSignatures = z.object({
+    secretarySigned: z.boolean(),
+    secretarySignedBy: z.string(),
+    secretarySignedAt: z.iso.date(),
+    minuteCheckerSigned: z.boolean(),
+    minuteCheckerSignedBy: z.string(),
+    minuteCheckerSignedAt: z.iso.date(),
+})
+
+const AgendaTopicCompletion = z.object({
+    id: z.string(),
+    userid: z.string(),
+    topic: z.string(),
+    completed: z.boolean(),
+})
+
+const Agenda = z.object({
+    id: z.string(),
+    date: z.iso.date(),
+    title: z.string(),
+    customLabels: z.record(z.string(), z.string()),
+    presentMembers: z.array(z.string()),
+    additionalNotes: z.string(),
+    chairman: z.string(),
+    secretary: z.string(),
+    minuteChecker: z.string(),
+    meetingInitiation: z.string(),
+    boardMembersMeetUp: z.string(),
+    meetingStartTime: z.iso.time(),
+    meetingEndTime: z.iso.time(),
+    topics: z.array(AgendaTopic),
+    meetingConcludes: z.string(),
+    nextMeetingDate: z.string(),
+    topicsForNextMeeting: z.string(),
+    isCompleted: z.boolean(),
+    completedAt: z.string(),
+    signatures: AgendaSignatures,
+    Topics: z.array(AgendaTopicCompletion)
+})
+
+
 
 const agendaFilePath = path.join(
 	process.cwd(),
@@ -10,64 +67,6 @@ const agendaFilePath = path.join(
 	"data",
 	"agendas.json",
 );
-
-const initializeClerk = () => {
-	const secretKey = process.env.CLERK_SECRET_KEY;
-	if (!secretKey) {
-		throw new Error("Server configuration error: Clerk Secret Key missing.");
-	}
-
-	return createClerkClient({ secretKey });
-};
-
-async function checkUserPermission(request, allowedRoleKeys = ["admin"]) {
-	let authResult;
-
-	try {
-		authResult = getAuth(request);
-		if (!authResult?.userId) {
-			return {
-				authorized: false,
-				error: "Authentication context missing.",
-				status: 401,
-			};
-		}
-	} catch (error) {
-		console.error("Agenda permission check failed while reading auth:", error);
-		return {
-			authorized: false,
-			error: "Failed to get authentication context.",
-			status: 500,
-		};
-	}
-
-	try {
-		const clerk = initializeClerk();
-		const user = await clerk.users.getUser(authResult.userId);
-		const userPublicMetadata = user?.publicMetadata || {};
-
-		const hasPermission = allowedRoleKeys.some(
-			(roleKey) => userPublicMetadata[roleKey] === true,
-		);
-
-		if (!hasPermission) {
-			return {
-				authorized: false,
-				error: `Unauthorized. Requires ${allowedRoleKeys.join(" or ")} role.`,
-				status: 403,
-			};
-		}
-
-		return { authorized: true, userId: authResult.userId };
-	} catch (error) {
-		console.error("Agenda permission check failed while reading user:", error);
-		return {
-			authorized: false,
-			error: "Could not verify user roles.",
-			status: 500,
-		};
-	}
-}
 
 const agendaDocumentFormatter = new Intl.DateTimeFormat("en-GB", {
 	day: "numeric",
@@ -485,25 +484,14 @@ async function writeAgendaFile(data) {
 	);
 }
 
-export async function GET(request) {
-	const permissionCheck = await checkUserPermission(request, [
-		"admin",
-		"committee",
-	]);
-	if (!permissionCheck.authorized) {
-		return NextResponse.json(
-			{ error: permissionCheck.error },
-			{ status: permissionCheck.status },
-		);
-	}
-
+export const GET = withAuth({ roles: ["admin", "committee"] }, async (req, _ctx, user) => {
 	try {
 		const agendas = await readAgendaFile();
 		return NextResponse.json(agendas);
-	} catch (error) {
+	} catch (error: any) {
 		return NextResponse.json({ error: error.message }, { status: 500 });
 	}
-}
+})
 
 export async function PUT(request) {
 	const permissionCheck = await checkUserPermission(request, ["admin"]);
