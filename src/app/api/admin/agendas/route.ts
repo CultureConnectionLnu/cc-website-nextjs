@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import * as z from "zod";
 import { withAuth } from "@/lib/auth";
-import { DataStore, DataStoreError } from "@/lib/dataStore";
+import { DataStore } from "@/lib/dataStore";
 
-const AgendaTopic = z.object({
+export const AgendaTopic = z.object({
 	id: z.string(),
 	label: z.string(),
 	content: z.string(),
@@ -15,6 +15,7 @@ const AgendaTopic = z.object({
 		abstain: z.array(z.string()),
 	}),
 });
+export type AgendaTopic = z.infer<typeof AgendaTopic>;
 
 const AgendaSignatures = z.object({
 	secretarySigned: z.boolean(),
@@ -25,14 +26,15 @@ const AgendaSignatures = z.object({
 	minuteCheckerSignedAt: z.iso.datetime().or(z.string().max(0)),
 });
 
-const AgendaTopicCompletion = z.object({
-	id: z.string(),
-	userid: z.string(),
+export const AgendaTopicCompletion = z.object({
+	id: z.string().trim().min(1),
+	userid: z.string().trim().min(1),
 	topic: z.string(),
 	completed: z.boolean().nullable(),
 });
+export type AgendaTopicCompletion = z.infer<typeof AgendaTopicCompletion>;
 
-const Agenda = z.object({
+export const Agenda = z.object({
 	id: z.string(),
 	date: z.iso.date(),
 	title: z.string(),
@@ -55,16 +57,16 @@ const Agenda = z.object({
 	signatures: AgendaSignatures,
 	Topics: z.array(AgendaTopicCompletion),
 });
-type Agenda = z.infer<typeof Agenda>;
+export type Agenda = z.infer<typeof Agenda>;
 
-const Agendas = z.array(Agenda).refine(
+export const Agendas = z.array(Agenda).refine(
 	(agendas) => {
 		const dates = agendas.map((agenda) => agenda.date);
 		return new Set(dates).size === dates.length;
 	},
 	{ message: "Agendas cannot have duplicate dates" },
 );
-type Agendas = z.infer<typeof Agendas>;
+export type Agendas = z.infer<typeof Agendas>;
 
 const agendaFile = new DataStore("agendas.json", Agendas, []);
 
