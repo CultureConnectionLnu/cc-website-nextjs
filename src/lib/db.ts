@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import Database from "better-sqlite3";
+import Sqlite, { type Database } from "better-sqlite3";
 
 const dbPath = path.join(process.cwd(), "data", "achievements.db");
 
@@ -9,10 +9,10 @@ if (!fs.existsSync(dbDir)) {
 	fs.mkdirSync(dbDir, { recursive: true });
 }
 
-let db;
+let db: Database | null;
 
 try {
-	db = new Database(dbPath, {});
+	db = new Sqlite(dbPath, {});
 	db.pragma("journal_mode = WAL");
 	db.pragma("foreign_keys = ON");
 
@@ -84,11 +84,11 @@ try {
 
 process.on("exit", () => {
 	if (db?.open) {
-		db.close((err) => {
-			if (err) {
-				console.error("Error closing SQLite connection:", err.message);
-			}
-		});
+		try {
+			db.close();
+		} catch {
+			console.error("Error closing SQLite database on exit.");
+		}
 	}
 });
 process.on("SIGINT", () => process.exit());
