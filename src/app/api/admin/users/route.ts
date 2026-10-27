@@ -1,5 +1,5 @@
 import { clerkClient, getAuth, type User } from "@clerk/nextjs/server";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 import { type NoParams, Role, withAuth } from "@/lib/auth";
 import { DataStore } from "@/lib/dataStore";
@@ -116,100 +116,70 @@ export const GET = withAuth<NoParams>(
 	},
 );
 
-export async function PUT(request) {
-	const loggedInCheck = await verifyUserLoggedIn(request);
-	if (!loggedInCheck.authorized) {
-		return NextResponse.json(
-			{ error: loggedInCheck.error },
-			{ status: loggedInCheck.status },
-		);
-	}
+const PutRequestBody = z.object({
+	userId: z.string().trim().min(1),
+	metadataKey: z.enum(["admin", "member", "freezed", "committee"]),
+	metadataValue: z.boolean(),
+});
 
-	try {
-		const { userId, metadataKey, metadataValue } = await request.json();
+const UserMetadata = z.object({
+    admin: z.boolean().optional(),
+    member: z.boolean().optional(),
+    freezed: z.boolean().optional(),
+    committee: z.boolean().optional(),
+}).transform(data => {
+    if (data.admin === true) {
+        data.member = true;
+    }
+    return data;
+});
 
-		const validKeys = ["admin", "member", "freezed", "committee"];
-		if (
-			!userId ||
-			!validKeys.includes(metadataKey) ||
-			typeof metadataValue !== "boolean"
-		) {
-			console.error("API PUT /api/admin/users - Invalid request body:", {
+export const PUT = withAuth<NoParams>(
+	{ roles: "admin" },
+	async (req, _ctx, _user) => {
+		try {
+			const { userId, metadataKey, metadataValue } = PutRequestBody.parse(
+				await req.json(),
+			);
+
+			const clerk = await clerkClient()
+            const targetUser = await clerk.users.getUser(userId);
+			
+			const existingMetadata = targetUser.publicMetadata;
+			const finalMetadata = {
+				...existingMetadata,
+				[metadataKey]: metadataValue,
+			};
+
+			clerk.users.updateUserMetadata(userId, {
+				publicMetadata: finalMetadata,
+			});
+
+			if (metadataKey === "member" && metadataValue === true) {
+                await removeUserFromVerification(targetUser.id);
+			}
+
+			return NextResponse.json({
+				success: true,
 				userId,
 				metadataKey,
 				metadataValue,
 			});
-			return NextResponse.json(
-				{
-					error:
-						"Invalid input: Missing userId, invalid metadataKey, or metadataValue is not a boolean.",
-				},
-				{ status: 400 },
+        } catch (error: any) {
+            console.error(
+				"Error updating user metadata:",
+				error,
 			);
-		}
-
-		let existingMetadata = {};
-		try {
-			const user = await clerk.users.getUser(userId);
-			existingMetadata = user.publicMetadata || {};
-		} catch (fetchError) {
-			console.error(
-				`API PUT /api/admin/users - Failed to fetch user ${userId} before update:`,
-				fetchError,
-			);
+            if (error instanceof z.ZodError) {
+                return NextResponse.json({ error: "Invalid request body" })
+            }
 			return NextResponse.json(
-				{
-					error: `Failed to fetch user ${userId} to get existing metadata.`,
-				},
+				{ error: `Failed to update user status` },
 				{ status: 500 },
 			);
 		}
-
-		const finalMetadata = {
-			...existingMetadata,
-			[metadataKey]: metadataValue,
-		};
-
-		if (metadataKey === "admin" && metadataValue === true) {
-			finalMetadata.member = true;
-		}
-
-		await clerk.users.updateUserMetadata(userId, {
-			publicMetadata: finalMetadata,
-		});
-
-		if (metadataKey === "member" && metadataValue === true) {
-			removeUserFromVerification(userId).catch((err) => {
-				console.error(
-					`Unhandled error during removeUserFromVerification for ${userId}:`,
-					err,
-				);
-			});
-		}
-
-		return NextResponse.json({
-			success: true,
-			userId,
-			metadataKey,
-			metadataValue,
-		});
-	} catch (error) {
-		console.error(
-			"API PUT /api/admin/users - Error during user update or SDK init:",
-			error,
-		);
-		if (
-			error.message.includes("Clerk Secret Key missing") ||
-			error.message.includes("Failed to initialize Clerk SDK")
-		) {
-			return NextResponse.json({ error: error.message }, { status: 500 });
-		}
-		return NextResponse.json(
-			{ error: `Failed to update user status: ${error.message}` },
-			{ status: 500 },
-		);
-	}
-}
+	},
+);
 
 export async function POST(request) {
 	const loggedInCheck = await verifyUserLoggedIn(request);
