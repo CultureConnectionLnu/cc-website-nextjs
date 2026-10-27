@@ -6,6 +6,7 @@ import type z from "zod";
 export class DataStore<T> {
     store: string;
     schema: z.ZodType;
+    fallback: T | undefined;
 
     constructor(storePath: string, schema: z.ZodType<T>, fallback?: T) {
         this.store = path.join(
@@ -15,13 +16,22 @@ export class DataStore<T> {
             storePath,
         );
         this.schema = schema;
+        this.fallback = fallback;
         if (!fs.existsSync(this.store) && fallback !== undefined) {
             this.write(fallback)
         }
     }
 
     async read(): Promise<T> {
-        const fileContents = await fsp.readFile(this.store, "utf8");
+        let fileContents: string;
+        try {
+            fileContents = await fsp.readFile(this.store, "utf8");
+        } catch (error: any) {
+            if (error.code === "ENOENT" && this.fallback !== undefined) {
+                return this.fallback;
+            }
+            throw error;
+        }
         const parsed = JSON.parse(fileContents);
         const { success, data, error } = this.schema.safeParse(parsed);
         if (!success) {
