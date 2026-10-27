@@ -1,8 +1,8 @@
-import { clerkClient, getAuth, type User } from "@clerk/nextjs/server";
+import { clerkClient, type User } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 import { type NoParams, Role, withAuth } from "@/lib/auth";
-import { DataStore } from "@/lib/dataStore";
+import { DataStore, DataStoreError } from "@/lib/dataStore";
 
 const VerificationRequest = z.object({
 	userID: z.string().trim().min(1),
@@ -15,7 +15,7 @@ const VerificationRequests = z.array(VerificationRequest);
 type VerificationRequests = z.infer<typeof VerificationRequests>;
 
 const verificationFile = new DataStore<VerificationRequests>(
-	"MemberVerefication.json",
+	"MemberVerification.json",
 	VerificationRequests,
 	[],
 );
@@ -98,7 +98,8 @@ export const GET = withAuth<NoParams>(
 				};
 			});
 			return NextResponse.json(userData);
-		} catch (error) {
+		} catch (error: any) {
+			console.error("Error fetching verification records:", error);
 			return NextResponse.json(
 				{ error: "Failed to fetch verification records" },
 				{ status: 500 },
@@ -113,17 +114,19 @@ const PutRequestBody = z.object({
 	metadataValue: z.boolean(),
 });
 
-const UserMetadata = z.object({
-    admin: z.boolean().optional(),
-    member: z.boolean().optional(),
-    freezed: z.boolean().optional(),
-    committee: z.boolean().optional(),
-}).transform(data => {
-    if (data.admin === true) {
-        data.member = true;
-    }
-    return data;
-});
+const UserMetadata = z
+	.looseObject({
+		admin: z.boolean().optional(),
+		member: z.boolean().optional(),
+		freezed: z.boolean().optional(),
+		committee: z.boolean().optional(),
+	})
+	.transform((data) => {
+		if (data.admin === true) {
+			data.member = true;
+		}
+		return data;
+	});
 
 export const PUT = withAuth<NoParams>(
 	{ roles: "admin" },
@@ -133,21 +136,21 @@ export const PUT = withAuth<NoParams>(
 				await req.json(),
 			);
 
-			const clerk = await clerkClient()
-            const targetUser = await clerk.users.getUser(userId);
-			
+			const clerk = await clerkClient();
+			const targetUser = await clerk.users.getUser(userId);
+
 			const existingMetadata = targetUser.publicMetadata;
-			const finalMetadata = {
+			const finalMetadata = UserMetadata.parse({
 				...existingMetadata,
 				[metadataKey]: metadataValue,
-			};
+			});
 
-			clerk.users.updateUserMetadata(userId, {
+			await clerk.users.updateUserMetadata(userId, {
 				publicMetadata: finalMetadata,
 			});
 
 			if (metadataKey === "member" && metadataValue === true) {
-                await removeUserFromVerification(targetUser.id);
+				await removeUserFromVerification(targetUser.id);
 			}
 
 			return NextResponse.json({
@@ -156,14 +159,14 @@ export const PUT = withAuth<NoParams>(
 				metadataKey,
 				metadataValue,
 			});
-        } catch (error: any) {
-            console.error(
-				"Error updating user metadata:",
-				error,
-			);
-            if (error instanceof z.ZodError) {
-                return NextResponse.json({ error: "Invalid request body" })
-            }
+		} catch (error: any) {
+			console.error("Error updating user metadata:", error);
+			if (error instanceof z.ZodError) {
+				return NextResponse.json(
+					{ error: "Invalid request body" },
+					{ status: 400 },
+				);
+			}
 			return NextResponse.json(
 				{ error: `Failed to update user status` },
 				{ status: 500 },
@@ -173,82 +176,94 @@ export const PUT = withAuth<NoParams>(
 );
 
 const PostRequestBody = z.object({
-    action: z.enum(["removeAllMembers"])
-})
+	action: z.enum(["removeAllMembers"]),
+});
 
-export const POST = withAuth<NoParams>({ roles: "admin" }, async (req, _ctx, _user) => {
-    const { action } = PostRequestBody.parse(await req.json());
-
-	if (action === "removeAllMembers") {
-		let updatedCount = 0;
-		let errorCount = 0;
-		const errors = [];
-
-		try {
-			const clerk = await clerkClient();
-			const userListResponse = await clerk.users.getUserList({
-				limit: 500,
-			});
-			const users = userListResponse?.data;
-
-			for (const user of users) {
-				const existingMetadata = UserMetadata.safeParse(user.publicMetadata).data ?? {};
-				if (existingMetadata.member === true && !existingMetadata.admin) {
-					try {
-						const finalMetadata = UserMetadata.parse({
-							...existingMetadata,
-							member: false,
-						});
-						await clerk.users.updateUserMetadata(user.id, {
-							publicMetadata: finalMetadata,
-						});
-						updatedCount++;
-					} catch (updateError: any) {
-						errorCount++;
-						errors.push(
-							`Failed to update user ${user.id}: ${updateError.message || updateError}`,
-						);
-						console.error(
-							`API POST /api/admin/users - Failed to update user ${user.id} during bulk remove:`,
-							updateError,
-						);
-					}
-				}
-			}
-
-			return NextResponse.json({
-				success: true,
-				message: `Removed member status from ${updatedCount} non-admin user(s). Admins retain member status.`,
-				errors: errorCount > 0 ? errors : undefined,
-			});
-        } catch (error: any) {
-			console.error(
-				"API POST /api/admin/users - General error during 'removeAllMembers':",
-				error,
-            );
-            if (error instanceof z.ZodError) {
-                return NextResponse.json(
-        			{ error: "Invalid request body or missing action." },
-        			{ status: 400 },
-        		);
-			}
-			if (
-				error.message.includes("Clerk Secret Key missing") ||
-				error.message.includes("Failed to initialize Clerk SDK")
-			) {
-				return NextResponse.json({ error: error.message }, { status: 500 });
-			}
-			if (error.message.includes("Received invalid user list format")) {
-				return NextResponse.json({ error: error.message }, { status: 500 });
-			}
+export const POST = withAuth<NoParams>(
+	{ roles: "admin" },
+	async (req, _ctx, _user) => {
+		const { success, data: body } = PostRequestBody.safeParse(
+			await req.json().catch(() => null),
+		);
+		if (!success) {
 			return NextResponse.json(
-				{ error: `Failed to process bulk request: ${error.message}` },
-				{ status: 500 },
+				{ error: "Invalid request body or missing action." },
+				{ status: 400 },
 			);
 		}
+
+		if (body.action === "removeAllMembers") {
+			return await removeMembershipStatus();
+		}
+		return NextResponse.json(
+			{ error: `Action '${body.action}' not supported.` },
+			{ status: 400 },
+		);
+	},
+);
+
+async function removeMembershipStatus() {
+	let updatedCount = 0;
+	let errorCount = 0;
+	const errors = [];
+
+	try {
+		const clerk = await clerkClient();
+		const userListResponse = await clerk.users.getUserList({
+			limit: 500,
+		});
+		const users = userListResponse?.data;
+
+		for (const user of users) {
+			const existingMetadata =
+				UserMetadata.safeParse(user.publicMetadata).data ?? {};
+			if (existingMetadata.member === true && !existingMetadata.admin) {
+				try {
+					const finalMetadata = UserMetadata.parse({
+						...existingMetadata,
+						member: false,
+					});
+					await clerk.users.updateUserMetadata(user.id, {
+						publicMetadata: finalMetadata,
+					});
+					updatedCount++;
+				} catch (updateError: any) {
+					errorCount++;
+					errors.push(
+						`Failed to update user ${user.id}: ${updateError.message || updateError}`,
+					);
+					console.error(
+						`API POST /api/admin/users - Failed to update user ${user.id} during bulk remove:`,
+						updateError,
+					);
+				}
+			}
+		}
+
+		return NextResponse.json({
+			success: true,
+			message: `Removed member status from ${updatedCount} non-admin user(s). Admins retain member status.`,
+			errors: errorCount > 0 ? errors : undefined,
+		});
+	} catch (error: any) {
+		console.error(
+			"API POST /api/admin/users - General error during 'removeAllMembers':",
+			error,
+		);
+		if (
+			error.message.includes("Clerk Secret Key missing") ||
+			error.message.includes("Failed to initialize Clerk SDK")
+		) {
+			return NextResponse.json({ error: error.message }, { status: 500 });
+		}
+		if (error.message.includes("Received invalid user list format")) {
+			return NextResponse.json({ error: error.message }, { status: 500 });
+		}
+		return NextResponse.json(
+			{
+				error: `Failed to process bulk request: ${error.message}`,
+			},
+			{ status: 500 },
+		);
 	}
-	return NextResponse.json(
-		{ error: `Action '${action}' not supported.` },
-		{ status: 400 },
-	);
-})
+}

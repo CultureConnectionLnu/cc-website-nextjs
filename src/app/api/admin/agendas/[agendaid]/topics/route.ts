@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import * as z from "zod";
 import { withAuth } from "@/lib/auth";
 import { DataStore } from "@/lib/dataStore";
-import { Agenda, Agendas, AgendaTopicCompletion } from "@/types/admin/agendas";
+import {
+	type Agenda,
+	Agendas,
+	type AgendaTopicCompletion,
+} from "@/types/admin/agendas";
 
 const SubmittedTopic = z.object({ topic: z.string().trim().min(1) });
 
