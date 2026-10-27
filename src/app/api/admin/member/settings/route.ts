@@ -10,11 +10,10 @@ const settingsFilePath = path.join(
 	"public/data/BoardSettings.json",
 );
 
-const Settings = z
-	.object({
-		defaultCodention: z.string().trim().min(1).optional(),
-		codentionOrder: z.array(z.string().trim().min(1)).optional(),
-	});
+const Settings = z.object({
+	defaultCodention: z.string().trim().min(1).optional(),
+	codentionOrder: z.array(z.string().trim().min(1)).optional(),
+});
 
 type Settings = z.infer<typeof Settings>;
 
