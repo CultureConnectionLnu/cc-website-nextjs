@@ -1,24 +1,23 @@
 import { clerkClient, getAuth, type User } from "@clerk/nextjs/server";
-import fs from "fs/promises";
 import { type NextRequest, NextResponse } from "next/server";
-import path from "path";
 import * as z from "zod";
 import { type NoParams, Role, withAuth } from "@/lib/auth";
+import { DataStore } from "@/lib/dataStore";
 
-const VerificationRequests = z.array(
-	z.object({
-		userID: z.string().trim().min(1),
-		requestedAt: z.iso.datetime(),
-	}),
-);
+const VerificationRequest = z.object({
+	userID: z.string().trim().min(1),
+	requestedAt: z.iso.datetime(),
+});
 
+type VerificationRequest = z.infer<typeof VerificationRequest>;
+
+const VerificationRequests = z.array(VerificationRequest);
 type VerificationRequests = z.infer<typeof VerificationRequests>;
 
-const verificationFilePath = path.join(
-	process.cwd(),
-	"public",
-	"data",
+const verificationFile = new DataStore<VerificationRequests>(
 	"MemberVerefication.json",
+	VerificationRequests,
+	[],
 );
 
 async function fetchAllClerkUsers() {
@@ -44,17 +43,7 @@ async function fetchAllClerkUsers() {
 
 async function readVerificationData() {
 	try {
-		const fileContent = await fs.readFile(verificationFilePath, "utf-8");
-		const parsed = JSON.parse(fileContent);
-		const { success, data: verificationRequests } =
-			VerificationRequests.safeParse(parsed);
-		if (!success) {
-			console.error(
-				"Invalid data format in MemberVerefication.json:",
-				verificationRequests,
-			);
-		}
-		return success ? verificationRequests : [];
+		return await verificationFile.read();
 	} catch (error: any) {
 		console.error("Error reading or parsing MemberVerefication.json:", error);
 		return [];
@@ -69,11 +58,7 @@ async function removeUserFromVerification(userIdToRemove: string) {
 		);
 
 		if (newData.length !== currentData.length) {
-			await fs.writeFile(
-				verificationFilePath,
-				JSON.stringify(newData, null, 2),
-				"utf-8",
-			);
+			await verificationFile.write(newData);
 			console.log(
 				`Successfully removed user ${userIdToRemove} from MemberVerefication.json`,
 			);
@@ -92,71 +77,44 @@ async function removeUserFromVerification(userIdToRemove: string) {
 
 export const GET = withAuth<NoParams>(
 	{ roles: [Role.admin] },
-	async (req, _, user) => {
-		const users: User[] = [];
-		const verificationList: VerificationRequests = [];
+	async (_req, _ctx, _user) => {
 		try {
 			const users = await fetchAllClerkUsers();
 			const verificationList = await readVerificationData();
-		} catch {}
 
-		const pendingUserIds = new Set(
-			verificationList.map((entry) => entry.userID),
-		);
+			const pendingUserIds = new Set(
+				verificationList.map((entry) => entry.userID),
+			);
 
-		if (!Array.isArray(users)) {
-			throw new Error("Received invalid user list format from Clerk.");
+			const userData = users.map((user) => {
+				const isActuallyMember = user.publicMetadata?.member === true;
+				const isInVerificationFile = pendingUserIds.has(user.id);
+				const isPending = isInVerificationFile && !isActuallyMember;
+
+				return {
+					id: user.id,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					username: user.username,
+					email:
+						user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)
+							?.emailAddress || "No primary email",
+					isAdmin: user.publicMetadata?.admin === true,
+					isMember: isActuallyMember,
+					isCommittee: user.publicMetadata?.committee === true,
+					isFreezed: user.publicMetadata?.freezed === true,
+					isPending: isPending,
+				};
+			});
+			return NextResponse.json(userData);
+		} catch (error) {
+			return NextResponse.json(
+				{ error: "Failed to fetch verification records" },
+				{ status: 500 },
+			);
 		}
-
-		const userData = users.map((user) => {
-			const isActuallyMember = user.publicMetadata?.member === true;
-			const isInVerificationFile = pendingUserIds.has(user.id);
-			const isPending = isInVerificationFile && !isActuallyMember;
-
-			return {
-				id: user.id,
-				firstName: user.firstName,
-				lastName: user.lastName,
-				username: user.username,
-				email:
-					user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)
-						?.emailAddress || "No primary email",
-				isAdmin: user.publicMetadata?.admin === true,
-				isMember: isActuallyMember,
-				isCommittee: user.publicMetadata?.committee === true,
-				isFreezed: user.publicMetadata?.freezed === true,
-				isPending: isPending,
-			};
-		});
-
-		return NextResponse.json(userData);
 	},
 );
-
-export async function _GET(request: NextRequest) {
-	let clerk;
-	try {
-		clerk = initializeClerk();
-	} catch (error: any) {
-		console.error(
-			"API GET /api/admin/users - Error during user fetch, verification read, or SDK init:",
-			error,
-		);
-		if (
-			error.message.includes("Clerk Secret Key missing") ||
-			error.message.includes("Failed to initialize Clerk SDK")
-		) {
-			return NextResponse.json({ error: error.message }, { status: 500 });
-		}
-		if (error.message.includes("Received invalid user list format")) {
-			return NextResponse.json({ error: error.message }, { status: 500 });
-		}
-		return NextResponse.json(
-			{ error: `Failed to fetch users: ${error.message}` },
-			{ status: 500 },
-		);
-	}
-}
 
 export async function PUT(request) {
 	const loggedInCheck = await verifyUserLoggedIn(request);
@@ -167,9 +125,7 @@ export async function PUT(request) {
 		);
 	}
 
-	let clerk;
 	try {
-		clerk = initializeClerk();
 		const { userId, metadataKey, metadataValue } = await request.json();
 
 		const validKeys = ["admin", "member", "freezed", "committee"];
@@ -202,12 +158,17 @@ export async function PUT(request) {
 				fetchError,
 			);
 			return NextResponse.json(
-				{ error: `Failed to fetch user ${userId} to get existing metadata.` },
+				{
+					error: `Failed to fetch user ${userId} to get existing metadata.`,
+				},
 				{ status: 500 },
 			);
 		}
 
-		const finalMetadata = { ...existingMetadata, [metadataKey]: metadataValue };
+		const finalMetadata = {
+			...existingMetadata,
+			[metadataKey]: metadataValue,
+		};
 
 		if (metadataKey === "admin" && metadataValue === true) {
 			finalMetadata.member = true;
@@ -289,7 +250,9 @@ export async function POST(request) {
 
 	if (!isAdmin) {
 		return NextResponse.json(
-			{ error: "Unauthorized: Admin privileges required for this action." },
+			{
+				error: "Unauthorized: Admin privileges required for this action.",
+			},
 			{ status: 403 },
 		);
 	}
@@ -312,7 +275,9 @@ export async function POST(request) {
 
 		try {
 			const clerk = clerkForAdminCheck || initializeClerk();
-			const userListResponse = await clerk.users.getUserList({ limit: 500 });
+			const userListResponse = await clerk.users.getUserList({
+				limit: 500,
+			});
 			const users = userListResponse?.data;
 
 			if (!Array.isArray(users)) {
@@ -325,7 +290,10 @@ export async function POST(request) {
 				const existingMetadata = user.publicMetadata || {};
 				if (existingMetadata.member === true && !existingMetadata.admin) {
 					try {
-						const finalMetadata = { ...existingMetadata, member: false };
+						const finalMetadata = {
+							...existingMetadata,
+							member: false,
+						};
 						await clerk.users.updateUserMetadata(user.id, {
 							publicMetadata: finalMetadata,
 						});
