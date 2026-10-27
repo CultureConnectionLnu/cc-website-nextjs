@@ -1,47 +1,18 @@
-// app/api/admin/users/route.js
-
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth, type User } from "@clerk/nextjs/server";
 import fs from "fs/promises";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import path from "path";
+import * as z from "zod";
+import { type NoParams, Role, withAuth } from "@/lib/auth";
 
-const initializeClerk = () => {
-	const secretKey = process.env.CLERK_SECRET_KEY;
-	if (!secretKey) {
-		console.error("Clerk Secret Key is missing from environment variables!");
-		throw new Error("Server configuration error: Clerk Secret Key missing.");
-	}
-	try {
-		return createClerkClient({ secretKey });
-	} catch (error) {
-		console.error("Failed to initialize Clerk SDK:", error);
-		throw new Error("Failed to initialize Clerk SDK.");
-	}
-};
+const VerificationRequests = z.array(
+	z.object({
+		userID: z.string().trim().min(1),
+		requestedAt: z.iso.datetime(),
+	}),
+);
 
-async function verifyUserLoggedIn(request) {
-	let authResult;
-	try {
-		authResult = getAuth(request);
-		if (!authResult?.userId) {
-			console.error("verifyUserLoggedIn: Failed to get userId from getAuth.");
-			return {
-				authorized: false,
-				error: "Authentication context missing or invalid session.",
-				status: 401,
-			};
-		}
-		return { authorized: true, userId: authResult.userId };
-	} catch (error) {
-		console.error("verifyUserLoggedIn: Error calling getAuth:", error);
-		return {
-			authorized: false,
-			error: "Failed to get authentication context due to server error.",
-			status: 500,
-		};
-	}
-}
+type VerificationRequests = z.infer<typeof VerificationRequests>;
 
 const verificationFilePath = path.join(
 	process.cwd(),
@@ -50,13 +21,13 @@ const verificationFilePath = path.join(
 	"MemberVerefication.json",
 );
 
-async function fetchAllClerkUsers(clerk) {
+async function fetchAllClerkUsers() {
 	const pageSize = 500;
 	let offset = 0;
-	let allUsers = [];
+	let allUsers: User[] = [];
 
 	while (true) {
-		const response = await clerk.users.getUserList({
+		const response = await (await clerkClient()).users.getUserList({
 			limit: pageSize,
 			offset,
 		});
@@ -74,30 +45,23 @@ async function fetchAllClerkUsers(clerk) {
 async function readVerificationData() {
 	try {
 		const fileContent = await fs.readFile(verificationFilePath, "utf-8");
-		const data = JSON.parse(fileContent);
-		if (
-			Array.isArray(data) &&
-			data.every(
-				(item) => typeof item === "object" && item !== null && "userID" in item,
-			)
-		) {
-			return data;
+		const parsed = JSON.parse(fileContent);
+		const { success, data: verificationRequests } =
+			VerificationRequests.safeParse(parsed);
+		if (!success) {
+			console.error(
+				"Invalid data format in MemberVerefication.json:",
+				verificationRequests,
+			);
 		}
-		console.warn(
-			"MemberVerefication.json format is invalid. Returning empty array.",
-		);
-		return [];
-	} catch (error) {
-		if (error.code === "ENOENT") {
-			console.log("MemberVerefication.json not found, returning empty list.");
-			return [];
-		}
+		return success ? verificationRequests : [];
+	} catch (error: any) {
 		console.error("Error reading or parsing MemberVerefication.json:", error);
 		return [];
 	}
 }
 
-async function removeUserFromVerification(userIdToRemove) {
+async function removeUserFromVerification(userIdToRemove: string) {
 	try {
 		const currentData = await readVerificationData();
 		const newData = currentData.filter(
@@ -126,23 +90,15 @@ async function removeUserFromVerification(userIdToRemove) {
 	}
 }
 
-export async function GET(request) {
-	const loggedInCheck = await verifyUserLoggedIn(request);
-	if (!loggedInCheck.authorized) {
-		return NextResponse.json(
-			{ error: loggedInCheck.error },
-			{ status: loggedInCheck.status },
-		);
-	}
-
-	let clerk;
-	try {
-		clerk = initializeClerk();
-
-		const [users, verificationList] = await Promise.all([
-			fetchAllClerkUsers(clerk),
-			readVerificationData(),
-		]);
+export const GET = withAuth<NoParams>(
+	{ roles: [Role.admin] },
+	async (req, _, user) => {
+		const users: User[] = [];
+		const verificationList: VerificationRequests = [];
+		try {
+			const users = await fetchAllClerkUsers();
+			const verificationList = await readVerificationData();
+		} catch {}
 
 		const pendingUserIds = new Set(
 			verificationList.map((entry) => entry.userID),
@@ -174,7 +130,14 @@ export async function GET(request) {
 		});
 
 		return NextResponse.json(userData);
-	} catch (error) {
+	},
+);
+
+export async function _GET(request: NextRequest) {
+	let clerk;
+	try {
+		clerk = initializeClerk();
+	} catch (error: any) {
 		console.error(
 			"API GET /api/admin/users - Error during user fetch, verification read, or SDK init:",
 			error,
