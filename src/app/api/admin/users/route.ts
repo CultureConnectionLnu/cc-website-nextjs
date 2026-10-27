@@ -41,18 +41,9 @@ async function fetchAllClerkUsers() {
 	return allUsers;
 }
 
-async function readVerificationData() {
-	try {
-		return await verificationFile.read();
-	} catch (error: any) {
-		console.error("Error reading or parsing MemberVerefication.json:", error);
-		return [];
-	}
-}
-
 async function removeUserFromVerification(userIdToRemove: string) {
 	try {
-		const currentData = await readVerificationData();
+		const currentData = await verificationFile.read();
 		const newData = currentData.filter(
 			(entry) => entry.userID !== userIdToRemove,
 		);
@@ -80,7 +71,7 @@ export const GET = withAuth<NoParams>(
 	async (_req, _ctx, _user) => {
 		try {
 			const users = await fetchAllClerkUsers();
-			const verificationList = await readVerificationData();
+			const verificationList = await verificationFile.read();
 
 			const pendingUserIds = new Set(
 				verificationList.map((entry) => entry.userID),
@@ -181,62 +172,12 @@ export const PUT = withAuth<NoParams>(
 	},
 );
 
-export async function POST(request) {
-	const loggedInCheck = await verifyUserLoggedIn(request);
-	if (!loggedInCheck.authorized) {
-		return NextResponse.json(
-			{ error: loggedInCheck.error },
-			{ status: loggedInCheck.status },
-		);
-	}
+const PostRequestBody = z.object({
+    action: z.enum(["removeAllMembers"])
+})
 
-	let isAdmin = false;
-	let clerkForAdminCheck;
-	try {
-		clerkForAdminCheck = initializeClerk();
-		const requestingUser = await clerkForAdminCheck.users.getUser(
-			loggedInCheck.userId,
-		);
-		isAdmin = requestingUser?.publicMetadata?.admin === true;
-	} catch (adminCheckError) {
-		console.error(
-			"API POST /api/admin/users - Error checking admin status for requesting user:",
-			adminCheckError,
-		);
-		if (
-			adminCheckError.message.includes("Clerk Secret Key missing") ||
-			adminCheckError.message.includes("Failed to initialize Clerk SDK")
-		) {
-			return NextResponse.json(
-				{ error: adminCheckError.message },
-				{ status: 500 },
-			);
-		}
-		return NextResponse.json(
-			{ error: "Failed to verify admin privileges." },
-			{ status: 500 },
-		);
-	}
-
-	if (!isAdmin) {
-		return NextResponse.json(
-			{
-				error: "Unauthorized: Admin privileges required for this action.",
-			},
-			{ status: 403 },
-		);
-	}
-
-	let action;
-	try {
-		const body = await request.json();
-		action = body?.action;
-	} catch (e) {
-		return NextResponse.json(
-			{ error: "Invalid request body or missing action." },
-			{ status: 400 },
-		);
-	}
+export const POST = withAuth<NoParams>({ roles: "admin" }, async (req, _ctx, _user) => {
+    const { action } = PostRequestBody.parse(await req.json());
 
 	if (action === "removeAllMembers") {
 		let updatedCount = 0;
@@ -244,31 +185,25 @@ export async function POST(request) {
 		const errors = [];
 
 		try {
-			const clerk = clerkForAdminCheck || initializeClerk();
+			const clerk = await clerkClient();
 			const userListResponse = await clerk.users.getUserList({
 				limit: 500,
 			});
 			const users = userListResponse?.data;
 
-			if (!Array.isArray(users)) {
-				throw new Error(
-					"Received invalid user list format from server during bulk action.",
-				);
-			}
-
 			for (const user of users) {
-				const existingMetadata = user.publicMetadata || {};
+				const existingMetadata = UserMetadata.safeParse(user.publicMetadata).data ?? {};
 				if (existingMetadata.member === true && !existingMetadata.admin) {
 					try {
-						const finalMetadata = {
+						const finalMetadata = UserMetadata.parse({
 							...existingMetadata,
 							member: false,
-						};
+						});
 						await clerk.users.updateUserMetadata(user.id, {
 							publicMetadata: finalMetadata,
 						});
 						updatedCount++;
-					} catch (updateError) {
+					} catch (updateError: any) {
 						errorCount++;
 						errors.push(
 							`Failed to update user ${user.id}: ${updateError.message || updateError}`,
@@ -286,11 +221,17 @@ export async function POST(request) {
 				message: `Removed member status from ${updatedCount} non-admin user(s). Admins retain member status.`,
 				errors: errorCount > 0 ? errors : undefined,
 			});
-		} catch (error) {
+        } catch (error: any) {
 			console.error(
 				"API POST /api/admin/users - General error during 'removeAllMembers':",
 				error,
-			);
+            );
+            if (error instanceof z.ZodError) {
+                return NextResponse.json(
+        			{ error: "Invalid request body or missing action." },
+        			{ status: 400 },
+        		);
+			}
 			if (
 				error.message.includes("Clerk Secret Key missing") ||
 				error.message.includes("Failed to initialize Clerk SDK")
@@ -310,4 +251,4 @@ export async function POST(request) {
 		{ error: `Action '${action}' not supported.` },
 		{ status: 400 },
 	);
-}
+})
