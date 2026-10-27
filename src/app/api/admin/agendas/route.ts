@@ -1,6 +1,5 @@
 import { withAuth } from "@/lib/auth";
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { DataStore } from "@/lib/dataStore";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
@@ -22,17 +21,17 @@ const AgendaTopic = z.object({
 const AgendaSignatures = z.object({
     secretarySigned: z.boolean(),
     secretarySignedBy: z.string(),
-    secretarySignedAt: z.iso.datetime(),
+    secretarySignedAt: z.iso.datetime().or(z.string().max(0)),
     minuteCheckerSigned: z.boolean(),
     minuteCheckerSignedBy: z.string(),
-    minuteCheckerSignedAt: z.iso.datetime(),
+    minuteCheckerSignedAt: z.iso.datetime().or(z.string().max(0)),
 })
 
 const AgendaTopicCompletion = z.object({
     id: z.string(),
     userid: z.string(),
     topic: z.string(),
-    completed: z.boolean(),
+    completed: z.boolean().catch(false),
 })
 
 const Agenda = z.looseObject({
@@ -48,7 +47,7 @@ const Agenda = z.looseObject({
     meetingInitiation: z.string(),
     boardMembersMeetUp: z.string(),
     meetingStartTime: z.iso.time(),
-    meetingEndTime: z.iso.time(),
+    meetingEndTime: z.iso.time().or(z.string().max(0)),
     topics: z.array(AgendaTopic),
     meetingConcludes: z.string(),
     nextMeetingDate: z.string(),
@@ -60,91 +59,28 @@ const Agenda = z.looseObject({
 })
 type Agenda = z.infer<typeof Agenda>;
 
-const Agendas = z.array(Agenda);
+const Agendas = z.array(Agenda).refine((agendas) => {
+    const dates = agendas.map(agenda => agenda.date)
+    return new Set(dates).size === dates.length
+}, { message: "Agendas cannot have duplicate dates" });
 type Agendas = z.infer<typeof Agendas>;
 
-
-const agendaFilePath = path.join(
-	process.cwd(),
-	"public",
-	"data",
-	"agendas.json",
-);
-
-const agendaDocumentFormatter = new Intl.DateTimeFormat("en-GB", {
-	day: "numeric",
-	month: "long",
-	year: "numeric",
-});
-
-const formatAgendaDate = (dateValue: string) => {
-	if (!dateValue) {
-		return "Day Month, Year";
-	}
-
-	const parsedDate = new Date(`${dateValue}T12:00:00`);
-	if (Number.isNaN(parsedDate.getTime())) {
-		return "Day Month, Year";
-	}
-
-	return agendaDocumentFormatter.format(parsedDate);
-};
-
-const formatAgendaTitle = (dateValue: string) =>
-	`Agenda ${formatAgendaDate(dateValue)}`;
-
-const DEFAULT_AGENDA_LABELS = {
-	meetingInitiation: "Meeting initiation",
-	boardMembersMeetUp: "Board members meet up",
-	meetingConcludes: "Meeting concludes",
-	nextMeetingDate: "Next date for meeting",
-	topicsForNextMeeting: "Topics for next meeting",
-};
-
-async function readAgendaFile(): Promise<Agenda[] | NextResponse> {
-	try {
-		const fileContents = await fs.readFile(agendaFilePath, "utf8");
-        const parsed = JSON.parse(fileContents);
-        const { success, data, error } = Agendas.safeParse(parsed);
-        if (!success) {
-            console.error("Invalid agenda data format:", error);
-            throw new Error("Invalid data format in agendas file.");
-        }
-        return data as Agendas;
-	} catch (error: any) {
-		if (error.code === "ENOENT") {
-			return [];
-		}
-
-		console.error("Error reading agendas file:", error);
-        return NextResponse.json(
-            { error: "Could not read agendas file" },
-            { status: 500 });
-    }
-	return []
-}
-
-async function writeAgendaFile(agenda: Agendas) {
-	await fs.writeFile(
-		agendaFilePath,
-		JSON.stringify(agenda, null, 2),
-		"utf8",
-	);
-}
+const agendaFile = new DataStore("agendas.json", Agendas);
 
 export const GET = withAuth({ roles: ["admin", "committee"] }, async (req, _ctx, user) => {
 	try {
-		const agendas = await readAgendaFile();
+		const agendas = await agendaFile.read();
 		return NextResponse.json(agendas);
 	} catch (error: any) {
 		return NextResponse.json({ error: error.message }, { status: 500 });
 	}
 })
 
-export const PUT = withAuth({ roles: ["admin", "committee"] }, async (req, _ctx, user) => {
+export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, user) => {
 	try {
-		const updatedAgendas = await req.json();
-		await writeAgendaFile(updatedAgendas);
+        const recieved = await req.json();
+        const updatedAgendas = Agendas.parse(recieved);
+		await agendaFile.write(updatedAgendas);
 		return NextResponse.json(updatedAgendas);
 	} catch (error: any) {
 		const status = error.message.startsWith("Invalid data format") ? 400 : 500;
