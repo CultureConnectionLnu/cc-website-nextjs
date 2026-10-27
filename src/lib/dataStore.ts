@@ -1,5 +1,4 @@
-import { promises as fsp } from "node:fs";
-import fs from "node:fs";
+import fs, { promises as fsp } from "node:fs";
 import path from "node:path";
 import type z from "zod";
 
@@ -37,14 +36,14 @@ export class DataStore<T> {
 	}
 
 	async write(contents: T) {
-		const { success, error } = this.schema.safeParse(contents);
+		const { success, data, error } = this.schema.safeParse(contents);
 		if (!success) {
 			console.error("Invalid data format:", error);
 			throw new DataStoreError("Invalid data format for store file.");
 		}
 		// write to a temporary file and rename since rename is atomic
-		const tempPath = this.store + ".tmp";
-		await fsp.writeFile(tempPath, JSON.stringify(contents, null, 2), "utf-8");
+		const tempPath = `${this.store}.${crypto.randomUUID()}.tmp`;
+		await fsp.writeFile(tempPath, JSON.stringify(data, null, 2), "utf-8");
 		await fsp.rename(tempPath, this.store);
 	}
 }
@@ -52,5 +51,6 @@ export class DataStore<T> {
 export class DataStoreError extends Error {
 	constructor(message: string) {
 		super(message);
+		this.name = "DataStoreError";
 	}
 }

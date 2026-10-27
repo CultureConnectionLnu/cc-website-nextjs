@@ -1,7 +1,7 @@
-import { withAuth } from "@/lib/auth";
-import { DataStore, DataStoreError } from "@/lib/dataStore";
 import { NextResponse } from "next/server";
 import * as z from "zod";
+import { withAuth } from "@/lib/auth";
+import { DataStore, DataStoreError } from "@/lib/dataStore";
 
 const AgendaTopic = z.object({
 	id: z.string(),
@@ -44,14 +44,14 @@ const Agenda = z.object({
 	minuteChecker: z.string(),
 	meetingInitiation: z.string(),
 	boardMembersMeetUp: z.string(),
-	meetingStartTime: z.iso.time(),
+	meetingStartTime: z.iso.time().or(z.string().max(0)),
 	meetingEndTime: z.iso.time().or(z.string().max(0)),
 	topics: z.array(AgendaTopic),
 	meetingConcludes: z.string(),
 	nextMeetingDate: z.string(),
 	topicsForNextMeeting: z.string(),
 	isCompleted: z.boolean(),
-	completedAt: z.string(),
+	completedAt: z.iso.datetime().or(z.string().max(0)),
 	signatures: AgendaSignatures,
 	Topics: z.array(AgendaTopicCompletion),
 });
@@ -66,7 +66,7 @@ const Agendas = z.array(Agenda).refine(
 );
 type Agendas = z.infer<typeof Agendas>;
 
-const agendaFile = new DataStore("agendas.json", Agendas);
+const agendaFile = new DataStore("agendas.json", Agendas, []);
 
 export const GET = withAuth(
 	{ roles: ["admin", "committee"] },
@@ -80,7 +80,7 @@ export const GET = withAuth(
 	},
 );
 
-export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, user) => {
+export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => {
 	try {
 		const recieved = await req.json();
 		const updatedAgendas = Agendas.parse(recieved);
