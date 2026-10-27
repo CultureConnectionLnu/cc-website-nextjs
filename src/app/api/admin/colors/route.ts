@@ -4,13 +4,6 @@ import { NextResponse } from "next/server";
 import path from "path";
 import z from "zod";
 
-const colorsFilePath = path.join(
-	process.cwd(),
-	"public",
-	"data",
-	"colors.json",
-);
-
 const Color = z.object({
     colorName: z.string().trim().min(0),
     isFavorite: z.boolean(),
