@@ -1,25 +1,31 @@
-import { withAuth } from "@/lib/auth";
-import { DataStore } from "@/lib/dataStore";
 import { NextResponse } from "next/server";
 import z from "zod";
+import { withAuth } from "@/lib/auth";
+import { DataStore } from "@/lib/dataStore";
 
 const BoardMember = z.object({
-    id: z.string().trim().min(1).catch(() => `m${crypto.randomUUID()}`),
-    name: z.string().trim().min(1),
-    codention: z.string().trim().min(1),
-    position: z.string().trim().min(1),
-    contact: z.string().optional().default(""),
-    imageUrl: z.httpUrl().optional().default(""),
-    bio: z.string().optional().default(""),
-})
-type BoardMember = z.infer<typeof BoardMember>
+	id: z
+		.string()
+		.trim()
+		.min(1)
+		.catch(() => `m${crypto.randomUUID()}`),
+	name: z.string().trim().min(1),
+	codention: z.string().trim().min(1),
+	position: z.string().trim().min(1),
+	contact: z.string().optional().default(""),
+	imageUrl: z.httpUrl().optional().default(""),
+	bio: z.string().optional().default(""),
+});
+type BoardMember = z.infer<typeof BoardMember>;
 
-const BoardMembers = z.array(BoardMember)
+const BoardMembers = z.array(BoardMember);
 
 const membersFile = new DataStore("BoardMembers.json", BoardMembers, []);
 
-
-function applyPartialMemberOrder(members: BoardMember[], orderedIds: string[]): BoardMember[] {
+function applyPartialMemberOrder(
+	members: BoardMember[],
+	orderedIds: string[],
+): BoardMember[] {
 	if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
 		throw new Error("orderedIds must be a non-empty array.");
 	}
@@ -45,10 +51,12 @@ function applyPartialMemberOrder(members: BoardMember[], orderedIds: string[]): 
 		}
 
 		const nextMember = orderedMembers[reorderedIndex];
-        if (nextMember === undefined) {
-            throw new Error(`No member found for ordered ID at index ${reorderedIndex}.`);
+		if (nextMember === undefined) {
+			throw new Error(
+				`No member found for ordered ID at index ${reorderedIndex}.`,
+			);
 		}
-        reorderedIndex += 1;
+		reorderedIndex += 1;
 		return nextMember;
 	});
 }
@@ -65,42 +73,43 @@ export async function GET() {
 	}
 }
 
-export const POST = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => 
- {
-    try {
-        const newMember = BoardMember.parse(await req.json());
+export const POST = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => {
+	try {
+		const newMember = BoardMember.parse(await req.json());
 
-        const members = await membersFile.read();
-        members.push(newMember);
-        await membersFile.write(members);
+		const members = await membersFile.read();
+		members.push(newMember);
+		await membersFile.write(members);
 
-        return NextResponse.json(newMember, { status: 201 });
-    } catch (error: any) {
-        console.error("Error in POST /api/admin/member:", error);
-        if (error instanceof z.ZodError) {
-            return NextResponse.json(
-                { error: "Invalid request body" }, { status: 400 }
-            )
-        }
+		return NextResponse.json(newMember, { status: 201 });
+	} catch (error: any) {
+		console.error("Error in POST /api/admin/member:", error);
+		if (error instanceof z.ZodError) {
+			return NextResponse.json(
+				{ error: "Invalid request body" },
+				{ status: 400 },
+			);
+		}
 		return NextResponse.json(
 			{ error: error.message || "Failed to create member" },
 			{ status: 500 },
 		);
 	}
-})
+});
 
-export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => 
- {
-    try {
-        const { success, data: updatedMemberData } = BoardMember.safeParse(await req.json());
+export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => {
+	try {
+		const { success, data: updatedMemberData } = BoardMember.safeParse(
+			await req.json(),
+		);
 
-        if (!success) {
-            return NextResponse.json(
-                { error: "Invalid request body" },
-                { status: 400 },
-            );
-        }
-        
+		if (!success) {
+			return NextResponse.json(
+				{ error: "Invalid request body" },
+				{ status: 400 },
+			);
+		}
+
 		const members = await membersFile.read();
 		const memberIndex = members.findIndex((m) => m.id === updatedMemberData.id);
 
@@ -126,70 +135,74 @@ export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) =>
 			{ status: 500 },
 		);
 	}
-})
+});
 
-export const DELETE = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => 
- {
-    try {
-		const { searchParams } = req.nextUrl;
-		const memberId = searchParams.get("id");
+export const DELETE = withAuth(
+	{ roles: ["admin"] },
+	async (req, _ctx, _user) => {
+		try {
+			const { searchParams } = req.nextUrl;
+			const memberId = searchParams.get("id");
 
-		if (!memberId) {
+			if (!memberId) {
+				return NextResponse.json(
+					{ error: "Member ID is required." },
+					{ status: 400 },
+				);
+			}
+
+			const members = await membersFile.read();
+			const initialLength = members.length;
+			const filteredMembers = members.filter((m) => m.id !== memberId);
+
+			if (filteredMembers.length === initialLength) {
+				return NextResponse.json(
+					{ error: `Member with ID ${memberId} not found.` },
+					{ status: 404 },
+				);
+			}
+
+			await membersFile.write(filteredMembers);
+
+			return NextResponse.json({
+				message: `Member ${memberId} deleted successfully.`,
+			});
+		} catch (error: any) {
+			console.error("Error in DELETE /api/admin/member:", error);
 			return NextResponse.json(
-				{ error: "Member ID is required." },
-				{ status: 400 },
+				{ error: error.message || "Failed to delete member" },
+				{ status: 500 },
 			);
 		}
+	},
+);
+export const PATCH = withAuth(
+	{ roles: ["admin"] },
+	async (req, _ctx, _user) => {
+		try {
+			const body = await req.json();
+			const orderedIds = body?.orderedIds;
 
-		const members = await membersFile.read();
-		const initialLength = members.length;
-		const filteredMembers = members.filter((m) => m.id !== memberId);
+			const members = await membersFile.read();
+			const reorderedMembers = applyPartialMemberOrder(members, orderedIds);
 
-		if (filteredMembers.length === initialLength) {
+			await membersFile.write(reorderedMembers);
+
+			return NextResponse.json(reorderedMembers);
+		} catch (error: any) {
+			console.error("Error in PATCH /api/admin/member:", error);
+
+			const status =
+				error.message === "orderedIds must be a non-empty array." ||
+				error.message === "orderedIds cannot contain duplicates." ||
+				error.message?.includes("not found")
+					? 400
+					: 500;
+
 			return NextResponse.json(
-				{ error: `Member with ID ${memberId} not found.` },
-				{ status: 404 },
+				{ error: error.message || "Failed to reorder members" },
+				{ status },
 			);
 		}
-
-		await membersFile.write(filteredMembers);
-
-		return NextResponse.json({
-			message: `Member ${memberId} deleted successfully.`,
-		});
-	} catch (error: any) {
-		console.error("Error in DELETE /api/admin/member:", error);
-		return NextResponse.json(
-			{ error: error.message || "Failed to delete member" },
-			{ status: 500 },
-		);
-	}
-})
-export const PATCH = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => 
- {
-	try {
-		const body = await req.json();
-		const orderedIds = body?.orderedIds;
-
-		const members = await membersFile.read();
-		const reorderedMembers = applyPartialMemberOrder(members, orderedIds);
-
-		await membersFile.write(reorderedMembers);
-
-		return NextResponse.json(reorderedMembers);
-	} catch (error: any) {
-		console.error("Error in PATCH /api/admin/member:", error);
-
-		const status =
-			error.message === "orderedIds must be a non-empty array." ||
-			error.message === "orderedIds cannot contain duplicates." ||
-			error.message?.includes("not found")
-				? 400
-				: 500;
-
-		return NextResponse.json(
-			{ error: error.message || "Failed to reorder members" },
-			{ status },
-		);
-	}
-})
+	},
+);
