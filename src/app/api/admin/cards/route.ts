@@ -17,7 +17,7 @@ const Card = z.object({
 	location: z.string().trim().min(1),
 	bgColor: z.string().trim().min(1).optional(),
 	imageUrl: z.httpUrl().optional(),
-	url: z.httpUrl().optional(),
+	url: z.httpUrl().optional().catch(""),
 	inDescription: z.array(Description),
 });
 

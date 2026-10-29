@@ -13,7 +13,7 @@ const BoardMember = z.object({
 	codention: z.string().trim().min(1),
 	position: z.string().trim().min(1),
 	contact: z.string().optional().default(""),
-	imageUrl: z.httpUrl().optional().default(""),
+	imageUrl: z.httpUrl().optional().catch(""),
 	bio: z.string().optional().default(""),
 });
 type BoardMember = z.infer<typeof BoardMember>;
