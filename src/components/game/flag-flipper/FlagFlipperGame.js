@@ -548,10 +548,11 @@ export function FlagFlipperGame({ onGameEnd, gameMode = "classic" }) {
 								className="group relative flex h-full w-full flex-col items-center justify-center rounded-xl bg-slate-700 p-4 shadow-lg transition-all duration-150 hover:bg-sky-600 hover:scale-[1.02] hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-sky-500 disabled:cursor-not-allowed disabled:opacity-60 overflow-hidden"
 							>
 								<div className="relative w-full h-full flex items-center justify-center">
-									<Image
+									<img
 										src={option.imageUrl}
 										alt={`Flag Option ${index + 1}`}
 										className="max-h-full max-w-full object-contain shadow-sm pointer-events-none"
+										draggable={false}
 									/>
 								</div>
 							</button>
