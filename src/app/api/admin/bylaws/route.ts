@@ -13,7 +13,7 @@ const Bylaws = z.array(Bylaw);
 
 const bylawsFile = new DataStore("bylaws.json", Bylaws, []);
 
-export const GET = withAuth({ roles: ["admin"] }, async (_req, _ctx, _user) => {
+export const GET = withAuth({ roles: ["admin", "committee"] }, async (_req, _ctx, _user) => {
 	try {
 		const bylaws = await bylawsFile.read();
 		return NextResponse.json(bylaws);

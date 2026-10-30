@@ -1,49 +1,25 @@
-import fs from "fs/promises";
 import { NextResponse } from "next/server";
-import path from "path";
-import { type NoParams, Role, withAuth } from "@/lib/auth";
+import { type NoParams, withAuth } from "@/lib/auth";
+import { DataStore } from "@/lib/dataStore";
+import z from "zod";
 
-const dataFilePath = path.join(process.cwd(), "public/data/linktree.json");
+const Link = z.object({
+    color: z.string().trim().min(1),
+    text: z.string().trim().min(1),
+    link: z.string().trim().min(1),
+    textColor: z.string().trim().min(1),
+    isEnabled: z.boolean(),
+})
 
-type Link = {
-	color: string;
-	text: string;
-	link: string;
-	textColor: string;
-	isEnabled: boolean;
-};
+const Linktree = z.array(Link)
 
-async function readLinks(): Promise<Link[]> {
-	try {
-		const jsonData = await fs.readFile(dataFilePath, "utf-8");
-		return JSON.parse(jsonData);
-	} catch (error: any) {
-		if (error.code === "ENOENT") {
-			return [];
-		}
-		console.error("Error reading linktree file:", error);
-		throw new Error("Could not read linktree data.");
-	}
-}
-
-async function writeLinks(links: Link[]) {
-	try {
-		if (!Array.isArray(links)) {
-			throw new Error("Invalid data format: Expected an array of links.");
-		}
-		const jsonData = JSON.stringify(links, null, 2);
-		await fs.writeFile(dataFilePath, jsonData, "utf-8");
-	} catch (error: any) {
-		console.error("Error writing linktree file:", error);
-		throw new Error(`Could not save linktree data: ${error.message}`);
-	}
-}
+const linktreeFile = new DataStore("linktree.json", Linktree, [])
 
 export const GET = withAuth<NoParams>(
-	{ roles: [Role.admin] },
-	async (req, _ctx, _user) => {
+	{ roles: ["admin", "committee"] },
+	async (_req, _ctx, _user) => {
 		try {
-			const links = await readLinks();
+			const links = await linktreeFile.read();
 			return NextResponse.json(links);
 		} catch (error) {
 			return NextResponse.json(
@@ -55,19 +31,23 @@ export const GET = withAuth<NoParams>(
 );
 
 export const PUT = withAuth<NoParams>(
-	{ roles: [Role.admin] },
+	{ roles: ["admin"] },
 	async (req, _ctx, _user) => {
 		try {
-			const newLinksData = await req.json();
-			await writeLinks(newLinksData);
+			const newLinksData = Linktree.parse(await req.json());
+			await linktreeFile.write(newLinksData);
 			return NextResponse.json(newLinksData);
-		} catch (error: any) {
-			const status = error.message.startsWith("Invalid data format")
-				? 400
-				: 500;
+        } catch (error: any) {
+            console.error("Error updating links:", error);
+    		if (error instanceof z.ZodError) {
+    			return NextResponse.json(
+    				{ error: "Invalid request body" },
+    				{ status: 400 },
+    			);
+    		}
 			return NextResponse.json(
-				{ error: error.message || "Failed to update links" },
-				{ status: status },
+				{ error: "Failed to update links" },
+				{ status: 500 },
 			);
 		}
 	},
