@@ -10,13 +10,14 @@ const Description = z.object({
 });
 
 const Card = z.object({
-	id: z.int().min(0),
+	id: z.int().optional(),
 	title: z.string().trim().min(1),
 	date: z.string().trim().min(1),
 	time: z.string().trim().min(1),
 	location: z.string().trim().min(1),
-	bgColor: z.string().trim().min(1).optional(),
-	imageUrl: z.httpUrl().optional(),
+	bgColor: z.string().trim().min(1).optional().default("bg-gray-200"),
+	description: z.string().optional().default(""),
+	imageUrl: z.httpUrl().optional().catch(""),
 	url: z.httpUrl().optional().catch(""),
 	inDescription: z.array(Description),
 });
@@ -36,12 +37,10 @@ export const GET = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => {
 
 export const POST = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => {
 	try {
-		const newCardData = Card.parse(await req.json());
-		const newCard = {
-			...newCardData,
-			id: Date.now(),
-			bgColor: newCardData.bgColor || "bg-gray-200",
-		};
+		const newCard = Card.parse(await req.json());
+		if (!newCard.id) {
+			newCard.id = Date.now();
+		}
 		const cards = await cardsFile.read();
 		cards.push(newCard);
 		await cardsFile.write(cards);
@@ -93,7 +92,9 @@ export const DELETE = withAuth(
 
 			if (!cardIdParam) {
 				return NextResponse.json(
-					{ error: "Card ID query parameter is required for deletion." },
+					{
+						error: "Card ID query parameter is required for deletion.",
+					},
 					{ status: 400 },
 				);
 			}

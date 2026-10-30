@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
+import z from "zod";
 import { type NoParams, withAuth } from "@/lib/auth";
 import { DataStore } from "@/lib/dataStore";
-import z from "zod";
 
 const Link = z.object({
-    color: z.string().trim().min(1),
-    text: z.string().trim().min(1),
-    link: z.string().trim().min(1),
-    textColor: z.string().trim().min(1),
-    isEnabled: z.boolean(),
-})
+	color: z.string(),
+	text: z.string(),
+	link: z.httpUrl(),
+	textColor: z.string(),
+	isEnabled: z.boolean(),
+});
 
-const Linktree = z.array(Link)
+const Linktree = z.array(Link);
 
-const linktreeFile = new DataStore("linktree.json", Linktree, [])
+const linktreeFile = new DataStore("linktree.json", Linktree, []);
 
 export const GET = withAuth<NoParams>(
 	{ roles: ["admin", "committee"] },
@@ -31,20 +31,20 @@ export const GET = withAuth<NoParams>(
 );
 
 export const PUT = withAuth<NoParams>(
-	{ roles: ["admin"] },
+	{ roles: ["admin", "committee"] },
 	async (req, _ctx, _user) => {
 		try {
 			const newLinksData = Linktree.parse(await req.json());
 			await linktreeFile.write(newLinksData);
 			return NextResponse.json(newLinksData);
-        } catch (error: any) {
-            console.error("Error updating links:", error);
-    		if (error instanceof z.ZodError) {
-    			return NextResponse.json(
-    				{ error: "Invalid request body" },
-    				{ status: 400 },
-    			);
-    		}
+		} catch (error: any) {
+			console.error("Error updating links:", error);
+			if (error instanceof z.ZodError) {
+				return NextResponse.json(
+					{ error: "Invalid request body" },
+					{ status: 400 },
+				);
+			}
 			return NextResponse.json(
 				{ error: "Failed to update links" },
 				{ status: 500 },

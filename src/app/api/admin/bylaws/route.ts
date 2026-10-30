@@ -13,14 +13,17 @@ const Bylaws = z.array(Bylaw);
 
 const bylawsFile = new DataStore("bylaws.json", Bylaws, []);
 
-export const GET = withAuth({ roles: ["admin", "committee"] }, async (_req, _ctx, _user) => {
-	try {
-		const bylaws = await bylawsFile.read();
-		return NextResponse.json(bylaws);
-	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
-	}
-});
+export const GET = withAuth(
+	{ roles: ["admin", "committee"] },
+	async (_req, _ctx, _user) => {
+		try {
+			const bylaws = await bylawsFile.read();
+			return NextResponse.json(bylaws);
+		} catch (error: any) {
+			return NextResponse.json({ error: error.message }, { status: 500 });
+		}
+	},
+);
 
 export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, _user) => {
 	try {

@@ -39,7 +39,7 @@ export const GET = withAuth(
 	},
 );
 
-export const POST = withAuth({ roles: ["admin"] }, async (req, _ctx, user) => {
+export const PUT = withAuth({ roles: ["admin"] }, async (req, _ctx, user) => {
 	try {
 		const updatedGuidelinesData = await req.json();
 		const parsedGuidelines = Guidelines.parse(updatedGuidelinesData);
