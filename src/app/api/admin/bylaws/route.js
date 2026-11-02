@@ -1,23 +1,7 @@
-// src/app/api/admin/bylaws/route.js
-
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
-
-const initializeClerk = () => {
-	const secretKey = process.env.CLERK_SECRET_KEY;
-	if (!secretKey) {
-		throw new Error("Server configuration error: Clerk Secret Key missing.");
-	}
-	try {
-		return createClerkClient({ secretKey });
-	} catch (error) {
-		console.error("Failed to initialize Clerk SDK:", error);
-		throw new Error("Failed to initialize Clerk SDK.");
-	}
-};
 
 async function checkUserPermission(request, allowedRoleKeys = ["admin"]) {
 	let authResult;
@@ -43,7 +27,7 @@ async function checkUserPermission(request, allowedRoleKeys = ["admin"]) {
 	let userPublicMetadata = {};
 
 	try {
-		const clerk = initializeClerk();
+		const clerk = await clerkClient();
 		const user = await clerk.users.getUser(userId);
 		userPublicMetadata = user?.publicMetadata || {};
 	} catch (error) {

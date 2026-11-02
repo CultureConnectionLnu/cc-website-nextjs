@@ -1,15 +1,8 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 
-const initializeClerk = () => {
-	const secretKey = process.env.CLERK_SECRET_KEY;
-	if (!secretKey)
-		throw new Error("Server configuration error: Clerk Secret Key missing.");
-	return createClerkClient({ secretKey });
-};
 
 async function verifyAdmin(request) {
 	const authResult = getAuth(request);
@@ -18,7 +11,7 @@ async function verifyAdmin(request) {
 	}
 	const { userId } = authResult;
 	try {
-		const clerk = initializeClerk();
+		const clerk = await clerkClient();
 		const user = await clerk.users.getUser(userId);
 		if (user?.publicMetadata?.admin !== true) {
 			return { authorized: false, error: "Forbidden", status: 403 };
