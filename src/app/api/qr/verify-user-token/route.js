@@ -1,10 +1,9 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { env } from "@/env";
 
-const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
+const clerk = await clerkClient();
 const QR_JWT_SECRET = process.env.QR_JWT_SECRET;
 
 export async function POST(request) {
@@ -39,7 +38,7 @@ export async function POST(request) {
 
 		const targetUserId = decoded.u;
 
-		const targetUser = await clerkClient.users.getUser(targetUserId);
+		const targetUser = await clerk.users.getUser(targetUserId);
 		const userName =
 			`${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() ||
 			targetUser.username;

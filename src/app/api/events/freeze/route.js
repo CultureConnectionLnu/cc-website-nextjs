@@ -1,10 +1,8 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { env } from "@/env";
 import db from "@/lib/db";
 
-const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
+const clerk = await clerkClient();
 
 export async function POST(request) {
 	const { userId, sessionClaims } = getAuth(request);
@@ -59,7 +57,7 @@ export async function POST(request) {
 
 		for (const targetUserId of userIdsToFreeze) {
 			try {
-				const userToUpdate = await clerkClient.users.getUser(targetUserId);
+				const userToUpdate = await clerk.users.getUser(targetUserId);
 				const currentMetadata = userToUpdate.publicMetadata || {};
 
 				if (currentMetadata.freezed === true) {
@@ -71,7 +69,7 @@ export async function POST(request) {
 					freezed: true,
 				};
 
-				await clerkClient.users.updateUserMetadata(targetUserId, {
+				await clerk.users.updateUserMetadata(targetUserId, {
 					publicMetadata: newMetadata,
 				});
 

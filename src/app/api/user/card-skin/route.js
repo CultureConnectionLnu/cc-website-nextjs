@@ -1,10 +1,10 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { env } from "@/env";
 import db from "@/lib/db";
 
-const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
+const clerk = await clerkClient();
 
 export async function POST(request) {
 	const { userId } = getAuth(request);
@@ -66,7 +66,7 @@ export async function POST(request) {
 			skinUrlToSet = achievement.card_skin_image_url;
 		}
 
-		await clerkClient.users.updateUserMetadata(userId, {
+		await clerk.users.updateUserMetadata(userId, {
 			publicMetadata: {
 				selectedCardSkinUrl: skinUrlToSet,
 			},

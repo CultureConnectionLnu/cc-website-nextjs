@@ -1,13 +1,6 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import SftpClient from "ssh2-sftp-client";
-
-const initializeClerk = () => {
-	const secretKey = process.env.CLERK_SECRET_KEY;
-	if (!secretKey) throw new Error("Clerk Secret Key missing.");
-	return createClerkClient({ secretKey });
-};
 
 async function checkUserPermission(
 	request,
@@ -17,7 +10,7 @@ async function checkUserPermission(
 		const { userId } = getAuth(request);
 		if (!userId)
 			return { authorized: false, error: "Auth context missing", status: 401 };
-		const clerk = initializeClerk();
+		const clerk = await clerkClient();
 		const user = await clerk.users.getUser(userId);
 		const hasPermission = allowedRoleKeys.some(
 			(role) => user?.publicMetadata?.[role] === true,

@@ -1,4 +1,4 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -6,12 +6,10 @@ const userDetailsSchema = z.object({
 	userIds: z.array(z.string().min(1)).min(1).max(50),
 });
 
-const clerkClient = process.env.CLERK_SECRET_KEY
-	? createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
-	: null;
+const clerk = await clerkClient()
 
 export async function POST(request) {
-	if (!clerkClient) {
+	if (!clerk) {
 		return NextResponse.json(
 			{ message: "Server configuration error" },
 			{ status: 500 },
@@ -34,7 +32,7 @@ export async function POST(request) {
 			return NextResponse.json({}, { status: 200 });
 		}
 
-		const userListResponse = await clerkClient.users.getUserList({
+		const userListResponse = await clerk.users.getUserList({
 			userId: userIds,
 		});
 		const usersArray = userListResponse.data;
