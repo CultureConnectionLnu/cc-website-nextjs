@@ -1,14 +1,7 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
-
-const initializeClerk = () => {
-	const secretKey = process.env.CLERK_SECRET_KEY;
-	if (!secretKey) return null;
-	return createClerkClient({ secretKey });
-};
 
 const propositionsFilePath = path.join(
 	process.cwd(),
@@ -53,7 +46,7 @@ async function requireAdmin(request) {
 		return { ok: false, error: "Unauthorized", status: 401 };
 	}
 
-	const clerk = initializeClerk();
+	const clerk = await clerkClient();
 	const user = await clerk.users.getUser(authResult.userId);
 	const isAdmin = user?.publicMetadata?.admin === true;
 
@@ -89,7 +82,7 @@ export async function POST(request) {
 
 	try {
 		const body = await request.json();
-		const clerk = initializeClerk();
+		const clerk = await clerkClient();
 		const user = await clerk.users.getUser(authResult.userId);
 		const userFullName = getUserFullName(user);
 		const submittedAt = new Date().toISOString();

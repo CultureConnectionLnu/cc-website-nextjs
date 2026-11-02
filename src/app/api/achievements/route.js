@@ -1,10 +1,9 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { env } from "@/env";
 import db from "@/lib/db";
 
-const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
+const clerk = await clerkClient();
 
 const intToBool = (val) => (val === 1 ? true : false);
 const boolToInt = (val) => (val === true ? 1 : 0);
@@ -205,7 +204,7 @@ export async function POST(request) {
 	}
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
@@ -324,7 +323,7 @@ export async function PUT(request) {
 	}
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
@@ -517,7 +516,7 @@ export async function PATCH(request) {
 	const { achievementId, targetUserId, action } = body;
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
@@ -738,7 +737,7 @@ export async function DELETE(request) {
 	}
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;

@@ -1,4 +1,4 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -8,16 +8,14 @@ const settingsSchemaWithUserId = z.object({
 	displayNameType: z.enum(["fullName", "username"]).optional(),
 });
 
-const clerkClient = process.env.CLERK_SECRET_KEY
-	? createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
-	: null;
+const clerk = await clerkClient();
 
 export async function POST(request) {
 	console.warn(
 		"API POST /api/user/settings: RUNNING IN MODE WHERE USERID IS CLIENT-SENT. VERIFY SECURITY IMPLICATIONS.",
 	);
 
-	if (!clerkClient) {
+	if (!clerk) {
 		console.error("API POST /api/user/settings: Clerk client not initialized.");
 		return NextResponse.json(
 			{ message: "Server configuration error" },
@@ -49,7 +47,7 @@ export async function POST(request) {
 			body,
 		);
 
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 		const existingPublicMetadata = user.publicMetadata || {};
 
 		const newPublicMetadata = {
@@ -70,7 +68,7 @@ export async function POST(request) {
 			newPublicMetadata,
 		);
 
-		await clerkClient.users.updateUserMetadata(userId, {
+		await clerk.users.updateUserMetadata(userId, {
 			publicMetadata: newPublicMetadata,
 		});
 

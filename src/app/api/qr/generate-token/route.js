@@ -1,11 +1,9 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { env } from "@/env";
 import db from "@/lib/db";
 import { generateShortToken } from "@/lib/short-token";
 
-const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
+const clerk = await clerkClient();
 const BASE_URL =
 	process.env.NEXT_PUBLIC_APP_URL || "https://cultureconnection.se";
 const intToBool = (val) => (val === 1 ? true : false);
@@ -16,7 +14,7 @@ export async function POST(request) {
 		return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 		const isAdmin =
 			user.publicMetadata?.admin || user.publicMetadata?.committee;
 		if (!isAdmin)

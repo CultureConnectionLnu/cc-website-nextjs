@@ -1,10 +1,9 @@
-import { createClerkClient } from "@clerk/clerk-sdk-node";
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { env } from "@/env";
 import db from "@/lib/db";
 
-const clerkClient = createClerkClient({ secretKey: env.CLERK_SECRET_KEY });
+const clerk = await clerkClient();
 const intToBool = (val) => (val === 1 ? true : false);
 const boolToInt = (val) => (val === true ? 1 : 0);
 
@@ -20,7 +19,7 @@ async function promoteFromWaitlist(eventId) {
 		return;
 	}
 
-	const waitingUserDetailsResponse = await clerkClient.users.getUserList({
+	const waitingUserDetailsResponse = await clerk.users.getUserList({
 		userId: waitingListUserIds,
 		limit: waitingListUserIds.length,
 	});
@@ -59,7 +58,7 @@ async function fetchAndMergeUserDetails(attendeesRaw) {
 	const userDetailsMap = new Map();
 	if (attendeeUserIds.length > 0) {
 		try {
-			const userListResponse = await clerkClient.users.getUserList({
+			const userListResponse = await clerk.users.getUserList({
 				userId: attendeeUserIds,
 				limit: attendeeUserIds.length,
 			});
@@ -206,7 +205,7 @@ export async function POST(request) {
 		);
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
 		if (!isAdmin && !isCommittee)
@@ -306,7 +305,7 @@ export async function PUT(request) {
 		);
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
 		if (!isAdmin && !isCommittee)
@@ -446,7 +445,7 @@ export async function PATCH(request) {
 				? userId
 				: body.attendeeUserId;
 
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
 
@@ -467,7 +466,7 @@ export async function PATCH(request) {
 				.map((a) => a.user_id);
 
 			if (allCurrentAttendeeUserIds.length > 0) {
-				const userListResponse = await clerkClient.users.getUserList({
+				const userListResponse = await clerk.users.getUserList({
 					userId: allCurrentAttendeeUserIds,
 					limit: allCurrentAttendeeUserIds.length,
 				});
@@ -712,7 +711,7 @@ export async function DELETE(request) {
 		);
 
 	try {
-		const user = await clerkClient.users.getUser(userId);
+		const user = await clerk.users.getUser(userId);
 		const isAdmin = user.publicMetadata?.admin === true;
 		const isCommittee = user.publicMetadata?.committee === true;
 		if (!isAdmin && !isCommittee)
