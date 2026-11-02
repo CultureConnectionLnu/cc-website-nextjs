@@ -8,7 +8,7 @@ const settingsSchemaWithUserId = z.object({
 	displayNameType: z.enum(["fullName", "username"]).optional(),
 });
 
-const clerk = await clerkClient()
+const clerk = await clerkClient();
 
 export async function POST(request) {
 	console.warn(

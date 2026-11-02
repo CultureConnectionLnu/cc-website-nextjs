@@ -6,7 +6,7 @@ const userDetailsSchema = z.object({
 	userIds: z.array(z.string().min(1)).min(1).max(50),
 });
 
-const clerk = await clerkClient()
+const clerk = await clerkClient();
 
 export async function POST(request) {
 	if (!clerk) {

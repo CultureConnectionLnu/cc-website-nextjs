@@ -1,4 +1,3 @@
-
 import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { env } from "@/env";
