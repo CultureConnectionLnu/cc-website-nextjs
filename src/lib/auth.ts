@@ -81,10 +81,7 @@ export class AuthError extends Error {
 
 	response() {
 		const code = this.status === 401 ? "Unauthorized" : "Forbidden";
-		return NextResponse.json(
-			{ error: { code, message: this.message } },
-			{ status: this.status },
-		);
+		return NextResponse.json({ error: this.message }, { status: this.status });
 	}
 }
 
