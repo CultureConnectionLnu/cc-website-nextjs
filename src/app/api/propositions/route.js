@@ -82,7 +82,7 @@ export async function POST(request) {
 
 	try {
 		const body = await request.json();
-		const clerk = initializeClerk();
+		const clerk = await clerkClient();
 		const user = await clerk.users.getUser(authResult.userId);
 		const userFullName = getUserFullName(user);
 		const submittedAt = new Date().toISOString();
