@@ -4,7 +4,7 @@
 	"type": "module",
 	"private": true,
 	"engines": {
-		"node": "20.x",
+		"node": "26.x",
 		"npm": ">=10"
 	},
 	"scripts": {
@@ -42,7 +42,7 @@
 		"@tiptap/react": "^2.27.2",
 		"@tiptap/starter-kit": "^2.27.2",
 		"@types/mdx": "^2.0.14",
-		"better-sqlite3": "^12.11.1",
+		"better-sqlite3": "^13.0.3",
 		"canvas-confetti": "^1.9.4",
 		"crypto-js": "^4.2.0",
 		"embla-carousel-autoplay": "^8.6.0",
