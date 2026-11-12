@@ -3,18 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 import { type NoParams, Role, withAuth } from "@/lib/auth";
 import { DataStore, DataStoreError } from "@/lib/dataStore";
+import { VerificationRequests } from "@/types/user/verification";
 
-const VerificationRequest = z.object({
-	userID: z.string().trim().min(1),
-	requestedAt: z.iso.datetime(),
-});
-
-type VerificationRequest = z.infer<typeof VerificationRequest>;
-
-const VerificationRequests = z.array(VerificationRequest);
-type VerificationRequests = z.infer<typeof VerificationRequests>;
-
-const verificationFile = new DataStore<VerificationRequests>(
+const verificationFile = new DataStore(
 	"MemberVerification.json",
 	VerificationRequests,
 	[],
