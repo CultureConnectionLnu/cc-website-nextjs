@@ -4,17 +4,17 @@ This is the website for [Culture Connection](https://cultureconnection.se), a no
 
 ## Tech stack
 
-| Area | Choice |
-| --- | --- |
-| Framework | Next.js 16 (App Router) |
-| UI | React 19, Tailwind CSS 4, Framer Motion, GSAP, Embla |
-| Language | TypeScript and JavaScript (mixed) |
-| Auth | Clerk (roles via `publicMetadata`) |
-| Data | SQLite (`better-sqlite3`) + JSON files validated with Zod |
-| Content | MDX (`@next/mdx`) for bylaws and code of conduct |
-| Tooling | Biome (lint + format), `tsc --noEmit` |
-| Runtime | Node.js 26, npm |
-| Hosting | Railway (persistent volume for `data/`) |
+| Area      | Choice                                                    |
+| --------- | --------------------------------------------------------- |
+| Framework | Next.js 16 (App Router)                                   |
+| UI        | React 19, Tailwind CSS 4, Framer Motion, GSAP, Embla      |
+| Language  | TypeScript and JavaScript (mixed)                         |
+| Auth      | Clerk (roles via `publicMetadata`)                        |
+| Data      | SQLite (`better-sqlite3`) + JSON files validated with Zod |
+| Content   | MDX (`@next/mdx`) for bylaws and code of conduct          |
+| Tooling   | Biome (lint + format), `tsc --noEmit`                     |
+| Runtime   | Node.js 26, npm                                           |
+| Hosting   | Railway (persistent volume for `data/`)                   |
 
 ## Getting started
 
@@ -46,16 +46,16 @@ Environment files are git-ignored (`.env*`). Create `.env.local` for development
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | Biome lint with autofix |
-| `npm run lint-check` | Biome lint without writing |
-| `npm run format` | Biome format with autofix |
-| `npm run format-check` | Biome format check (CI) |
-| `npm run typecheck` | `tsc --noEmit` |
+| Command                | Description                |
+| ---------------------- | -------------------------- |
+| `npm run dev`          | Start the dev server       |
+| `npm run build`        | Production build           |
+| `npm run start`        | Serve the production build |
+| `npm run lint`         | Biome lint with autofix    |
+| `npm run lint-check`   | Biome lint without writing |
+| `npm run format`       | Biome format with autofix  |
+| `npm run format-check` | Biome format check (CI)    |
+| `npm run typecheck`    | `tsc --noEmit`             |
 
 There is no automated test suite; CI enforces build, formatting, and type checks.
 
