@@ -28,6 +28,8 @@ const CARD_BASE_HEIGHT = 450;
 const CARD_WIDTH_DESKTOP = "max-w-3xl";
 const ANIMATION_DURATION_MS = 400;
 const NUM_VISIBLE_STACK_CARDS_DESKTOP = 2;
+const WEEKDAYS =
+	/\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/gi;
 
 const fetchCardsData = async () => {
 	const response = await fetch("/api/main/cards");
@@ -178,16 +180,6 @@ export default function ActivitiesPage() {
 	const currentActiveCardData =
 		allCards.length > 0 ? allCards[activeIndex] : null;
 
-	const daysOfWeek = [
-		"Monday",
-		"Tuesday",
-		"Wednesday",
-		"Thursday",
-		"Friday",
-		"Saturday",
-		"Sunday",
-	];
-
 	return (
 		<div className="flex flex-col items-center min-h-screen py-8 md:py-12">
 			<p className="font-Header text-mainColor md:text-9xl text-6xl sm:text-5xl font-bold mb-8">
@@ -195,8 +187,7 @@ export default function ActivitiesPage() {
 			</p>
 			<div className="flex md:flex-row justify-center items-center gap-2 mb-4 px-4 w-full max-w-6xl flex-wrap">
 				{allCards.map((card, index) => {
-					const hasDay = daysOfWeek.some((day) => card.date?.includes(day));
-					const day = hasDay ? card.date?.split(" ")[1] || "" : "";
+					const weekdays = card.date?.match(WEEKDAYS)?.join(", ");
 					return (
 						<div key={card.id} className="relative">
 							<button
@@ -208,9 +199,9 @@ export default function ActivitiesPage() {
 							>
 								{card.title}
 							</button>
-							{hasDay && day && (
+							{weekdays && (
 								<div className="pointer-events-none absolute top-0 left-0 -translate-y-1/2 -translate-x-1/2 -rotate-15 whitespace-nowrap rounded-lg bg-gray-800 px-2 py-1 text-xs opacity-90 text-white shadow-lg">
-									{day}
+									{weekdays}
 									<span className="absolute bottom-0 left-1/2 h-2 w-2 translate-y-1/2 -translate-x-1/2 rotate-45 bg-gray-800"></span>
 								</div>
 							)}
