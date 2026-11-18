@@ -4,25 +4,30 @@ import { VerificationRequests } from "@/types/user/verification";
 import { NextResponse } from "next/server";
 import z from "zod";
 
-const verificationFile = new DataStore("MemberVerification.json", VerificationRequests, []);
+const verificationFile = new DataStore(
+	"MemberVerification.json",
+	VerificationRequests,
+	[],
+);
 
 const verificationRequest = z.object({
-    userId: z.string(),
-})
+	userId: z.string(),
+});
 
 export const POST = withAuth(async (req, _ctx, user) => {
-    try {
+	try {
+		const { data, success, error } = verificationRequest.safeParse(
+			await req.json(),
+		);
 
-        const { data, success, error } = verificationRequest.safeParse(await req.json());
-
-        if (!success) {
-            console.error(`Invalid request body: ${error}`)
-            return NextResponse.json(
+		if (!success) {
+			console.error(`Invalid request body: ${error}`);
+			return NextResponse.json(
 				{ error: "Invalid request body." },
 				{ status: 400 },
 			);
-        }
-        
+		}
+
 		if (user.userId !== data.userId) {
 			console.warn(
 				`Forbidden attempt: Auth user ${user.userId} tried to add user ${data?.userId}`,
@@ -53,8 +58,8 @@ export const POST = withAuth(async (req, _ctx, user) => {
 		const newUserEntry = {
 			userID: user.userId,
 			requestedAt: new Date().toISOString(),
-        };
-		
+		};
+
 		verificationList.push(newUserEntry);
 
 		await verificationFile.write(verificationList);
@@ -75,4 +80,4 @@ export const POST = withAuth(async (req, _ctx, user) => {
 			{ status: 500 },
 		);
 	}
-})
+});
