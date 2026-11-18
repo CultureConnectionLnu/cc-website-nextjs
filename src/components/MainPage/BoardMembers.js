@@ -142,7 +142,7 @@ export default function BoardMembers() {
 								>
 									<img
 										src={member.imageUrl}
-										alt=""
+										alt={`Image of ${member.name}`}
 										className="w-full h-72 object-cover object-top"
 									/>
 									<div className="p-4">
