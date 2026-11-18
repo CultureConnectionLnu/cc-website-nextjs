@@ -60,7 +60,9 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"**/*.mdx",
-		"**/*.md"
+		"**/*.md",
+		"src/components/admin/DriveManagment/EventImageManager.jsx",
+		"src/components/admin/DriveManagment/CombinedFileManager.jsx"
 	],
 	"exclude": ["node_modules"]
 }
