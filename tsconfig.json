@@ -60,7 +60,14 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"**/*.mdx",
+<<<<<<< HEAD
 		"**/*.md"
 , "src/components/admin/DriveManagment/EventImageManager.jsx", "src/components/admin/DriveManagment/CombinedFileManager.jsx"	],
+=======
+		"**/*.md",
+		"src/components/admin/DriveManagment/EventImageManager.jsx",
+		"src/components/admin/DriveManagment/CombinedFileManager.jsx"
+	],
+>>>>>>> ba819cd (remove one.com file manager)
 	"exclude": ["node_modules"]
 }
